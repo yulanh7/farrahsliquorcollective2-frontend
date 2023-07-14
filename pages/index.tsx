@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
+import QRCodeGenerator from "../utils/QRCodeUtils";
+
 import Link from "next/link";
 
 export default function Home() {
@@ -18,6 +20,7 @@ export default function Home() {
       >
         OPT IN OFFER TO REGISTER
       </h2>
+      <QRCodeGenerator url={newUrl} className="qrcode40" />
       <p
         className={`${utilStyles.text} ${utilStyles.lightText} ${utilStyles.flexCenter} ${utilStyles.pT10px}`}
       >
