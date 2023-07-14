@@ -1,16 +1,16 @@
 import React, { ReactNode } from 'react';
-import Head from "next/head";
-import styles from "./layout.module.scss";
-import utilStyles from "../styles/utils.module.scss";
-import Link from "next/link";
-import PropTypes from "prop-types";
+import Head from 'next/head';
+import styles from './layout.module.scss';
+import utilStyles from '../styles/utils.module.scss';
+import Link from 'next/link';
+import PropTypes from 'prop-types';
+import Image from 'next/image';
 
 interface LayoutProps {
   children: ReactNode;
   title: ReactNode;
-  logo: ReactNode;
+  logo: string;
 }
-
 
 export default function Layout({ children, title, logo }: LayoutProps) {
   return (
@@ -25,7 +25,7 @@ export default function Layout({ children, title, logo }: LayoutProps) {
       <header className={styles.header}>
         <>
           <Link href="/" className={styles.logoBox}>
-            <img src={logo} alt="logo" className={styles.logo} />
+            <Image src={logo} alt="logo" width={100} height={50} className={styles.logo} />
           </Link>
           <h1 className={utilStyles.headingLg}>{title}</h1>
         </>
@@ -46,5 +46,5 @@ export default function Layout({ children, title, logo }: LayoutProps) {
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.node.isRequired,
-  logo: PropTypes.node.isRequired,
+  logo: PropTypes.string.isRequired,
 };
