@@ -1,9 +1,38 @@
-
+import React, { useState } from "react";
+import Layout from "../src/components/layout";
+import utilStyles from "../src/styles/utils.module.scss";
+import Link from "next/link";
 
 export default function Home() {
+  const [referra, setReferra] = useState("");
+  const handleChange = (event) => {
+    setReferra(event.target.value);
+  };
+
+  const newUrl = referra ? `/detail?referra=${referra}` : "/detail";
+
   return (
-    <div>
-      test
-    </div>
-  )
+    <Layout title="WELCOME - OPT IN" logo="/images/logo.jpg">
+      <h2
+        className={`${utilStyles.headingMd} ${utilStyles.flexCenter} ${utilStyles.pB10px}`}
+      >
+        OPT IN OFFER TO REGISTER
+      </h2>
+      <p
+        className={`${utilStyles.text} ${utilStyles.lightText} ${utilStyles.flexCenter} ${utilStyles.pT10px}`}
+      >
+        <span className={`${utilStyles.pR5px} ${utilStyles.darkText}`}>
+          URL:
+        </span>
+        <Link href={newUrl}>
+          Detail
+        </Link>
+
+      </p>
+      <section className={utilStyles.flexCenter}>
+        <span className={utilStyles.pR5px}>Reference: </span>
+        <input type="text" value={referra} onChange={handleChange} />
+      </section>
+    </Layout>
+  );
 }
