@@ -85,7 +85,12 @@ export default function Post() {
     }
   };
 
-  const getHash = async (firstName, lastName, email, dob) => {
+  const getHash = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    dob: string
+  ) => {
     const data = `${firstName}${lastName}${email}${dob}`;
     const encoder = new TextEncoder();
     const encodedData = encoder.encode(data);

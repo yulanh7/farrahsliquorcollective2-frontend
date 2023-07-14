@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
 import QRCodeGenerator from "../utils/QRCodeUtils";
-
 import Link from "next/link";
+
 
 export default function Home() {
   const [referra, setReferra] = useState("");
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setReferra(event.target.value);
   };
 
