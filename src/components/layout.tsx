@@ -1,10 +1,18 @@
+import React, { ReactNode } from 'react';
 import Head from "next/head";
 import styles from "./layout.module.scss";
 import utilStyles from "../styles/utils.module.scss";
 import Link from "next/link";
 import PropTypes from "prop-types";
 
-export default function Layout({ children, title, logo }) {
+interface LayoutProps {
+  children: ReactNode;
+  title: ReactNode;
+  logo: ReactNode;
+}
+
+
+export default function Layout({ children, title, logo }: LayoutProps) {
   return (
     <div className={styles.container}>
       <Head>
