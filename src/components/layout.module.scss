@@ -1,0 +1,48 @@
+.container {
+  max-width: 767px;
+  padding: 0 20px;
+  margin: 30px auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+
+}
+
+.logoBox {
+  position: absolute;
+  left: 0;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+}
+
+.pageContainer {
+  margin: 6rem auto;
+  width: 100%;
+}
+
+@media (max-width:767px) {
+  .logoBox {
+    position: relative;
+  }
+
+  .logo {
+    width: 120px;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+
+  .pageContainer {
+    margin: 3rem auto;
+    width: 100%;
+  }
+}
