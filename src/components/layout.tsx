@@ -24,17 +24,20 @@ export default function Layout({ children, title, logo }: LayoutProps) {
       </Head>
       <header className={styles.header}>
         <>
-          <Link href="/" className={styles.logoBox}>
+          <a target="_blank" rel="noopener noreferrer" href="https://farrahsliquorcollective.com/" className={styles.logoBox}>
             <Image src={logo} alt="logo" width={100} height={50} className={styles.logo} />
-          </Link>
+          </a>
           <h1 className={utilStyles.headingLg}>{title}</h1>
         </>
       </header>
       <main className={styles.pageContainer}>{children}</main>
       <footer className={`${utilStyles.footerContainer} ${utilStyles.pT10px}`}>
-        <Link href="https://4block.com.au/">
-          <div>www.4block.com.au</div>
-        </Link>
+        <div>
+          <Link href="https://4block.com.au/">
+            <span>www.4block.com.au </span>
+          </Link>
+          - Want to know more
+        </div>
         <div className={`${utilStyles.textSm} `}>
           Copyright © 2023 – All rights reserved
         </div>
