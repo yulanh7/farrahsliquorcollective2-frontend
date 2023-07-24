@@ -6,12 +6,8 @@ import Link from "next/link";
 
 
 export default function Home() {
-  const [referra, setReferra] = useState("");
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setReferra(event.target.value);
-  };
 
-  const newUrl = referra ? `/detail?referra=${referra}` : "/detail";
+  const newUrl = "http://dev.farrahsliquorcollective2.com/detail";
 
   return (
     <Layout title="WELCOME - OPT IN" logo="/images/logo.jpg">
@@ -28,14 +24,11 @@ export default function Home() {
           URL:
         </span>
         <Link href={newUrl}>
-          Detail
+          {newUrl}
         </Link>
 
       </p>
-      <section className={utilStyles.flexCenter}>
-        <span className={utilStyles.pR5px}>Reference: </span>
-        <input type="text" value={referra} onChange={handleChange} />
-      </section>
+
     </Layout>
   );
 }
