@@ -10,9 +10,10 @@ interface LayoutProps {
   children: ReactNode;
   title: ReactNode;
   logo: string;
+  subTitle: string;
 }
 
-export default function Layout({ children, title, logo }: LayoutProps) {
+export default function Layout({ children, title, subTitle, logo }: LayoutProps) {
   return (
     <div className={styles.container}>
       <Head>
@@ -22,13 +23,22 @@ export default function Layout({ children, title, logo }: LayoutProps) {
           content="Learn how to build a personal website using Next.js"
         />
       </Head>
-      <header className={styles.header}>
-        <>
-          <a target="_blank" rel="noopener noreferrer" href="https://farrahsliquorcollective.com/" className={styles.logoBox}>
-            <Image src={logo} alt="logo" width={100} height={50} className={styles.logo} />
-          </a>
+      <header>
+        <div className={styles.headerTop}>
+          <div className={styles.logoBox}>
+
+            <a target="_blank" rel="noopener noreferrer" href="https://farrahsliquorcollective.com/">
+              <Image src={logo} alt="logo" width={100} height={50} className={styles.logo} />
+            </a>
+            <div>
+              ABN 92 637 607 517
+            </div>
+          </div>
           <h1 className={utilStyles.headingLg}>{title}</h1>
-        </>
+        </div>
+        <div className={`${utilStyles.textMd} ${utilStyles.textCenter}`}>
+          {subTitle}
+        </div>
       </header>
       <main className={styles.pageContainer}>{children}</main>
       <footer className={`${utilStyles.footerContainer} ${utilStyles.pT10px}`}>
@@ -50,4 +60,5 @@ Layout.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.node.isRequired,
   logo: PropTypes.string.isRequired,
+  subTitle: PropTypes.string,
 };
