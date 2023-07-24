@@ -36,7 +36,7 @@ export default function Layout({ children, title, logo }: LayoutProps) {
           <Link href="https://4block.com.au/">
             <span>www.4block.com.au </span>
           </Link>
-          - Want to know more
+          - Want to know more?
         </div>
         <div className={`${utilStyles.textSm} `}>
           Copyright © 2023 – All rights reserved
