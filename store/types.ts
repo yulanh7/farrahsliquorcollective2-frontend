@@ -5,9 +5,8 @@ export interface Post {
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
-  email: string;
 }
 
 export interface RootState {

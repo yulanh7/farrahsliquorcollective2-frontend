@@ -1,3 +1,7 @@
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/store';
+import { fetchPostsAsync } from '../store/actions';
 import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
 import { useRouter } from "next/router";
@@ -8,9 +12,16 @@ import { useState } from 'react';
 
 export default function Post() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { posts, loading, error } = useSelector((state: RootState) => state.posts);
+
+
   // const referra = router.query.referra;
   console.log(router.query);
   const newUrl = "/offer-receipt";
+  useEffect(() => {
+    dispatch(fetchPostsAsync());
+  }, [dispatch]);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
