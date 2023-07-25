@@ -5,15 +5,17 @@ import utilStyles from '../styles/utils.module.scss';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
+import { Button } from "react-bootstrap";
 
 interface LayoutProps {
   children: ReactNode;
   title: ReactNode;
   logo: string;
   subTitle: string;
+  showFeedback: boolean;
 }
 
-export default function Layout({ children, title, subTitle, logo }: LayoutProps) {
+export default function Layout({ children, title, subTitle, logo, showFeedback }: LayoutProps) {
   return (
     <div className={styles.container}>
       <Head>
@@ -44,15 +46,28 @@ export default function Layout({ children, title, subTitle, logo }: LayoutProps)
 
       </header>
       <main className={styles.pageContainer}>{children}</main>
-      <footer className={`${utilStyles.footerContainer} ${utilStyles.pT10px}`}>
-        <div>
-          <Link href="https://4block.com.au/">
-            <span>www.4block.com.au </span>
-          </Link>
-          - Want to know more?
-        </div>
-        <div className={`${utilStyles.textSm} `}>
-          Copyright © 2023 – All rights reserved
+      <footer>
+        {showFeedback &&
+          <div className={` ${utilStyles.pB10px} ${utilStyles.textRight}`}>
+            <Button
+              variant="primary"
+              className={utilStyles.button}
+            >
+              Feedback
+            </Button>
+          </div>
+        }
+        <div className={`${utilStyles.footerContainer} ${utilStyles.pT10px}`}>
+
+          <div >
+            <Link href="https://4block.com.au/">
+              <span>www.4block.com.au </span>
+            </Link>
+            - Want to know more?
+          </div>
+          <div className={`${utilStyles.textSm} `}>
+            Copyright © 2023 – All rights reserved
+          </div>
         </div>
       </footer>
     </div>
@@ -64,4 +79,5 @@ Layout.propTypes = {
   title: PropTypes.node.isRequired,
   logo: PropTypes.string.isRequired,
   subTitle: PropTypes.string,
+  showFeedback: PropTypes.bool,
 };

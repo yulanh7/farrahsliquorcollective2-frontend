@@ -85,6 +85,9 @@
 }
 
 
+.pB20px {
+  padding-bottom: 20px;
+}
 .pB10px {
   padding-bottom: 10px;
 }
@@ -196,16 +199,23 @@ canvas.qrcode40 {
   align-items: center;
   position: absolute;
   z-index: -1;
-  top: 480px;
-  left: 45%;
+  top: 420px;
+  left: 46%;
 }
 
 .leftCol {
-  padding-right: 40px;
+  padding-right: 20px;
 }
 
 .rightCol {
-  padding-left: 40px;
+  padding-left: 20px;
+}
+
+.formControlNoBorder {
+  border: none;
+}
+.is-invalid.formControlNoBorder {
+  border: 1px solid #dc3545;
 }
 
 @media (max-width:767px) {

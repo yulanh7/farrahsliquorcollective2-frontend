@@ -27,11 +27,13 @@ export default function Post() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
+  const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState<{
     firstName?: string;
     lastName?: string;
     email?: string;
     dob?: string;
+    agreed?: string;
   }>({});
 
   const validateForm = () => {
@@ -41,6 +43,7 @@ export default function Post() {
       lastName?: string;
       email?: string;
       dob?: string;
+      agreed?: string;
     } = {};
 
     if (firstName.trim() === '') {
@@ -65,8 +68,13 @@ export default function Post() {
       newErrors.dob = 'Date of birth is required';
       isValid = false;
     }
+    if (!agreed) {
+      newErrors.agreed = 'You must agree to receive promotional material before submitting the form.';
+      isValid = false;
+    }
 
     setErrors(newErrors);
+
     return isValid;
   };
 
@@ -81,7 +89,7 @@ export default function Post() {
     if (validateForm()) {
       const hashCode = getHash(firstName, lastName, email, dob);
       console.log(hashCode);
-      getHash(firstName, lastName, email, dob).then(hash => {
+      getHash(firstName, lastName, email, dob,).then(hash => {
         console.log(hash);
         fetch('http://172.19.0.191:3000/users', {
           method: 'POST',
@@ -111,9 +119,10 @@ export default function Post() {
     return hashHex;
   }
 
+  console.log('error', errors);
 
   return (
-    <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg">
+    <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback>
       <Badge />
       <form className={utilStyles.form} onSubmit={handleSubmit}>
         <Container>
@@ -166,7 +175,7 @@ export default function Post() {
                   <div className="invalid-feedback">{errors.email}</div>
                 )}
               </div>
-              <div className={utilStyles.pB10px}>
+              <div className={utilStyles.pB20px}>
                 <label htmlFor="dob" className="form-label">
                   Date of Birth
                 </label>
@@ -180,15 +189,24 @@ export default function Post() {
                 />
                 {errors.dob && <div className="invalid-feedback">{errors.dob}</div>}
               </div>
+              <div>
+                <label className={`${errors.agreed && 'is-invalid'} ${errors.agreed && 'form-control'}`}>
+                  <input
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={(e) => setAgreed(e.target.checked)}
+                  />
+                  <span> I agree to receive promotional material.</span>
+                </label>
+                {errors.agreed && <div className="invalid-feedback">{errors.agreed}</div>}
+              </div>
             </Col>
             <Col sm="12" md="6" className={utilStyles.rightCol}>
               <h2 className={`${utilStyles.headingMd} ${utilStyles.pB10px}`}>
                 OPT IN OFFER TO REGISTRAR
               </h2>
               <div className={`${utilStyles.text} ${utilStyles.pB10px}`}>
-                Lorem ipsum is placeholder text commonly used in the graphic,
-                print, and publishing industries for previewing layouts and
-                visual mockups.
+                Welcome to Farrah Liquor Collective members club. You will Receive{`<gift>`} for joining.
               </div>
 
 
