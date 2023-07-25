@@ -60,13 +60,15 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
         }
         {showOptOut &&
           <div className={` ${utilStyles.pB10px} ${utilStyles.textRight}`}>
-            <Button
-              variant="primary"
-              className={utilStyles.button}
-            >
-              <div className={utilStyles.textXs}>UNSUBSCRIBE</div>
-              OPT OUT
-            </Button>
+            <Link href="/opt-out">
+              <Button
+                variant="primary"
+                className={utilStyles.button}
+              >
+                <div className={utilStyles.textXs}>UNSUBSCRIBE</div>
+                OPT OUT
+              </Button>
+            </Link>
           </div>
         }
         <div className={`${utilStyles.footerContainer} ${utilStyles.pT10px}`}>
