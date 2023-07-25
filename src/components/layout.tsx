@@ -13,9 +13,10 @@ interface LayoutProps {
   logo: string;
   subTitle?: string;
   showFeedback?: boolean;
+  showOptOut?: boolean;
 }
 
-export default function Layout({ children, title, subTitle, logo, showFeedback }: LayoutProps) {
+export default function Layout({ children, title, subTitle, logo, showFeedback, showOptOut }: LayoutProps) {
   return (
     <div className={styles.container}>
       <Head>
@@ -53,7 +54,18 @@ export default function Layout({ children, title, subTitle, logo, showFeedback }
               variant="primary"
               className={utilStyles.button}
             >
-              Feedback
+              FEEDBACK
+            </Button>
+          </div>
+        }
+        {showOptOut &&
+          <div className={` ${utilStyles.pB10px} ${utilStyles.textRight}`}>
+            <Button
+              variant="primary"
+              className={utilStyles.button}
+            >
+              <div className={utilStyles.textXs}>UNSUBSCRIBE</div>
+              OPT OUT
             </Button>
           </div>
         }
@@ -80,4 +92,5 @@ Layout.propTypes = {
   logo: PropTypes.string.isRequired,
   subTitle: PropTypes.string,
   showFeedback: PropTypes.bool,
+  showOptOut: PropTypes.bool,
 };

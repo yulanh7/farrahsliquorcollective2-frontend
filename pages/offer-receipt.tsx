@@ -42,40 +42,22 @@ export default function Post() {
   }
 
   return (
-    <Layout title="OFFER RECEIPT" logo="/images/logo.jpg">
+    <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showOptOut>
       <form onSubmit={handleSubmit}>
         <Container>
           <Row>
-            <Col sm="12" md="7">
+            <Col sm="12" md="6">
               <QRCodeGenerator url={newUrl} className="qrcode80" />
-              <p
-                className={`${utilStyles.text} ${utilStyles.lightText} ${utilStyles.flexCenter} ${utilStyles.pT10px}`}
-              >
-                <Link href={newUrl}>
-                  {newUrl}
-                </Link>
-
-              </p>
             </Col>
-            <Col sm="12" md="5" className={`${utilStyles.pT30px}`}>
-              <div className={utilStyles.pB10px}>
-                <label htmlFor="firstName" className={`${utilStyles.pB10px} form-label`}>
-                  Unique ID:
-                </label>
-                <input
-                  type="text"
-                  className={`form-control ${errors.uniqueId && 'is-invalid'}`}
-                  id="firstName"
-                  value={uniqueId}
-                  onChange={(e) => setUniqueId(e.target.value)}
-                />
-                {errors.uniqueId && (
-                  <div className="invalid-feedback">{errors.uniqueId}</div>
-                )}
-              </div>
+            <Col sm="12" md="6" className={`${utilStyles.pT30px}`}>
+              <div className={`${utilStyles.headingMd} ${utilStyles.pB10px}`}>Unique ID:</div>
+              <div> FLC-00001 </div>
             </Col>
           </Row>
         </Container>
+        {/* <h3 className={`${utilStyles.textCenter} ${utilStyles.pT30px}`}>
+          Detail of the Offer
+        </h3> */}
         <div
           className={`${utilStyles.text} ${utilStyles.pB10px} ${utilStyles.textCenter} ${utilStyles.pT30px}`}
         >
@@ -86,7 +68,7 @@ export default function Post() {
         </div>
         <div className={utilStyles.textCenter}>
           <Button variant="primary" type="submit" className={utilStyles.button}>
-            Submit
+            SUBMIT
           </Button>
         </div>
       </form>

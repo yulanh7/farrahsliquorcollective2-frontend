@@ -215,7 +215,7 @@ export default function Post() {
                 type="submit"
                 className={utilStyles.button}
               >
-                Submit
+                SUBMIT
               </Button>
             </Col>
           </Row>
