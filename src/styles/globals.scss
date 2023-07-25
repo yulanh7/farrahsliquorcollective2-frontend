@@ -13,7 +13,7 @@ body {
 }
 
 a {
-  color: #0070f3;
+  color: #004067;
   text-decoration: none;
 }
 
@@ -26,6 +26,15 @@ img {
   display: block;
 }
 
+
+.table thead th {
+  background-color: #004067;
+  color: #fff;
+  font-size: 0.8rem;
+}
+.table td{
+  font-size: 0.8rem;
+}
 
 /* post.module.css */
 .customRadio {
