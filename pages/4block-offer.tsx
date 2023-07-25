@@ -56,21 +56,21 @@ const HomePage: React.FC = () => {
     <Layout title="4BLOCK OFFER" logo="/images/4Block Logo_RGB_Colour.jpg">
       <h5>TOP OFFERS</h5>
       {sortedTopOffers.length > 0 ? (
-        <TableComponent data={sortedTopOffers} />
+        <TableComponent data={sortedTopOffers} itemsPerPage={6} />
       ) : (
         <div>Loading...</div>
       )}
       <h5>JUST IN {process.env.NEXT_PUBLIC_WEB_URL}</h5>
 
       {sortedJustInOffers.length > 0 ? (
-        <TableComponent data={sortedJustInOffers} />
+        <TableComponent data={sortedJustInOffers} itemsPerPage={6} />
       ) : (
         <div>Loading...</div>
       )}
       <h5>FAVORITE</h5>
 
       {sortedFavoriteOffers.length > 0 ? (
-        <TableComponent data={sortedFavoriteOffers} />
+        <TableComponent data={sortedFavoriteOffers} itemsPerPage={6} />
       ) : (
         <div>Loading...</div>
       )}

@@ -62,7 +62,7 @@ img {
 }
 
 .customRadio input:checked ~ .checkmark {
-  background-color: #2196F3; /* Color when the radio input is checked */
+  background-color: $primaryColor; /* Color when the radio input is checked */
 }
 
 .checkmark:after {
@@ -90,3 +90,19 @@ img {
 // .customRadio input:checked ~ .checkmark {
 //   box-shadow: 0 0 0 3px white, 0 0 0 5px #2196F3; /* Add a border around the checked checkbox */
 // }
+
+
+/* components/TableComponent.module.css */
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  .page-link {
+    color: $primaryColor; /* Color when the radio input is checked */
+    transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  .active  .page-link {
+    background-color: $primaryColor; /* Color when the radio input is checked */
+  }
+}

@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Pagination } from 'react-bootstrap';
 
 
-interface TableProps {
-  data: { id: number; business: string; offer: string; detail: string; optLink: string; createdTime: string; likes: number; downloads: number; }[];
+interface TableData {
+  id: number; business: string; offer: string; detail: string; optLink: string; createdTime: string; likes: number; downloads: number;
 }
 
 
+interface TableComponentProps {
+  data: TableData[];
+  itemsPerPage: number;
+}
 
-
-const TableComponent: React.FC<TableProps> = ({ data }) => {
+const TableComponent: React.FC<TableComponentProps> = ({ data, itemsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
 
+  const totalItems = data.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = data.slice(startIndex, endIndex);
+  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+
   const formattedDate = (item: string) => {
     const date = new Date(item);
 
@@ -32,38 +35,56 @@ const TableComponent: React.FC<TableProps> = ({ data }) => {
 
   }
   return (
-    <Table striped bordered hover responsive>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>ID</th>
-          <th>Date</th>
-          <th>BUSINESS</th>
-          <th>OFFER</th>
-          <th>DETAILS</th>
-          <th>OPT</th>
-          <th>Likes</th>
-          <th>Used</th>
+    <div>
 
-          {/* Add more table headers as needed */}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <tr key={item.id}>
-            <td></td>
-            <td>{item.id}</td>
-            <td>{formattedDate(item.createdTime)}</td>
-            <td>{item.business}</td>
-            <td>{item.offer}</td>
-            <td>{item.detail}</td>
-            <td>{item.optLink}</td>
-            <td>{item.likes}</td>
-            <td>{item.downloads}</td>
+      <Table striped bordered hover responsive>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Date</th>
+            <th>BUSINESS</th>
+            <th>OFFER</th>
+            <th>DETAILS</th>
+            <th>OPT</th>
+            <th>Likes</th>
+            <th>Used</th>
+
+            {/* Add more table headers as needed */}
           </tr>
-        ))}
-      </tbody>
-    </Table>
+        </thead>
+        <tbody>
+          {paginatedData.map((item) => (
+            <tr key={item.id}>
+              <td></td>
+              <td>{item.id}</td>
+              <td>{formattedDate(item.createdTime)}</td>
+              <td>{item.business}</td>
+              <td>{item.offer}</td>
+              <td>{item.detail}</td>
+              <td>{item.optLink}</td>
+              <td>{item.likes}</td>
+              <td>{item.downloads}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <div className="pagination-container">
+
+        <Pagination>
+          <Pagination.First onClick={() => onPageChange(1)} disabled={currentPage === 1} />
+          <Pagination.Prev onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} />
+          {[...Array(totalPages)].map((_, index) => (
+            <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => onPageChange(index + 1)}>
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+          <Pagination.Last onClick={() => onPageChange(totalPages)} disabled={currentPage === totalPages} />
+        </Pagination>
+      </div>
+
+    </div>
 
   );
 };
