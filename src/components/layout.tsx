@@ -15,9 +15,10 @@ interface LayoutProps {
   topSubTitle?: string;
   showFeedback?: boolean;
   showOptOut?: boolean;
+  showABN?: boolean;
 }
 
-export default function Layout({ children, title, subTitle, logo, showFeedback, showOptOut, topSubTitle }: LayoutProps) {
+export default function Layout({ children, title, subTitle, logo, showFeedback, showOptOut, topSubTitle, showABN }: LayoutProps) {
   return (
     <div className={styles.container}>
       <Head>
@@ -34,9 +35,12 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
             <a target="_blank" rel="noopener noreferrer" href="https://farrahsliquorcollective.com/">
               <Image src={logo} alt="logo" width={100} height={50} className={styles.logo} />
             </a>
-            <div className={utilStyles.textSm}>
-              ABN 92 637 607 517
-            </div>
+            {
+              showABN &&
+              <div className={utilStyles.textSm}>
+                ABN 92 637 607 517
+              </div>
+            }
           </div>
           <div>
             <div className={`${utilStyles.text} ${utilStyles.textCenter}`}>{topSubTitle}</div>
@@ -98,4 +102,5 @@ Layout.propTypes = {
   subTitle: PropTypes.string,
   showFeedback: PropTypes.bool,
   showOptOut: PropTypes.bool,
+  showABN: PropTypes.bool,
 };

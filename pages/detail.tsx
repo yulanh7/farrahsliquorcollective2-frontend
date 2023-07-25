@@ -122,7 +122,7 @@ export default function Post() {
   console.log('error', errors);
 
   return (
-    <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback>
+    <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
       <Badge />
       <form className={utilStyles.form} onSubmit={handleSubmit}>
         <Container>

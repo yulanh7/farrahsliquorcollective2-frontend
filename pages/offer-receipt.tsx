@@ -42,7 +42,7 @@ export default function Post() {
   }
 
   return (
-    <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showOptOut>
+    <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showOptOut showABN>
       <form onSubmit={handleSubmit}>
         <Container>
           <Row>

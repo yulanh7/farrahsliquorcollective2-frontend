@@ -10,7 +10,7 @@ export default function Home() {
   const newUrl = "http://dev.farrahsliquorcollective2.com/detail";
 
   return (
-    <Layout title="WELCOME - OPT IN" logo="/images/logo.jpg">
+    <Layout title="WELCOME - OPT IN" logo="/images/logo.jpg" showABN>
       <h2
         className={`${utilStyles.headingMd} ${utilStyles.flexCenter} ${utilStyles.pB10px}`}
       >
