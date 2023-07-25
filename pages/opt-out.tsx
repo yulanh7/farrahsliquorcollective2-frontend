@@ -105,7 +105,7 @@ export default function Post() {
                   onChange={handleOptionChange}
                 />
                 <span className="checkmark"></span> {/* Pseudo-element for the custom checkbox appearance */}
-                Opt out of 4block altogether
+                Opt out of 4Block altogether
               </label>
               <label className="customRadio">
 
@@ -117,7 +117,7 @@ export default function Post() {
                   onChange={handleOptionChange}
                 />
                 <span className="checkmark"></span> {/* Pseudo-element for the custom checkbox appearance */}
-                Opt out altogether
+                Opt out and not hear from us again
               </label>
               <div className={`${errors.optOutSelection && 'is-invalid'}`}></div>
               {errors.optOutSelection && (
