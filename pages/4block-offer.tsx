@@ -54,20 +54,20 @@ const HomePage: React.FC = () => {
 
   return (
     <Layout title="4BLOCK OFFER" logo="/images/4Block Logo_RGB_Colour.jpg">
-      <h2>TOP OFFERS</h2>
+      <h5>TOP OFFERS</h5>
       {sortedTopOffers.length > 0 ? (
         <TableComponent data={sortedTopOffers} />
       ) : (
         <div>Loading...</div>
       )}
-      <h2>JUST IN {process.env.NEXT_PUBLIC_WEB_URL}</h2>
+      <h5>JUST IN {process.env.NEXT_PUBLIC_WEB_URL}</h5>
 
       {sortedJustInOffers.length > 0 ? (
         <TableComponent data={sortedJustInOffers} />
       ) : (
         <div>Loading...</div>
       )}
-      <h2>FAVORITE</h2>
+      <h5>FAVORITE</h5>
 
       {sortedFavoriteOffers.length > 0 ? (
         <TableComponent data={sortedFavoriteOffers} />
