@@ -119,6 +119,18 @@
   justify-content: center;
   align-items: center;
 }
+.flexColStart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+.flexColCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 .flexTop {
   display: flex;

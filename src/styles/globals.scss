@@ -26,3 +26,56 @@ img {
   display: block;
 }
 
+
+/* post.module.css */
+.customRadio {
+  position: relative;
+  cursor: pointer;
+  padding-left: 35px; /* Space for the custom checkbox appearance */
+  margin-bottom: 12px;
+}
+
+.customRadio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  border: 1px solid #ccc;
+}
+
+.customRadio input:checked ~ .checkmark {
+  background-color: #2196F3; /* Color when the radio input is checked */
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.customRadio input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.customRadio .checkmark:after {
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 5px;
+  border: 2px solid white; /* Pseudo-element for the checkmark inside the custom checkbox */
+  border-top: none;
+  border-right: none;
+  transform: translate(-50%, -50%) rotate(-45deg); /* Rotate the checkmark to create a tick (√) */
+}
+
+/* Additional styles for the checked state */
+// .customRadio input:checked ~ .checkmark {
+//   box-shadow: 0 0 0 3px white, 0 0 0 5px #2196F3; /* Add a border around the checked checkbox */
+// }
