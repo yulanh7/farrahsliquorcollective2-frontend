@@ -47,3 +47,8 @@
     width: 100%;
   }
 }
+@media (max-width:450px) {
+  .headerTop {
+    flex-direction: column;
+  }
+}

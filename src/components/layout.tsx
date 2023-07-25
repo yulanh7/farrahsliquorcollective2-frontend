@@ -30,15 +30,18 @@ export default function Layout({ children, title, subTitle, logo }: LayoutProps)
             <a target="_blank" rel="noopener noreferrer" href="https://farrahsliquorcollective.com/">
               <Image src={logo} alt="logo" width={100} height={50} className={styles.logo} />
             </a>
-            <div>
+            <div className={utilStyles.textSm}>
               ABN 92 637 607 517
             </div>
           </div>
-          <h1 className={utilStyles.headingLg}>{title}</h1>
+          <div>
+            <div className={utilStyles.headingLg}>{title}</div>
+            <div className={`${utilStyles.textMd} ${utilStyles.textCenter}`}>
+              {subTitle}
+            </div>
+          </div>
         </div>
-        <div className={`${utilStyles.textMd} ${utilStyles.textCenter}`}>
-          {subTitle}
-        </div>
+
       </header>
       <main className={styles.pageContainer}>{children}</main>
       <footer className={`${utilStyles.footerContainer} ${utilStyles.pT10px}`}>
