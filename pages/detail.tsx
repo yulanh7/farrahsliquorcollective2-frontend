@@ -1,7 +1,3 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store/store';
-import { fetchPostsAsync } from '../store/actions';
 import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
 import { useRouter } from "next/router";
@@ -12,16 +8,10 @@ import { useState } from 'react';
 
 export default function Post() {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const { posts, loading, error } = useSelector((state: RootState) => state.posts);
-
 
   // const referra = router.query.referra;
   console.log(router.query);
   const newUrl = "/offer-receipt";
-  useEffect(() => {
-    dispatch(fetchPostsAsync());
-  }, [dispatch]);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -202,9 +192,9 @@ export default function Post() {
               </div>
             </Col>
             <Col sm="12" md="6" className={utilStyles.rightCol}>
-              <h2 className={`${utilStyles.headingMd} ${utilStyles.pB10px}`}>
+              <h5 className={`${utilStyles.pB10px}`}>
                 OPT IN OFFER TO REGISTRAR
-              </h2>
+              </h5>
               <div className={`${utilStyles.text} ${utilStyles.pB10px}`}>
                 Welcome to Farrah Liquor Collective members club. You will Receive{`<gift>`} for joining.
               </div>
