@@ -11,8 +11,8 @@ interface LayoutProps {
   children: ReactNode;
   title: ReactNode;
   logo: string;
-  subTitle: string;
-  showFeedback: boolean;
+  subTitle?: string;
+  showFeedback?: boolean;
 }
 
 export default function Layout({ children, title, subTitle, logo, showFeedback }: LayoutProps) {
