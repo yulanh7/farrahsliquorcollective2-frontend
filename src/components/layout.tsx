@@ -12,11 +12,12 @@ interface LayoutProps {
   title: ReactNode;
   logo: string;
   subTitle?: string;
+  topSubTitle?: string;
   showFeedback?: boolean;
   showOptOut?: boolean;
 }
 
-export default function Layout({ children, title, subTitle, logo, showFeedback, showOptOut }: LayoutProps) {
+export default function Layout({ children, title, subTitle, logo, showFeedback, showOptOut, topSubTitle }: LayoutProps) {
   return (
     <div className={styles.container}>
       <Head>
@@ -38,6 +39,7 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
             </div>
           </div>
           <div>
+            <div className={`${utilStyles.text} ${utilStyles.textCenter}`}>{topSubTitle}</div>
             <div className={utilStyles.headingLg}>{title}</div>
             <div className={`${utilStyles.textMd} ${utilStyles.textCenter}`}>
               {subTitle}
@@ -92,6 +94,7 @@ Layout.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.node.isRequired,
   logo: PropTypes.string.isRequired,
+  topSubTitle: PropTypes.string,
   subTitle: PropTypes.string,
   showFeedback: PropTypes.bool,
   showOptOut: PropTypes.bool,
