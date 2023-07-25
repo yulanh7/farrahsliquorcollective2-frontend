@@ -44,7 +44,7 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
           </div>
           <div>
             <div className={`${utilStyles.text} ${utilStyles.textCenter}`}>{topSubTitle}</div>
-            <div className={utilStyles.headingLg}>{title}</div>
+            <h3>{title}</h3>
             <div className={`${utilStyles.textMd} ${utilStyles.textCenter}`}>
               {subTitle}
             </div>

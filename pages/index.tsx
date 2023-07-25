@@ -11,11 +11,11 @@ export default function Home() {
 
   return (
     <Layout title="WELCOME - OPT IN" logo="/images/logo.jpg" showABN>
-      <h2
-        className={`${utilStyles.headingMd} ${utilStyles.flexCenter} ${utilStyles.pB10px}`}
+      <h5
+        className={`${utilStyles.flexCenter} ${utilStyles.pB10px}`}
       >
         OPT IN OFFER TO REGISTER
-      </h2>
+      </h5>
       <QRCodeGenerator url={newUrl} className="qrcode40" />
       <p
         className={`${utilStyles.text} ${utilStyles.lightText} ${utilStyles.flexCenter} ${utilStyles.pT10px}`}

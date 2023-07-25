@@ -50,7 +50,7 @@ export default function Post() {
               <QRCodeGenerator url={newUrl} className="qrcode80" />
             </Col>
             <Col sm="12" md="6" className={`${utilStyles.pT30px}`}>
-              <div className={`${utilStyles.headingMd} ${utilStyles.pB10px}`}>Unique ID:</div>
+              <h5 className={`${utilStyles.pB10px}`}>Unique ID:</h5>
               <div> FLC-00001 </div>
             </Col>
           </Row>
