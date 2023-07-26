@@ -26,19 +26,3 @@ export const getUser = async (payload: {
     throw new Error("Failed to submit payload to the external API");
   }
 };
-
-export const pushSubscribe = async (payload: { userId: string }) => {
-  const host = window.location.host.replace(/:[0-9]{1,5}.*/, "");
-  let currentId = null;
-
-  try {
-    const response = await axios.post(`${API_URL}/user/withBlockchain`, {
-      ...payload,
-      companyName,
-    });
-
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to submit payload to the external API");
-  }
-};
