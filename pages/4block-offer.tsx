@@ -73,7 +73,7 @@ const HomePage: React.FC = () => {
 
 
   return (
-    <Layout title="4BLOCK OFFER" logo="/images/4Block Logo_RGB_Colour.jpg">
+    <Layout title="4BLOCK OFFER" logo="/images/4Block Logo_RGB_Colour.jpg" showOptOut>
       <h5>TOP OFFERS</h5>
       {sortedTopOffers.length > 0 ? (
         <TableComponent data={sortedTopOffers} itemsPerPage={6} />
