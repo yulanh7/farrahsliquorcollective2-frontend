@@ -8,7 +8,7 @@ import userReducer from "./userSlice";
 const store = configureStore({
   reducer: {
     offer: offerReducer,
-    user: userReducer, // Add the new reducer for companyName and userId
+    user: userReducer,
   },
 });
 

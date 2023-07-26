@@ -1,6 +1,6 @@
 import axios from "axios";
+import { companyName } from "../utils/utils";
 
-const companyName = "Farrah's Liquor Collective";
 const API_URL = "http://localhost:3008";
 export const getOffersData = async () => {
   const response = await axios.get("/api/offer"); // Replace with your actual API endpoint
@@ -8,7 +8,6 @@ export const getOffersData = async () => {
 };
 
 export const getUser = async (payload: {
-  companyName: string;
   userHash: string;
   endpoint?: string; // Make 'endpoint' optional
   expirationTime: number | null; // Change to 'number | null'
@@ -17,7 +16,10 @@ export const getUser = async (payload: {
   try {
     const response = await axios.post(
       `${API_URL}/user/withBlockchainSubscribe`,
-      payload
+      {
+        ...payload,
+        companyName,
+      }
     );
     return response.data;
   } catch (error) {
@@ -25,18 +27,15 @@ export const getUser = async (payload: {
   }
 };
 
-export const pushSubscribe = async (payload: {
-  companyName: string;
-  userId: string;
-}) => {
+export const pushSubscribe = async (payload: { userId: string }) => {
   const host = window.location.host.replace(/:[0-9]{1,5}.*/, "");
   let currentId = null;
 
   try {
-    const response = await axios.post(
-      `${API_URL}/user/withBlockchain`,
-      payload
-    );
+    const response = await axios.post(`${API_URL}/user/withBlockchain`, {
+      ...payload,
+      companyName,
+    });
 
     return response.data;
   } catch (error) {

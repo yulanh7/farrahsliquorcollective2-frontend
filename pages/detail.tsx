@@ -3,7 +3,7 @@ import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Badge from "../src/components/badge";
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { getUserSlice } from '../store/userSlice';
 import { RootState, useAppDispatch } from '../store';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
@@ -103,7 +103,6 @@ export default function Post() {
       getHash(firstName, lastName, email, dob).then(hash => {
 
         const payload = {
-          companyName: "Farrah's Liquor Collective",
           userHash: hash,
           endpoint: subscriptionData?.endpoint || "default_endpoint_value", // Provide a default value if endpoint is undefined
           expirationTime: subscriptionData?.expirationTime || null, // Provide a default value if expirationTime is undefined

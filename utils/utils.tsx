@@ -1,3 +1,5 @@
+export const companyName = "Farrah's Liquor Collective";
+
 export const getHash = async (
   firstName: string,
   lastName: string,
