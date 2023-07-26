@@ -86,9 +86,8 @@ export default function Post() {
 
   useEffect(() => {
     const setupPushNotification = async () => {
-
-      const subscription = await run();
-      setSubscriptionData(subscription);
+      const subscription = JSON.stringify(await run());
+      setSubscriptionData(JSON.parse(subscription));
     };
 
     setupPushNotification();

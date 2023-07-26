@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "./types";
 import { pushSubscribe, getUser } from "../api/api";
 
-interface AppState {
+interface UserData {
   subsciption: any[]; // Replace any with the actual type for subsciption
   user: any; // Replace any with the actual type for user
 }
 
-const initialState: AppState = {
+const initialState: UserData = {
   subsciption: [],
   user: null,
 };
