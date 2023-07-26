@@ -11,25 +11,25 @@ import { run } from '../lib/notification'; // Import the run function from the n
 
 
 export default function Post() {
-  const dispatch = useAppDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
-  const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
-
-
   // const referra = router.query.referra;
   const newUrl = "/offer-receipt";
 
+  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+  const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
-  const [agreed, setAgreed] = useState(true);
+  const [agreedPromotion, setAgreedPromotion] = useState(true);
+  const [agreedAge, setAgreedAge] = useState(true);
   const [errors, setErrors] = useState<{
     firstName?: string;
     lastName?: string;
     email?: string;
     dob?: string;
-    agreed?: string;
+    agreedPromotion?: string;
+    agreedAge?: string;
   }>({});
 
   const validateForm = () => {
@@ -39,7 +39,8 @@ export default function Post() {
       lastName?: string;
       email?: string;
       dob?: string;
-      agreed?: string;
+      agreedPromotion?: string;
+      agreedAge?: string;
     } = {};
 
     if (firstName.trim() === '') {
@@ -64,8 +65,12 @@ export default function Post() {
       newErrors.dob = 'Date of birth is required';
       isValid = false;
     }
-    if (!agreed) {
-      newErrors.agreed = 'You must agree to receive promotional material before submitting the form.';
+    if (!agreedPromotion) {
+      newErrors.agreedPromotion = 'You must agree to receive promotional material before submitting the form.';
+      isValid = false;
+    }
+    if (!agreedAge) {
+      newErrors.agreedAge = 'You must be at least 18 years old.';
       isValid = false;
     }
 
@@ -197,15 +202,26 @@ export default function Post() {
                 {errors.dob && <div className="invalid-feedback">{errors.dob}</div>}
               </div>
               <div>
-                <label className={`${errors.agreed && 'is-invalid'} ${errors.agreed && 'form-control'}`}>
+                <label className={`${errors.agreedPromotion && 'is-invalid'} ${errors.agreedPromotion && 'form-control'}`}>
                   <input
                     type="checkbox"
-                    checked={agreed}
-                    onChange={(e) => setAgreed(e.target.checked)}
+                    checked={agreedPromotion}
+                    onChange={(e) => setAgreedPromotion(e.target.checked)}
                   />
                   <span> I agree to receive promotional material.</span>
                 </label>
-                {errors.agreed && <div className="invalid-feedback">{errors.agreed}</div>}
+                {errors.agreedPromotion && <div className="invalid-feedback">{errors.agreedPromotion}</div>}
+              </div>
+              <div>
+                <label className={`${errors.agreedAge && 'is-invalid'} ${errors.agreedAge && 'form-control'}`}>
+                  <input
+                    type="checkbox"
+                    checked={agreedAge}
+                    onChange={(e) => setAgreedAge(e.target.checked)}
+                  />
+                  <span>  It is an offence to supply alcohol to a person under the age of 18 years – penalties apply. A.C.T. Liquor Licence Number 14005716.</span>
+                </label>
+                {errors.agreedAge && <div className="invalid-feedback">{errors.agreedAge}</div>}
               </div>
             </Col>
             <Col sm="12" md="6" className={utilStyles.rightCol}>
