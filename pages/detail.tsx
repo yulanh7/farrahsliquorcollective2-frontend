@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { getUserSlice } from '../store/userSlice';
 import { RootState, useAppDispatch } from '../store';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
-
+import { getHash } from "../utils/utils";
 
 
 export default function Post() {
@@ -15,7 +15,7 @@ export default function Post() {
   const newUrl = "/offer-receipt";
 
   const dispatch = useAppDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  // const { user } = useSelector((state: RootState) => state.user);
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -115,22 +115,7 @@ export default function Post() {
     }
   };
 
-  const getHash = async (
-    firstName: string,
-    lastName: string,
-    email: string,
-    dob: string
-  ) => {
-    const data = `${firstName}${lastName}${email}${dob}`;
-    const encoder = new TextEncoder();
-    const encodedData = encoder.encode(data);
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', encodedData);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-  }
 
-  console.log('error', errors);
 
   return (
     <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
@@ -230,8 +215,6 @@ export default function Post() {
               <div className={`${utilStyles.text} ${utilStyles.pB10px}`}>
                 Welcome to Farrah Liquor Collective members club. You will Receive{`<gift>`} for joining.
               </div>
-
-
               <Button
                 variant="primary"
                 type="submit"
