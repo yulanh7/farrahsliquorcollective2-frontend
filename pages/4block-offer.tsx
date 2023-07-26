@@ -4,6 +4,7 @@ import TableComponent from '../src/components/table';
 import Layout from "../src/components/layout";
 import { fetchUserData } from '../store/offerSlice';
 import { RootState, useAppDispatch } from '../store';
+import FAQ from '../src/components/faq';
 
 
 
@@ -17,6 +18,25 @@ interface OfferData {
   likes: number;
   downloads: number;
 }
+
+const faqItems = [
+  {
+    question: 'What is the technology of 4block ?',
+    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+  },
+  {
+    question: 'How does 4block ensure security',
+    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+  },
+  {
+    question: 'What are the main applications of 4block technology',
+    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+  },
+  {
+    question: 'What are the benefits of using 4block',
+    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+  },
+];
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -74,6 +94,10 @@ const HomePage: React.FC = () => {
       ) : (
         <div>Loading...</div>
       )}
+      <div>
+        <h5>FAQ</h5>
+        <FAQ faqItems={faqItems} />
+      </div>
     </Layout>
   );
 };
