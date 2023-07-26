@@ -1,19 +1,20 @@
+import React, { useEffect, useState } from 'react';
 import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
-import { useRouter } from "next/router";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Badge from "../src/components/badge";
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { submitPayload } from '../store/userSlice';
+import { useSelector } from 'react-redux';
+import { getUserSlice } from '../store/userSlice';
 import { RootState, useAppDispatch } from '../store';
+import { run } from '../lib/notification'; // Import the run function from the notification.ts file
+
 
 
 export default function Post() {
-  const dispatch = useDispatch();
-  const { businessOwner, userId } = useSelector((state: RootState) => state.user);
-  const [inputBusinessOwner, setInputBusinessOwner] = useState('');
-  const [inputUserId, setInputUserId] = useState('');
+  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+  const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
+
 
   // const referra = router.query.referra;
   const newUrl = "/offer-receipt";
@@ -78,14 +79,35 @@ export default function Post() {
     return emailRegex.test(value);
   };
 
+  useEffect(() => {
+    const setupPushNotification = async () => {
+
+      const subscription = await run();
+      setSubscriptionData(subscription);
+    };
+
+    setupPushNotification();
+  }, []);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (validateForm()) {
+    console.log("bbb", subscriptionData);
+    if (validateForm() && subscriptionData) {
       const hashCode = getHash(firstName, lastName, email, dob);
       console.log(hashCode);
-      const payload = { businessOwner: inputBusinessOwner, userId: inputUserId };
-      dispatch(submitPayload(payload));
+
+      getHash(firstName, lastName, email, dob).then(hash => {
+
+        const payload = {
+          companyName: "Farrah's Liquor Collective",
+          userHash: hash,
+          endpoint: subscriptionData?.endpoint || "default_endpoint_value", // Provide a default value if endpoint is undefined
+          expirationTime: subscriptionData?.expirationTime || null, // Provide a default value if expirationTime is undefined
+          keys: subscriptionData?.keys || {} // Provide a default empty object if keys is undefined
+        };
+        dispatch(getUserSlice(payload));
+
+      })
     }
   };
 

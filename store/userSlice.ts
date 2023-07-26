@@ -1,41 +1,58 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "./types";
-import { pushSubscribe } from "../api/api";
+import { pushSubscribe, getUser } from "../api/api";
 
 interface AppState {
-  businessOwner: string | null;
-  userId: string | null;
+  subsciption: any[]; // Replace any with the actual type for subsciption
+  user: any; // Replace any with the actual type for user
 }
 
 const initialState: AppState = {
-  businessOwner: null,
-  userId: null,
+  subsciption: [],
+  user: null,
 };
 
 const useSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setBusinessOwner: (state, action: PayloadAction<string | null>) => {
-      state.businessOwner = action.payload;
+    setSubsciption: (state, action: PayloadAction<any[]>) => {
+      state.subsciption = action.payload;
     },
-    setUserId: (state, action: PayloadAction<string | null>) => {
-      state.userId = action.payload;
+    setUser: (state, action: PayloadAction<any>) => {
+      state.user = action.payload;
     },
   },
 });
 
-export const { setBusinessOwner, setUserId } = useSlice.actions;
+export const { setSubsciption, setUser } = useSlice.actions;
 export default useSlice.reducer;
 
 // Thunk to submit payload to external API
-export const submitPayload =
-  (payload: { businessOwner: string; userId: string }): AppThunk =>
+export const pushSubscribeSlice =
+  (payload: { companyName: string; userId: string }): AppThunk =>
   async (dispatch) => {
     try {
-      await pushSubscribe(payload);
-      dispatch(setBusinessOwner(payload.businessOwner));
-      dispatch(setUserId(payload.userId));
+      const subsciption = await pushSubscribe(payload);
+
+      dispatch(setSubsciption(subsciption));
+    } catch (error) {
+      console.error("Error submitting payload:", error);
+    }
+  };
+
+export const getUserSlice =
+  (payload: {
+    companyName: string;
+    userHash: string;
+    endpoint?: string; // Make 'endpoint' optional
+    expirationTime: number | null; // Change to 'number | null'
+    keys: Record<string, string>;
+  }): AppThunk =>
+  async (dispatch) => {
+    try {
+      const subsciption = await getUser(payload);
+      dispatch(setSubsciption(subsciption));
     } catch (error) {
       console.error("Error submitting payload:", error);
     }
