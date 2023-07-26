@@ -3,10 +3,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import offerReducer from "./offerSlice";
+import userReducer from "./userSlice";
 
 const store = configureStore({
   reducer: {
     offer: offerReducer,
+    user: userReducer, // Add the new reducer for businessOwner and userId
   },
 });
 

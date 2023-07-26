@@ -4,13 +4,18 @@ import { useRouter } from "next/router";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Badge from "../src/components/badge";
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitPayload } from '../store/userSlice';
+import { RootState, useAppDispatch } from '../store';
 
 
 export default function Post() {
-  const router = useRouter();
+  const dispatch = useDispatch();
+  const { businessOwner, userId } = useSelector((state: RootState) => state.user);
+  const [inputBusinessOwner, setInputBusinessOwner] = useState('');
+  const [inputUserId, setInputUserId] = useState('');
 
   // const referra = router.query.referra;
-  console.log(router.query);
   const newUrl = "/offer-receipt";
 
   const [firstName, setFirstName] = useState('');
@@ -79,18 +84,8 @@ export default function Post() {
     if (validateForm()) {
       const hashCode = getHash(firstName, lastName, email, dob);
       console.log(hashCode);
-      getHash(firstName, lastName, email, dob,).then(hash => {
-        console.log(hash);
-        fetch('http://172.19.0.191:3000/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ hash })
-        });
-      });
-      // Form is valid, perform form submission logic here
-      router.push(newUrl)
+      const payload = { businessOwner: inputBusinessOwner, userId: inputUserId };
+      dispatch(submitPayload(payload));
     }
   };
 
