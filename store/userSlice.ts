@@ -31,14 +31,14 @@ export default useSlice.reducer;
 export const getUserSlice =
   (payload: {
     userHash: string;
-    endpoint?: string; // Make 'endpoint' optional
-    expirationTime: number | null; // Change to 'number | null'
+    endpoint?: string;
+    expirationTime: number | null;
     keys: Record<string, string>;
-  }): AppThunk =>
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
       const { user } = await getUser(payload);
-      dispatch(setSubsciption(user));
+      dispatch(setUser(user));
     } catch (error) {
       console.error("Error submitting payload:", error);
     }

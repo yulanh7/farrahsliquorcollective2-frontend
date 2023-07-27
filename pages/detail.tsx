@@ -3,19 +3,20 @@ import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Badge from "../src/components/badge";
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getUserSlice } from '../store/userSlice';
 import { RootState, useAppDispatch } from '../store';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
+import { useRouter } from 'next/router';
 import { getHash } from "../utils/utils";
-
 
 export default function Post() {
   // const referra = router.query.referra;
   const newUrl = "/offer-receipt";
+  const router = useRouter();
 
   const dispatch = useAppDispatch();
-  // const { user } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -93,24 +94,22 @@ export default function Post() {
     setupPushNotification();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("bbb", subscriptionData);
     if (validateForm() && subscriptionData) {
-      const hashCode = getHash(firstName, lastName, email, dob);
-      console.log(hashCode);
+      const hash = await getHash(firstName, lastName, email, dob);
 
-      getHash(firstName, lastName, email, dob).then(hash => {
-
-        const payload = {
-          userHash: hash,
-          endpoint: subscriptionData?.endpoint || "default_endpoint_value", // Provide a default value if endpoint is undefined
-          expirationTime: subscriptionData?.expirationTime || null, // Provide a default value if expirationTime is undefined
-          keys: subscriptionData?.keys || {} // Provide a default empty object if keys is undefined
-        };
-        dispatch(getUserSlice(payload));
-
-      })
+      const payload = {
+        userHash: hash,
+        endpoint: subscriptionData?.endpoint || "default_endpoint_value",
+        expirationTime: subscriptionData?.expirationTime || null,
+        keys: subscriptionData?.keys || {}
+      };
+      await dispatch(getUserSlice(payload));
+      if (user) {
+        router.push(newUrl);
+      }
     }
   };
 
