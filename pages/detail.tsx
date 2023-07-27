@@ -8,7 +8,7 @@ import { getUserSlice } from '../store/userSlice';
 import { RootState, useAppDispatch } from '../store';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
 import { useRouter } from 'next/router';
-import { getHash } from "../utils/utils";
+import { getHash, getCookie } from "../utils/utils";
 
 export default function Post() {
   // const referra = router.query.referra;
@@ -114,10 +114,35 @@ export default function Post() {
   useEffect(() => {
     // Redirect to the new page only if the user is not null
     if (user) {
-      document.cookie = `userHash=${hash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+      router.push("/offer-receipt");
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+
+    // Redirect to the new page only if the user is not null
+    if (user) {
+      document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       router.push("/offer-receipt");
     }
   }, [hash, user, router]);
+
+  useEffect(() => {
+    // Redirect to the new page only if the user is not null
+    const hash = getCookie('userHash');
+    if (hash) {
+      const payload = {
+        userHash: hash,
+        endpoint: subscriptionData?.endpoint || "default_endpoint_value",
+        expirationTime: subscriptionData?.expirationTime || null,
+        keys: subscriptionData?.keys || {}
+      };
+      dispatch(getUserSlice(payload));
+    }
+
+  });
+
+
 
 
 
