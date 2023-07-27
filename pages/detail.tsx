@@ -22,6 +22,7 @@ export default function Post() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
+  const [hash, setHash] = useState('');
   const [agreedPromotion, setAgreedPromotion] = useState(true);
   const [agreedAge, setAgreedAge] = useState(true);
   const [errors, setErrors] = useState<{
@@ -99,7 +100,7 @@ export default function Post() {
     console.log("bbb", subscriptionData);
     if (validateForm() && subscriptionData) {
       const hash = await getHash(firstName, lastName, email, dob);
-
+      setHash(hash);
       const payload = {
         userHash: hash,
         endpoint: subscriptionData?.endpoint || "default_endpoint_value",
@@ -107,11 +108,16 @@ export default function Post() {
         keys: subscriptionData?.keys || {}
       };
       await dispatch(getUserSlice(payload));
-      if (user) {
-        router.push(newUrl);
-      }
     }
   };
+
+  useEffect(() => {
+    // Redirect to the new page only if the user is not null
+    if (user) {
+      document.cookie = `userHash=${hash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+      router.push("/offer-receipt");
+    }
+  }, [hash, user, router]);
 
 
 
