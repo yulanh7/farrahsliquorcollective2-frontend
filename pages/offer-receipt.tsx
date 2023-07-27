@@ -31,7 +31,7 @@ export default function Post() {
     }
   }, [dispatch]);
 
-
+  console.log("aa", defaultOffer);
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showOptOut showABN>
       {defaultOfferLoading &&
@@ -56,9 +56,9 @@ export default function Post() {
               className={`${utilStyles.text} ${utilStyles.pB10px} ${utilStyles.textCenter} ${utilStyles.pT30px}`}
             >
               {defaultOffer.description}
-            </div>
-            <div>
-              Expire Date: {defaultOffer.expireDate}
+              <div>
+                Expire Date: {defaultOffer.expireDate}
+              </div>
             </div>
             <div className={utilStyles.textCenter}>
               <Button variant="primary" type="submit" className={utilStyles.button}>

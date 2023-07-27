@@ -41,7 +41,7 @@ const offerSlice = createSlice({
     },
     getDefaultOfferSuccess(state, action: PayloadAction<any>) {
       state.defaultOfferLoading = false;
-      state.allOffers = action.payload;
+      state.defaultOffer = action.payload;
       state.error = null;
     },
     getDefaultOfferFailure(state, action: PayloadAction<string>) {
