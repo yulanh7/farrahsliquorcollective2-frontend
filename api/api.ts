@@ -37,3 +37,12 @@ export const getDefaultOfferData = async (payload: { userHash: string }) => {
     throw new Error("Failed to get a default offer");
   }
 };
+
+export const submitUnsubscribe = async (payload: { userHash: string }) => {
+  try {
+    const response = await axios.put(`${API_URL}/user/unsubscribe`, payload);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to unsubcribe");
+  }
+};

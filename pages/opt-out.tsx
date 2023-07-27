@@ -3,8 +3,15 @@ import React, { useState, FormEvent, ChangeEvent } from "react";
 import utilStyles from "../src/styles/utils.module.scss";
 import { Button } from "react-bootstrap";
 import Link from "next/link";
+import { useSelector } from 'react-redux';
+import { unsubscribeSlice } from '../store/userSlice';
+import { RootState, useAppDispatch } from '../store';
+import { getHash, getCookie } from "../utils/utils";
+
 
 export default function Post() {
+  const dispatch = useAppDispatch();
+  const { subsciption } = useSelector((state: RootState) => state.user);
   const [optOutSelection, setOptOutSelection] = useState('optOutFromOffer');
   const handleOptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setOptOutSelection(e.target.value);
@@ -45,10 +52,17 @@ export default function Post() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 
     e.preventDefault();
-    if (validateForm()) {
-      // Form is valid, perform form submission logic here
-      setOptOut(true);
+    // if (validateForm()) {
+    const hash = getCookie('userHash');
+    if (hash) {
+      const payload = {
+        userHash: hash
+      }
+      dispatch(unsubscribeSlice(payload));
     }
+    // Form is valid, perform form submission logic here
+    setOptOut(true);
+    // }
 
   }
 
