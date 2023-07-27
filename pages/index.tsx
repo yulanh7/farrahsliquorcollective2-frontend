@@ -1,13 +1,52 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
 import QRCodeGenerator from "../utils/QRCodeUtils";
 import Link from "next/link";
+import { RootState, useAppDispatch } from '../store';
+import { getCookie } from "../utils/utils";
+import { useSelector } from 'react-redux';
+import { getUserSlice } from '../store/userSlice';
+import { run } from '../lib/notification'; // Import the run function from the notification.ts file
+import { useRouter } from 'next/router';
 
 
 export default function Home() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+  const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
+  const url = "http://dev.farrahsliquorcollective2.com/detail";
+  useEffect(() => {
+    const setupPushNotification = async () => {
+      const subscription = JSON.stringify(await run());
+      setSubscriptionData(JSON.parse(subscription));
+    };
 
-  const newUrl = "http://dev.farrahsliquorcollective2.com/detail";
+    setupPushNotification();
+  }, []);
+
+  useEffect(() => {
+    const hash = getCookie('userHash');
+    if (hash) {
+      const payload = {
+        userHash: hash,
+        endpoint: subscriptionData?.endpoint || "default_endpoint_value",
+        expirationTime: subscriptionData?.expirationTime || null,
+        keys: subscriptionData?.keys || {}
+      };
+      dispatch(getUserSlice(payload));
+    }
+  });
+
+
+  useEffect(() => {
+    // Redirect to the new page only if the user is not null
+    if (user) {
+      router.push("/offer-receipt")
+    }
+  }, [user, router]);
+
 
   return (
     <Layout title="WELCOME - OPT IN" logo="/images/logo.jpg" showABN>
@@ -16,15 +55,15 @@ export default function Home() {
       >
         OPT IN OFFER TO REGISTER
       </h5>
-      <QRCodeGenerator url={newUrl} className="qrcode40" />
+      <QRCodeGenerator url={url} className="qrcode40" />
       <p
         className={`${utilStyles.text} ${utilStyles.lightText} ${utilStyles.flexCenter} ${utilStyles.pT10px}`}
       >
         <span className={`${utilStyles.pR5px} ${utilStyles.darkText}`}>
           URL:
         </span>
-        <Link href={newUrl}>
-          {newUrl}
+        <Link href={url}>
+          {url}
         </Link>
 
       </p>
