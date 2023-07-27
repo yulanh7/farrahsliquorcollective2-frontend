@@ -23,6 +23,17 @@ export const getUser = async (payload: {
     );
     return response.data;
   } catch (error) {
-    throw new Error("Failed to submit payload to the external API");
+    throw new Error("Failed to creat a user");
+  }
+};
+export const getDefaultOfferData = async (payload: { userHash: string }) => {
+  try {
+    const response = await axios.post(`${API_URL}/user/defaultCoupon`, {
+      ...payload,
+      companyName,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to get a default offer");
   }
 };

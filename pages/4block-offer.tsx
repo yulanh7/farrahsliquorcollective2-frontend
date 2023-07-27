@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import TableComponent from '../src/components/table';
 import Layout from "../src/components/layout";
-import { fetchUserData } from '../store/offerSlice';
+import { fetchAllOffers } from '../store/offerSlice';
 import { RootState, useAppDispatch } from '../store';
 import FAQ from '../src/components/faq';
 
@@ -40,24 +40,24 @@ const faqItems = [
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { loading, data, error } = useSelector((state: RootState) => state.offer);
+  const { loading, allOffers, error } = useSelector((state: RootState) => state.offer);
   useEffect(() => {
-    dispatch(fetchUserData());
+    dispatch(fetchAllOffers());
   }, [dispatch]);
 
   let sortedJustInOffers: OfferData[] = [];
   let sortedTopOffers: OfferData[] = [];
   let sortedFavoriteOffers: OfferData[] = [];
-  if (data) {
-    sortedJustInOffers = [...data].sort((a, b) => {
+  if (allOffers) {
+    sortedJustInOffers = [...allOffers].sort((a, b) => {
       return new Date(b.createdTime).getTime() - new Date(a.createdTime).getTime();
     });
 
-    sortedTopOffers = [...data].sort((a, b) => {
+    sortedTopOffers = [...allOffers].sort((a, b) => {
       return b.downloads - a.downloads;
     });
 
-    sortedFavoriteOffers = [...data].sort((a, b) => {
+    sortedFavoriteOffers = [...allOffers].sort((a, b) => {
       return b.likes - a.likes;
     });
   }

@@ -139,12 +139,7 @@ export default function Post() {
       };
       dispatch(getUserSlice(payload));
     }
-
-  });
-
-
-
-
+  }, [dispatch, subscriptionData]);
 
   return (
     <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
