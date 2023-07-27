@@ -44,7 +44,7 @@ export default function Post() {
             <Container>
               <Row>
                 <Col sm="12" md="6">
-                  <QRCodeGenerator url={url} className="qrcode80" />
+                  <QRCodeGenerator url={defaultOffer.couponId} className="qrcode80" />
                 </Col>
                 <Col sm="12" md="6" className={`${utilStyles.pT30px}`}>
                   <h5 className={`${utilStyles.pB10px}`}>Unique ID:</h5>
