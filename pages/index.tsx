@@ -37,12 +37,12 @@ export default function Home() {
       };
       dispatch(getUserInfoSlice(payload));
     }
-  });
+  }, []);
 
 
   useEffect(() => {
     // Redirect to the new page only if the user is not null
-    if (userInfo) {
+    if (userInfo && userInfo.subscriptionStatus) {
       router.push("/offer-receipt")
     }
   }, [userInfo, router]);
