@@ -4,7 +4,7 @@ import utilStyles from "../src/styles/utils.module.scss";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Badge from "../src/components/badge";
 import { useSelector } from 'react-redux';
-import { getUserSlice } from '../store/userSlice';
+import { optInSlice } from '../store/userSlice';
 import { RootState, useAppDispatch } from '../store';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
 import { useRouter } from 'next/router';
@@ -97,7 +97,6 @@ export default function Post() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("bbb", subscriptionData);
     if (validateForm() && subscriptionData) {
       const hash = await getHash(firstName, lastName, email, dob);
       setHash(hash);
@@ -107,25 +106,25 @@ export default function Post() {
         expirationTime: subscriptionData?.expirationTime || null,
         keys: subscriptionData?.keys || {}
       };
-      await dispatch(getUserSlice(payload));
+      await dispatch(optInSlice(payload));
     }
   };
 
-  useEffect(() => {
-    // Redirect to the new page only if the user is not null
-    if (user) {
-      router.push("/offer-receipt");
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   // Redirect to the new page only if the user is not null
+  //   if (user && user.subscriptionStatus) {
+  //     router.push("/offer-receipt");
+  //   }
+  // }, [user, router]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    // Redirect to the new page only if the user is not null
-    if (user) {
-      document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
-      router.push("/offer-receipt");
-    }
-  }, [hash, user, router]);
+  //   // Redirect to the new page only if the user is not null
+  //   if (user) {
+  //     document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+  //     router.push("/offer-receipt");
+  //   }
+  // }, [hash, user, router]);
 
   useEffect(() => {
     // Redirect to the new page only if the user is not null
@@ -137,7 +136,7 @@ export default function Post() {
         expirationTime: subscriptionData?.expirationTime || null,
         keys: subscriptionData?.keys || {}
       };
-      dispatch(getUserSlice(payload));
+      dispatch(optInSlice(payload));
     }
   }, [dispatch, subscriptionData]);
 

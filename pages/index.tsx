@@ -6,7 +6,7 @@ import Link from "next/link";
 import { RootState, useAppDispatch } from '../store';
 import { getCookie } from "../utils/utils";
 import { useSelector } from 'react-redux';
-import { getUserSlice } from '../store/userSlice';
+import { optInSlice } from '../store/userSlice';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
 import { useRouter } from 'next/router';
 
@@ -35,7 +35,7 @@ export default function Home() {
         expirationTime: subscriptionData?.expirationTime || null,
         keys: subscriptionData?.keys || {}
       };
-      dispatch(getUserSlice(payload));
+      dispatch(optInSlice(payload));
     }
   });
 

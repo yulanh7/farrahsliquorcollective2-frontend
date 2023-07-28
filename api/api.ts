@@ -7,7 +7,7 @@ export const getOffersData = async () => {
   return response.data;
 };
 
-export const getUser = async (payload: {
+export const optIn = async (payload: {
   userHash: string;
   endpoint?: string; // Make 'endpoint' optional
   expirationTime: number | null; // Change to 'number | null'
@@ -26,6 +26,7 @@ export const getUser = async (payload: {
     throw new Error("Failed to creat a user");
   }
 };
+
 export const getDefaultOfferData = async (payload: { userHash: string }) => {
   try {
     const response = await axios.post(`${API_URL}/user/defaultCoupon`, {

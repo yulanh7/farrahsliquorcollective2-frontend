@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "./types";
-import { getUser, submitUnsubscribe } from "../api/api";
+import { optIn, submitUnsubscribe } from "../api/api";
 
 interface UserData {
   subsciption: any; // Replace any with the actual type for subsciption
@@ -28,7 +28,7 @@ const useSlice = createSlice({
 export const { setUnsubsciption, setUser } = useSlice.actions;
 export default useSlice.reducer;
 
-export const getUserSlice =
+export const optInSlice =
   (payload: {
     userHash: string;
     endpoint?: string;
@@ -37,7 +37,7 @@ export const getUserSlice =
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
-      const { user } = await getUser(payload);
+      const { user } = await optIn(payload);
       dispatch(setUser(user));
     } catch (error) {
       console.error("Error submitting payload:", error);
