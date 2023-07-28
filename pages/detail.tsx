@@ -110,21 +110,21 @@ export default function Post() {
     }
   };
 
-  // useEffect(() => {
-  //   // Redirect to the new page only if the user is not null
-  //   if (user && user.subscriptionStatus) {
-  //     router.push("/offer-receipt");
-  //   }
-  // }, [user, router]);
-
   useEffect(() => {
-
     // Redirect to the new page only if the user is not null
-    if (userWithData) {
-      document.cookie = `userHash=${userWithData.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+    if (userInfo && userInfo.subscriptionStatus) {
       router.push("/offer-receipt");
     }
-  }, [hash, userWithData, router]);
+  }, [userInfo, router]);
+
+  // useEffect(() => {
+
+  //   // Redirect to the new page only if the user is not null
+  //   if (userWithData && userWithData.userHash && userWithData.subscriptionStatus) {
+  //     document.cookie = `userHash=${userWithData.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+  //     router.push("/offer-receipt");
+  //   }
+  // }, [hash, userWithData, router]);
 
   useEffect(() => {
     // Redirect to the new page only if the user is not null
