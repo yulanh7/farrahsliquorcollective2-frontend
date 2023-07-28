@@ -75,7 +75,7 @@ export default function Post() {
               You have been unsubscribed
             </div>
             <div className={`${utilStyles.textCenter}`}>
-              <Link href="/" >
+              <Link href="/detail" >
                 <Button variant="primary" type="submit" className={utilStyles.button}>
                   OPT IN
                 </Button>
