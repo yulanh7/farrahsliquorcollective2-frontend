@@ -4,12 +4,12 @@ import { optIn, submitUnsubscribe } from "../api/api";
 
 interface UserData {
   subsciption: any; // Replace any with the actual type for subsciption
-  user: any; // Replace any with the actual type for user
+  userWithData: any; // Replace any with the actual type for user
 }
 
 const initialState: UserData = {
   subsciption: null,
-  user: null,
+  userWithData: null,
 };
 
 const useSlice = createSlice({
@@ -19,13 +19,13 @@ const useSlice = createSlice({
     setUnsubsciption: (state, action: PayloadAction<any[]>) => {
       state.subsciption = action.payload;
     },
-    setUser: (state, action: PayloadAction<any>) => {
-      state.user = action.payload;
+    setUserWithData: (state, action: PayloadAction<any>) => {
+      state.userWithData = action.payload;
     },
   },
 });
 
-export const { setUnsubsciption, setUser } = useSlice.actions;
+export const { setUnsubsciption, setUserWithData } = useSlice.actions;
 export default useSlice.reducer;
 
 export const optInSlice =
@@ -38,7 +38,7 @@ export const optInSlice =
   async (dispatch) => {
     try {
       const { user } = await optIn(payload);
-      dispatch(setUser(user));
+      dispatch(setUserWithData(user));
     } catch (error) {
       console.error("Error submitting payload:", error);
     }
