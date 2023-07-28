@@ -16,16 +16,21 @@ export async function run() {
     }
 
     console.log("Registering push notification...");
-    try {
-      const permission = await Notification.requestPermission();
+    // try {
+    //   const permission = await Notification.requestPermission();
 
-      if (permission !== "granted") {
-        throw new Error("Permission not granted for Notification");
-      }
-    } catch (error) {
-      console.error("User did not grant notification permission.", error);
+    //   if (permission !== "granted") {
+    //     throw new Error("Permission not granted for Notification");
+    //   }
+    // } catch (error) {
+    //   console.error("User did not grant notification permission.", error);
+    // }
+
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      alert("Please grant permission for Notification");
+      return null;
     }
-
     // This will pop out the browser's native permission prompt
     let subscription = await registration.pushManager.getSubscription();
 
