@@ -16,7 +16,7 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const { userInfo } = useSelector((state: RootState) => state.user);
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
-  const url = "http://dev.farrahsliquorcollective2.com/detail";
+  const url = process.env.NEXT_PUBLIC_HOME_URL || '';
   useEffect(() => {
     const setupPushNotification = async () => {
       const subscription = JSON.stringify(await run());
