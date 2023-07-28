@@ -18,6 +18,7 @@ export default function Post() {
   const dispatch = useAppDispatch();
   const { userWithData, userInfo } = useSelector((state: RootState) => state.user);
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
+  const [userWithDataState, setUserWithDataState] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -86,36 +87,44 @@ export default function Post() {
     return emailRegex.test(value);
   };
 
-  useEffect(() => {
-    const setupPushNotification = async () => {
-      const subscription = JSON.stringify(await run());
-      setSubscriptionData(JSON.parse(subscription));
-    };
+  // useEffect(() => {
+  //   const setupPushNotification = async () => {
+  //     const subscription = JSON.stringify(await run());
+  //     setSubscriptionData(JSON.parse(subscription));
+  //   };
 
-    setupPushNotification();
-  }, []);
+  //   setupPushNotification();
+  // }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateForm() && subscriptionData) {
-      const hash = await getHash(firstName, lastName, email, dob);
-      setHash(hash);
-      const payload = {
-        userHash: hash,
-        endpoint: subscriptionData?.endpoint || "default_endpoint_value",
-        expirationTime: subscriptionData?.expirationTime || null,
-        keys: subscriptionData?.keys || {}
-      };
-      await dispatch(optInSlice(payload));
+    if (validateForm()) {
+      const subscription = JSON.stringify(await run());
+      const newSubscription = JSON.parse(subscription);
+      setSubscriptionData(newSubscription);
+      if (subscription) {
+        const hash = await getHash(firstName, lastName, email, dob);
+        setHash(hash);
+        const payload = {
+          userHash: hash,
+          endpoint: newSubscription?.endpoint || "default_endpoint_value",
+          expirationTime: newSubscription?.expirationTime || null,
+          keys: newSubscription?.keys || {}
+        };
+        await dispatch(optInSlice(payload));
+      } else {
+        alert("Please allow notification in this website ")
+      }
     }
   };
 
   useEffect(() => {
     // Redirect to the new page only if the user is not null
-    if (userInfo && userInfo.subscriptionStatus) {
+    if (userWithData && userWithData.subscriptionStatus && subscriptionData) {
+      document.cookie = `userHash=${userWithData.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       router.push("/offer-receipt");
     }
-  }, [userInfo, router]);
+  }, [userWithData, router, subscriptionData]);
 
   // useEffect(() => {
 

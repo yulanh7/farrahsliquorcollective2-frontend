@@ -16,7 +16,6 @@ export async function run() {
     }
 
     console.log("Registering push notification...");
-
     try {
       const permission = await Notification.requestPermission();
 
