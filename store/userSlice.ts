@@ -45,6 +45,8 @@ export const optInSlice =
     try {
       const { user } = await optIn(payload);
       dispatch(setUserWithData(user));
+      document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+      window.location.href = "/offer-receipt";
     } catch (error) {
       console.error("Error submitting payload:", error);
     }
