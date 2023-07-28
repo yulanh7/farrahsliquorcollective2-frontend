@@ -8,13 +8,16 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --only=production
 
 # Copy all other source code to work directory
 COPY . .
+
+# Build the application for production
+RUN npm run build
 
 # Expose port to the Docker host
 EXPOSE 3000
 
 # Run the server
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "run", "start" ]
