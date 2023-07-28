@@ -26,6 +26,22 @@ export const optIn = async (payload: {
     throw new Error("Failed to creat a user");
   }
 };
+export const getUserInfo = async (payload: {
+  userHash: string;
+  endpoint?: string; // Make 'endpoint' optional
+  expirationTime: number | null; // Change to 'number | null'
+  keys: Record<string, string>;
+}) => {
+  try {
+    const response = await axios.post(`${API_URL}/user/getInfo`, {
+      ...payload,
+      companyName,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to creat a user");
+  }
+};
 
 export const getDefaultOfferData = async (payload: { userHash: string }) => {
   try {

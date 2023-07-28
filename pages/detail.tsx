@@ -4,7 +4,7 @@ import utilStyles from "../src/styles/utils.module.scss";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Badge from "../src/components/badge";
 import { useSelector } from 'react-redux';
-import { optInSlice } from '../store/userSlice';
+import { optInSlice, getUserInfoSlice } from '../store/userSlice';
 import { RootState, useAppDispatch } from '../store';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ export default function Post() {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { userWithData, userInfo } = useSelector((state: RootState) => state.user);
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -117,14 +117,14 @@ export default function Post() {
   //   }
   // }, [user, router]);
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   // Redirect to the new page only if the user is not null
-  //   if (user) {
-  //     document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
-  //     router.push("/offer-receipt");
-  //   }
-  // }, [hash, user, router]);
+    // Redirect to the new page only if the user is not null
+    if (userWithData) {
+      document.cookie = `userHash=${userWithData.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+      router.push("/offer-receipt");
+    }
+  }, [hash, userWithData, router]);
 
   useEffect(() => {
     // Redirect to the new page only if the user is not null
@@ -136,9 +136,9 @@ export default function Post() {
         expirationTime: subscriptionData?.expirationTime || null,
         keys: subscriptionData?.keys || {}
       };
-      dispatch(optInSlice(payload));
+      dispatch(getUserInfoSlice(payload));
     }
-  }, [dispatch, subscriptionData]);
+  }, []);
 
   return (
     <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>

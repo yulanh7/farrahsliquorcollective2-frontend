@@ -6,7 +6,7 @@ import Link from "next/link";
 import { RootState, useAppDispatch } from '../store';
 import { getCookie } from "../utils/utils";
 import { useSelector } from 'react-redux';
-import { optInSlice } from '../store/userSlice';
+import { getUserInfoSlice } from '../store/userSlice';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
 import { useRouter } from 'next/router';
 
@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 export default function Home() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { userInfo } = useSelector((state: RootState) => state.user);
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
   const url = "http://dev.farrahsliquorcollective2.com/detail";
   useEffect(() => {
@@ -35,17 +35,17 @@ export default function Home() {
         expirationTime: subscriptionData?.expirationTime || null,
         keys: subscriptionData?.keys || {}
       };
-      dispatch(optInSlice(payload));
+      dispatch(getUserInfoSlice(payload));
     }
   });
 
 
   useEffect(() => {
     // Redirect to the new page only if the user is not null
-    if (user) {
+    if (userInfo) {
       router.push("/offer-receipt")
     }
-  }, [user, router]);
+  }, [userInfo, router]);
 
 
   return (
