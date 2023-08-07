@@ -1,3 +1,4 @@
+# Client Dockerfile
 # Base Image
 FROM node:lts-alpine
 
@@ -8,16 +9,16 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --only=production
+RUN npm install
 
 # Copy all other source code to work directory
 COPY . .
 
-# Build the application for production
+# Build the application
 RUN npm run build
 
 # Expose port to the Docker host
 EXPOSE 3000
 
 # Run the server
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "start" ]
