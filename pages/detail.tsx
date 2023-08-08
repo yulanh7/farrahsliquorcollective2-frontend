@@ -97,7 +97,9 @@ export default function Post() {
   // }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
+    if ('serviceWorker' in navigator) { console.log("Service Workers are supported!"); } else { console.log("Service Workers are not supported."); }
     if (validateForm()) {
       const subscription = JSON.stringify(await run());
       const newSubscription = JSON.parse(subscription);
@@ -136,6 +138,7 @@ export default function Post() {
   // }, [hash, userWithData, router]);
 
   useEffect(() => {
+
     // Redirect to the new page only if the user is not null
     const hash = getCookie('userHash');
     if (hash) {
@@ -148,6 +151,8 @@ export default function Post() {
       dispatch(getUserInfoSlice(payload));
     }
   }, []);
+
+
 
   return (
     <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
