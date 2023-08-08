@@ -1,7 +1,8 @@
 import axios from "axios";
 import { companyName } from "../utils/utils";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = "https://172.19.0.191:3008";
 export const getOffersData = async () => {
   const response = await axios.get("/api/offer"); // Replace with your actual API endpoint
   return response.data;
@@ -89,6 +90,14 @@ export const addDefaultCoupon = async (payload: {
     const response = await axios.post(`${API_URL}/defaultCoupon`, {
       ...payload,
     });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to creat a default coupon");
+  }
+};
+export const fetchDefaultCoupon = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/defaultCoupon`);
     return response.data;
   } catch (error) {
     throw new Error("Failed to creat a default coupon");

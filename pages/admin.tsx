@@ -1,163 +1,122 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
-import { Button, Container, Row, Col } from "react-bootstrap";
-import { addCouponSlice } from '../store/couponSlice';
+import { Button, Container, Row, Col, Table } from "react-bootstrap";
+import { addCouponSlice, addDefaultCouponSlice } from '../store/couponSlice';
 import { RootState, useAppDispatch } from '../store';
 import { useRouter } from 'next/router';
+import { fetchDefaultCouponSlice } from '../store/couponSlice';
+import { useSelector } from 'react-redux';
 
 export default function Post() {
-  // const referra = router.query.referra;
   const newUrl = "/offer-receipt";
   const router = useRouter();
-
+  const { defaultCoupon, defaultCouponLoading } = useSelector((state: RootState) => state.coupon);
   const dispatch = useAppDispatch();
-  // const { userWithData, userInfo } = useSelector((state: RootState) => state.user);
-  const [company, setCompany] = useState('');
-  const [description, setDescription] = useState('');
-  const [expireDate, setExpireDate] = useState('');
-  const [scheduleTime, setScheduleTime] = useState('');
-  const [errors, setErrors] = useState<{
-    company?: string;
-    description?: string;
-    expireDate?: string;
-    scheduleTime?: string;
-  }>({});
 
-  const validateForm = () => {
-    let isValid = true;
-    const newErrors: {
-      company?: string;
-      description?: string;
-      expireDate?: string;
-      scheduleTime?: string;
+  const [coupons, setCoupons] = useState([]); // Assume this array holds coupon data
+  const [editingCouponId, setEditingCouponId] = useState(null);
+  const [updatedDescription, setUpdatedDescription] = useState('');
+  const [updatedExpireDate, setUpdatedExpireDate] = useState('');
+  const [updatedScheduleTime, setUpdatedScheduleTime] = useState('');
 
-    } = {};
-    if (company.trim() === '') {
-      newErrors.company = 'Company name is required';
-      isValid = false;
-    }
+  useEffect(() => {
 
-    if (description.trim() === '') {
-      newErrors.description = 'Description is required';
-      isValid = false;
-    }
+    dispatch(fetchDefaultCouponSlice());
+  }, [dispatch]);
 
-    if (expireDate.trim() === '') {
-      newErrors.expireDate = 'Expire Date is required';
-      isValid = false;
-    }
-    if (scheduleTime.trim() === '') {
-      newErrors.scheduleTime = 'Schedule Time is required';
-      isValid = false;
-    }
+  // ... other code
 
-
-    setErrors(newErrors);
-
-    return isValid;
+  const handleEditClick = (couponId) => {
+    setEditingCouponId(couponId);
+    const editedCoupon = coupons.find(coupon => coupon.id === couponId);
+    setUpdatedDescription(editedCoupon.description);
+    setUpdatedExpireDate(editedCoupon.expireDate);
+    setUpdatedScheduleTime(editedCoupon.scheduleTime);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (validateForm()) {
-      const payload = {
-        company,
-        description,
-        expireDate,
-        scheduleTime
-      };
-      console.log(payload);
-      dispatch(addCouponSlice(payload))
-    }
+  const handleSaveClick = (couponId) => {
+    const updatedCoupons = coupons.map(coupon => {
+      if (coupon.id === couponId) {
+        return {
+          ...coupon,
+          description: updatedDescription,
+          expireDate: updatedExpireDate,
+          scheduleTime: updatedScheduleTime,
+        };
+      }
+      return coupon;
+    });
+    setCoupons(updatedCoupons);
+    setEditingCouponId(null);
   };
 
+  // ... other code
 
   return (
     <Layout title="Coupon Manager" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
-      <h3>Add Coupon</h3>
-      <form className={utilStyles.form} onSubmit={handleSubmit}>
-        <Row>
-          <Col sm="12" md="6" className={utilStyles.leftCol}>
-            <div className={utilStyles.pB10px}>
-              <label htmlFor="company" className="form-label">
-                Company
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.company && 'is-invalid'}`}
-                id="company"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-              />
-              {errors.company && (
-                <div className="invalid-feedback">{errors.company}</div>
-              )}
-            </div>
-          </Col>
-          <Col sm="12" md="6" className={utilStyles.rightCol}>
-            <div className={utilStyles.pB10px}>
-
-              <label htmlFor="description" className="form-label">
-                Description
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.description && 'is-invalid'}`}
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              {errors.description && (
-                <div className="invalid-feedback">{errors.description}</div>
-              )}
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="12" md="6" className={utilStyles.leftCol}>
-            <div className={utilStyles.pB20px}>
-              <label htmlFor="expireDate" className="form-label">
-                Expire Date
-              </label>
-              <input
-                type="date"
-                className={`form-control ${errors.expireDate && 'is-invalid'}`}
-                id="expireDate"
-                value={expireDate}
-                onChange={(e) => setExpireDate(e.target.value)}
-                onFocus={(e) => e.target.type = "date"}
-              />
-              {errors.expireDate && <div className="invalid-feedback">{errors.expireDate}</div>}
-            </div>
-          </Col>
-          <Col sm="12" md="6" className={utilStyles.rightCol}>
-            <div className={utilStyles.pB20px}>
-              <label htmlFor="scheduleTime" className="form-label">
-                Schedule Time
-              </label>
-              <input
-                type="date"
-                className={`form-control ${errors.scheduleTime && 'is-invalid'}`}
-                id="scheduleTime"
-                value={scheduleTime}
-                onChange={(e) => setScheduleTime(e.target.value)}
-                onFocus={(e) => e.target.type = "date"}
-              />
-              {errors.scheduleTime && <div className="invalid-feedback">{errors.scheduleTime}</div>}
-            </div>
-          </Col>
-        </Row>
-
-        <Button
-          variant="primary"
-          type="submit"
-          className={utilStyles.button}
-        >
-          Add Coupon
-        </Button>
-
-      </form>
+      <h3>Coupon List</h3>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Expire Date</th>
+            <th>Schedule Time</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {coupons.map((coupon) => (
+            <tr key={coupon.id}>
+              <td>{coupon.id}</td>
+              <td>
+                {editingCouponId === coupon.id ? (
+                  <input
+                    type="text"
+                    value={updatedDescription}
+                    onChange={(e) => setUpdatedDescription(e.target.value)}
+                  />
+                ) : (
+                  coupon.description
+                )}
+              </td>
+              <td>
+                {editingCouponId === coupon.id ? (
+                  <input
+                    type="date"
+                    value={updatedExpireDate}
+                    onChange={(e) => setUpdatedExpireDate(e.target.value)}
+                  />
+                ) : (
+                  coupon.expireDate
+                )}
+              </td>
+              <td>
+                {editingCouponId === coupon.id ? (
+                  <input
+                    type="time"
+                    value={updatedScheduleTime}
+                    onChange={(e) => setUpdatedScheduleTime(e.target.value)}
+                  />
+                ) : (
+                  coupon.scheduleTime
+                )}
+              </td>
+              <td>
+                {editingCouponId === coupon.id ? (
+                  <>
+                    <Button variant="success" onClick={() => handleSaveClick(coupon.id)}>Save</Button>{' '}
+                    <Button variant="secondary" onClick={() => setEditingCouponId(null)}>Cancel</Button>
+                  </>
+                ) : (
+                  <Button variant="primary" onClick={() => handleEditClick(coupon.id)}>Edit</Button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </Layout>
   );
 }

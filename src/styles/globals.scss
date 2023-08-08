@@ -106,3 +106,9 @@ img {
     background-color: $primaryColor; /* Color when the radio input is checked */
   }
 }
+
+
+.row .form-control {
+  appearance: auto;
+  -webkit-appearance: auto;
+}
