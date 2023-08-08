@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Layout from "../src/components/layout";
 import utilStyles from "../src/styles/utils.module.scss";
 import { Button, Container, Row, Col } from "react-bootstrap";
-import Badge from "../src/components/badge";
-import { useSelector } from 'react-redux';
-import { optInSlice, getUserInfoSlice } from '../store/userSlice';
+import { addCouponSlice } from '../store/couponSlice';
 import { RootState, useAppDispatch } from '../store';
-import { run } from '../lib/notification'; // Import the run function from the notification.ts file
 import { useRouter } from 'next/router';
-import { getHash, getCookie } from "../utils/utils";
 
 export default function Post() {
   // const referra = router.query.referra;
@@ -72,6 +68,7 @@ export default function Post() {
         scheduleTime
       };
       console.log(payload);
+      dispatch(addCouponSlice(payload))
     }
   };
 

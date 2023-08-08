@@ -63,3 +63,22 @@ export const submitUnsubscribe = async (payload: { userHash: string }) => {
     throw new Error("Failed to unsubcribe");
   }
 };
+
+export const addCoupon = async (payload: {
+  company: string;
+  description: string; // Make 'endpoint' optional
+  expireDate: string; // Change to 'string'
+  scheduleTime: string; // Change to 'number | null'
+}) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/user/withBlockchainSubscribe`,
+      {
+        ...payload,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to creat a Coupon");
+  }
+};
