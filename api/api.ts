@@ -65,7 +65,6 @@ export const submitUnsubscribe = async (payload: { userHash: string }) => {
 };
 
 export const addCoupon = async (payload: {
-  company: string;
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'
   scheduleTime: string; // Change to 'number | null'
@@ -80,5 +79,18 @@ export const addCoupon = async (payload: {
     return response.data;
   } catch (error) {
     throw new Error("Failed to creat a Coupon");
+  }
+};
+export const addDefaultCoupon = async (payload: {
+  description: string; // Make 'endpoint' optional
+  expireDate: string; // Change to 'string'
+}) => {
+  try {
+    const response = await axios.post(`${API_URL}/defaultCoupon`, {
+      ...payload,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to creat a default coupon");
   }
 };
