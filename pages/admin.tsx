@@ -5,6 +5,10 @@ import { Button, Row, Col } from "react-bootstrap";
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { addDefaultCouponSlice, fetchDefaultCouponSlice } from '../store/couponSlice';
+import { formatDateForInput } from "../utils/utils";
+
+
+
 export default function Post() {
 
   const dispatch = useAppDispatch();
@@ -28,6 +32,7 @@ export default function Post() {
       setExpireDate(defaultCoupon.expireDate || '');
     }
   }, [defaultCoupon]);
+
 
   const validateForm = () => {
     let isValid = true;
@@ -78,7 +83,7 @@ export default function Post() {
                     type="date"
                     className={`form-control ${errors.expireDate && 'is-invalid'}`}
                     id="expireDate"
-                    value={expireDate}
+                    value={formatDateForInput(expireDate)}
                     onChange={(e) => setExpireDate(e.target.value)}
                     onFocus={(e) => e.target.type = "date"}
                   />
