@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Head from 'next/head';
 import styles from './layout.module.scss';
 import utilStyles from '../styles/utils.module.scss';
@@ -6,7 +6,7 @@ import Link from 'next/link';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { Button } from "react-bootstrap";
-
+import FeedbackForm from "./feedback";
 interface LayoutProps {
   children: ReactNode;
   title: ReactNode;
@@ -19,6 +19,14 @@ interface LayoutProps {
 }
 
 export default function Layout({ children, title, subTitle, logo, showFeedback, showOptOut, topSubTitle, showABN }: LayoutProps) {
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const handleShowFeedbackModal = () => {
+    setShowFeedbackModal(true);
+  };
+
+  const handleCloseFeedbackModal = () => {
+    setShowFeedbackModal(false);
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -59,9 +67,12 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
             <Button
               variant="primary"
               className={utilStyles.button}
+              onClick={handleShowFeedbackModal}
             >
               FEEDBACK
             </Button>
+            <FeedbackForm show={showFeedbackModal} onHide={handleCloseFeedbackModal} />
+
           </div>
         }
         {showOptOut &&
