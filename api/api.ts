@@ -1,8 +1,7 @@
 import axios from "axios";
 import { companyName } from "../utils/utils";
 
-// const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_URL = "https://172.19.0.191:3008";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const getOffersData = async () => {
   const response = await axios.get("/api/offer"); // Replace with your actual API endpoint
   return response.data;
