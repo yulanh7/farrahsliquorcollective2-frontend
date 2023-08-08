@@ -77,73 +77,78 @@ export default function Post() {
     <Layout title="Coupon Manager" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
       <h3>Add Coupon</h3>
       <form className={utilStyles.form} onSubmit={handleSubmit}>
-        <div className={utilStyles.pB10px}>
-          <label htmlFor="company" className="form-label">
-            Company
-          </label>
-          <input
-            type="text"
-            className={`form-control ${errors.company && 'is-invalid'}`}
-            id="company"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-          />
-          {errors.company && (
-            <div className="invalid-feedback">{errors.company}</div>
-          )}
-        </div>
-        <div className={utilStyles.pB10px}>
+        <Row>
+          <Col sm="12" md="6" className={utilStyles.leftCol}>
+            <div className={utilStyles.pB10px}>
+              <label htmlFor="company" className="form-label">
+                Company
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.company && 'is-invalid'}`}
+                id="company"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+              />
+              {errors.company && (
+                <div className="invalid-feedback">{errors.company}</div>
+              )}
+            </div>
+          </Col>
+          <Col sm="12" md="6" className={utilStyles.rightCol}>
+            <div className={utilStyles.pB10px}>
 
-          <label htmlFor="description" className="form-label">
-            Description
-          </label>
-          <input
-            type="text"
-            className={`form-control ${errors.description && 'is-invalid'}`}
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          {errors.description && (
-            <div className="invalid-feedback">{errors.description}</div>
-          )}
-        </div>
+              <label htmlFor="description" className="form-label">
+                Description
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.description && 'is-invalid'}`}
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              {errors.description && (
+                <div className="invalid-feedback">{errors.description}</div>
+              )}
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm="12" md="6" className={utilStyles.leftCol}>
+            <div className={utilStyles.pB20px}>
+              <label htmlFor="expireDate" className="form-label">
+                Expire Date
+              </label>
+              <input
+                type="date"
+                className={`form-control ${errors.expireDate && 'is-invalid'}`}
+                id="expireDate"
+                value={expireDate}
+                onChange={(e) => setExpireDate(e.target.value)}
+                onFocus={(e) => e.target.type = "date"}
+              />
+              {errors.expireDate && <div className="invalid-feedback">{errors.expireDate}</div>}
+            </div>
+          </Col>
+          <Col sm="12" md="6" className={utilStyles.rightCol}>
+            <div className={utilStyles.pB20px}>
+              <label htmlFor="scheduleTime" className="form-label">
+                Schedule Time
+              </label>
+              <input
+                type="date"
+                className={`form-control ${errors.scheduleTime && 'is-invalid'}`}
+                id="scheduleTime"
+                value={scheduleTime}
+                onChange={(e) => setScheduleTime(e.target.value)}
+                onFocus={(e) => e.target.type = "date"}
+              />
+              {errors.scheduleTime && <div className="invalid-feedback">{errors.scheduleTime}</div>}
+            </div>
+          </Col>
+        </Row>
 
-        <div className={utilStyles.pB20px}>
-          <label htmlFor="expireDate" className="form-label">
-            Expire Date
-          </label>
-          <input
-            type="date"
-            className={`form-control ${errors.expireDate && 'is-invalid'}`}
-            id="expireDate"
-            value={expireDate}
-            onChange={(e) => setExpireDate(e.target.value)}
-            onFocus={(e) => e.target.type = "date"}
-          />
-          {errors.expireDate && <div className="invalid-feedback">{errors.expireDate}</div>}
-        </div>
-        <div className={utilStyles.pB20px}>
-          <label htmlFor="scheduleTime" className="form-label">
-            Schedule Time
-          </label>
-          <input
-            type="date"
-            className={`form-control ${errors.scheduleTime && 'is-invalid'}`}
-            id="scheduleTime"
-            value={scheduleTime}
-            onChange={(e) => setScheduleTime(e.target.value)}
-            onFocus={(e) => e.target.type = "date"}
-          />
-          {errors.scheduleTime && <div className="invalid-feedback">{errors.scheduleTime}</div>}
-        </div>
-
-        <h5 className={`${utilStyles.pB10px}`}>
-          OPT IN OFFER TO REGISTRAR
-        </h5>
-        <div className={`${utilStyles.text} ${utilStyles.pB10px}`}>
-          Welcome to Farrah Liquor Collective members club. You will Receive{`<gift>`} for joining.
-        </div>
         <Button
           variant="primary"
           type="submit"
