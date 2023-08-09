@@ -194,7 +194,7 @@ export default function Post() {
 
       <h4 className={`${utilStyles.textCenter} ${utilStyles.pB20px}`}>All Coupons</h4>
       {allCoupons && allCoupons.length &&
-        <CouponTable allCoupons={allCoupons} isForAdmin />
+        <CouponTable allCoupons={allCoupons} />
       }
 
 
