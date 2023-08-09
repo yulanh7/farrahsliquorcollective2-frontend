@@ -102,7 +102,7 @@ export const addCouponSlice =
 
 export const updateCouponSlice =
   (payload: {
-    id: string;
+    _id: string;
     description: string; // Make 'endpoint' optional
     expireDate: string; // Change to 'string'
     scheduleTime: string; // Change to 'string'

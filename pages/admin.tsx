@@ -10,13 +10,13 @@ import CouponTable from '../src/components/couponTable';
 
 const allCoupons = [
   {
-    "id": "1",
+    "_id": "1",
     "description": "50% off on shoes",
     "expireDate": "2023-08-31T00:00:00.000Z",
     "scheduleTime": "2023-08-31T00:00:00.000Z"
   },
   {
-    "id": "2",
+    "_id": "2",
     "description": "$10 off on orders over $50",
     "expireDate": "2023-08-31T00:00:00.000Z",
     "scheduleTime": "2023-08-31T00:00:00.000Z"
@@ -194,7 +194,7 @@ export default function Post() {
 
       <h4 className={`${utilStyles.textCenter} ${utilStyles.pB20px}`}>All Coupons</h4>
       {allCoupons && allCoupons.length &&
-        <CouponTable allCoupons={allCoupons} />
+        <CouponTable allCoupons={allCoupons} isForAdmin />
       }
 
 

@@ -33,7 +33,7 @@ const allCoupons = [
   }
 ]
 
-const CouponTable: React.FC<CouponTableProps> = () => {
+const CouponTable: React.FC<CouponTableProps> = (isForAdmin) => {
 
   const dispatch = useAppDispatch();
 
@@ -167,11 +167,13 @@ const CouponTable: React.FC<CouponTableProps> = () => {
             {errors.scheduleTime && <div className="invalid-feedback">{errors.scheduleTime}</div>}
           </td>
           <td>
+
             <div className={utilStyles.pB10px}>
               <Button variant="success" onClick={handleAddCoupon} className={utilStyles.tableButton}>
                 Save
               </Button>
             </div>
+
             <Button variant="secondary" size="sm" onClick={handleCancelEdit} className={utilStyles.tableButton}>
               Cancel
             </Button>
