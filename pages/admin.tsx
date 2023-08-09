@@ -76,12 +76,10 @@ export default function Post() {
         description,
         expireDate,
       };
-      console.log(payload);
       if (defaultCoupon) {
-
-        dispatch(addDefaultCouponSlice(payload))
-      } else {
         dispatch(updateDefaultCouponSlice(payload));
+      } else {
+        dispatch(addDefaultCouponSlice(payload))
       }
     }
   };
