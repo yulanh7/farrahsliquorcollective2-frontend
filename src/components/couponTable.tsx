@@ -1,8 +1,8 @@
 // components/CouponTable.tsx
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Button, Form } from 'react-bootstrap';
-// import { formatDateForInput } from "../../utils/utils";
+import { Button, Form, Table } from 'react-bootstrap';
+import { formatDateForInput, formatDatetimeLocal, formatDatetimeLocalForInput, formatDate } from "../../utils/utils";
+import utilStyles from "../styles/utils.module.scss";
 
 interface Coupon {
   _id: string;
@@ -15,37 +15,6 @@ interface CouponTableProps {
   allCoupons: Coupon[];
 }
 
-const formatDateForInput = (dateString: string) => {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  const hours = date.getHours() % 12 || 12; // Convert to 12-hour format
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const ampm = date.getHours() < 12 ? 'am' : 'pm';
-
-  return `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
-}
-
-const formatDefaultScheduleTime = (scheduleTime: string) => {
-  const date = new Date(scheduleTime);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-
-  const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-  return formattedDate;
-}
 
 const allCoupons = [
   {
@@ -91,7 +60,7 @@ const CouponTable: React.FC<CouponTableProps> = () => {
   };
 
   return (
-    <table className="table">
+    <Table striped bordered hover>
       <thead>
         <tr>
           <th>ID</th>
@@ -132,31 +101,35 @@ const CouponTable: React.FC<CouponTableProps> = () => {
               {editingCouponId === coupon._id ? (
                 <Form.Control
                   type="datetime-local"
-                  defaultValue={formatDefaultScheduleTime(coupon.scheduleTime)}
+                  defaultValue={formatDatetimeLocalForInput(coupon.scheduleTime)}
                   onChange={(e) => {
                     // Update the coupon's scheduleTime in state when edited
                   }}
                 />
               ) : (
-                formatDate(coupon.scheduleTime)
+                formatDatetimeLocal(coupon.scheduleTime)
               )}
             </td>
             <td>
               {editingCouponId === coupon._id ? (
                 <>
-                  <Button variant="success" size="sm" onClick={() => handleSaveEdit(coupon._id)}>
-                    Save
-                  </Button>
-                  <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
+                  <div className={utilStyles.pB10px}>
+                    <Button variant="success" onClick={() => handleSaveEdit(coupon._id)} className={utilStyles.tableButton}>
+                      Save
+                    </Button>
+                  </div>
+                  <Button variant="secondary" size="sm" onClick={handleCancelEdit} className={utilStyles.tableButton}>
                     Cancel
                   </Button>
                 </>
               ) : (
                 <>
-                  <Button variant="primary" size="sm" onClick={() => handleEditClick(coupon._id)}>
-                    Edit
-                  </Button>
-                  <Button variant="danger" size="sm" onClick={() => handleDeleteClick(coupon._id)}>
+                  <div className={utilStyles.pB10px}>
+                    <Button variant="primary" onClick={() => handleEditClick(coupon._id)} className={utilStyles.tableButton}>
+                      Edit
+                    </Button>
+                  </div>
+                  <Button variant="danger" onClick={() => handleDeleteClick(coupon._id)} className={utilStyles.tableButton}>
                     Delete
                   </Button>{' '}
 
@@ -166,7 +139,7 @@ const CouponTable: React.FC<CouponTableProps> = () => {
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table >
   );
 };
 

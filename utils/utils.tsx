@@ -29,3 +29,35 @@ export const formatDateForInput = (dateString: string) => {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
+
+export const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+export const formatDatetimeLocal = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = date.getHours() % 12 || 12; // Convert to 12-hour format
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const ampm = date.getHours() < 12 ? 'am' : 'pm';
+
+  return `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
+}
+
+export const formatDatetimeLocalForInput = (scheduleTime: string) => {
+  const date = new Date(scheduleTime);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+  return formattedDate;
+}
