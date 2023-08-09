@@ -16,9 +16,10 @@ interface LayoutProps {
   showFeedback?: boolean;
   showOptOut?: boolean;
   showABN?: boolean;
+  width?: string;
 }
 
-export default function Layout({ children, title, subTitle, logo, showFeedback, showOptOut, topSubTitle, showABN }: LayoutProps) {
+export default function Layout({ children, title, subTitle, logo, showFeedback, showOptOut, topSubTitle, showABN, width }: LayoutProps) {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const handleShowFeedbackModal = () => {
     setShowFeedbackModal(true);
@@ -28,7 +29,7 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
     setShowFeedbackModal(false);
   };
   return (
-    <div className={styles.container}>
+    <div className={width == "lg" ? styles.containerLg : styles.container}>
       <Head>
         <link rel="icon" href="/favicon.png" />
         <meta
@@ -111,6 +112,7 @@ Layout.propTypes = {
   logo: PropTypes.string.isRequired,
   topSubTitle: PropTypes.string,
   subTitle: PropTypes.string,
+  width: PropTypes.string,
   showFeedback: PropTypes.bool,
   showOptOut: PropTypes.bool,
   showABN: PropTypes.bool,
