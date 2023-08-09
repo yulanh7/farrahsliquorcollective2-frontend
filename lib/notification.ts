@@ -28,8 +28,7 @@ export async function run() {
 
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      alert("Please grant permission for Notification");
-      return null;
+      return "notGranted";
     }
     // This will pop out the browser's native permission prompt
     let subscription = await registration.pushManager.getSubscription();
@@ -42,8 +41,6 @@ export async function run() {
         applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
       });
     }
-
-    console.log("Subscription created/updated.");
 
     return subscription;
 

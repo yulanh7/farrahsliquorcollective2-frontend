@@ -9,13 +9,14 @@ import { RootState, useAppDispatch } from '../store';
 import { run } from '../lib/notification'; // Import the run function from the notification.ts file
 import { useRouter } from 'next/router';
 import { getHash, getCookie } from "../utils/utils";
+import NotificationAlertModule from "../src/components/notificationAlertModule";
 
 export default function Post() {
   // const referra = router.query.referra;
-  const newUrl = "/offer-receipt";
   const router = useRouter();
 
   const dispatch = useAppDispatch();
+  const [showModal, setShowModal] = useState(false);
   const { userWithData, userInfo } = useSelector((state: RootState) => state.user);
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
   const [userWithDataState, setUserWithDataState] = useState('');
@@ -26,6 +27,7 @@ export default function Post() {
   const [hash, setHash] = useState('');
   const [agreedPromotion, setAgreedPromotion] = useState(true);
   const [agreedAge, setAgreedAge] = useState(true);
+  const [agreedNotigications, setAgreedNotigications] = useState(false);
   const [errors, setErrors] = useState<{
     firstName?: string;
     lastName?: string;
@@ -33,6 +35,7 @@ export default function Post() {
     dob?: string;
     agreedPromotion?: string;
     agreedAge?: string;
+    agreedNotigications?: string;
   }>({});
 
   const validateForm = () => {
@@ -44,6 +47,7 @@ export default function Post() {
       dob?: string;
       agreedPromotion?: string;
       agreedAge?: string;
+      agreedNotigications?: string;
     } = {};
 
     if (firstName.trim() === '') {
@@ -76,6 +80,10 @@ export default function Post() {
       newErrors.agreedAge = 'You must be at least 18 years old.';
       isValid = false;
     }
+    if (!agreedNotigications) {
+      newErrors.agreedNotigications = 'You must agreen to allow to show notifications in this browser.';
+      isValid = false;
+    }
 
     setErrors(newErrors);
 
@@ -99,23 +107,29 @@ export default function Post() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
     e.preventDefault();
-    if ('serviceWorker' in navigator) { console.log("Service Workers are supported!"); } else { console.log("Service Workers are not supported."); }
     if (validateForm()) {
-      const subscription = JSON.stringify(await run());
-      const newSubscription = JSON.parse(subscription);
-      setSubscriptionData(newSubscription);
-      if (subscription) {
-        const hash = await getHash(firstName, lastName, email, dob);
-        setHash(hash);
-        const payload = {
-          userHash: hash,
-          endpoint: newSubscription?.endpoint || "default_endpoint_value",
-          expirationTime: newSubscription?.expirationTime || null,
-          keys: newSubscription?.keys || {}
-        };
-        await dispatch(optInSlice(payload));
+      const notificationGranted = await run();
+      if (notificationGranted == "notGranted") {
+        setShowModal(true);
+
       } else {
-        alert("Please allow notification in this website ")
+
+        const subscription = JSON.stringify(notificationGranted);
+        const newSubscription = JSON.parse(subscription);
+        setSubscriptionData(newSubscription);
+        if (subscription) {
+          const hash = await getHash(firstName, lastName, email, dob);
+          setHash(hash);
+          const payload = {
+            userHash: hash,
+            endpoint: newSubscription?.endpoint || "default_endpoint_value",
+            expirationTime: newSubscription?.expirationTime || null,
+            keys: newSubscription?.keys || {}
+          };
+          await dispatch(optInSlice(payload));
+        } else {
+          alert("Please allow notification in this website ")
+        }
       }
     }
   };
@@ -152,11 +166,14 @@ export default function Post() {
     }
   }, []);
 
-
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
       <Badge />
+      <NotificationAlertModule show={showModal} onHide={handleCloseModal} />
       <form className={utilStyles.form} onSubmit={handleSubmit}>
         <Container>
           <Row>
@@ -243,6 +260,17 @@ export default function Post() {
                   <span>  It is an offence to supply alcohol to a person under the age of 18 years – penalties apply. A.C.T. Liquor Licence Number 14005716.</span>
                 </label>
                 {errors.agreedAge && <div className="invalid-feedback">{errors.agreedAge}</div>}
+              </div>
+              <div>
+                <label className={`${errors.agreedNotigications && 'is-invalid'} ${errors.agreedNotigications && 'form-control'}`}>
+                  <input
+                    type="checkbox"
+                    checked={agreedNotigications}
+                    onChange={(e) => setAgreedNotigications(e.target.checked)}
+                  />
+                  <span>  It is an offence to supply alcohol to a person under the age of 18 years – penalties apply. A.C.T. Liquor Licence Number 14005716.</span>
+                </label>
+                {errors.agreedNotigications && <div className="invalid-feedback">{errors.agreedNotigications}</div>}
               </div>
             </Col>
             <Col sm="12" md="6" className={utilStyles.rightCol}>
