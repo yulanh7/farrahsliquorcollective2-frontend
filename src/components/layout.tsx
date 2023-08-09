@@ -92,7 +92,7 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
         <div className={`${utilStyles.footerContainer} ${utilStyles.pT10px}`}>
 
           <div >
-            <Link href="https://4block.com.au/">
+            <Link href="https://4block.com.au/" target='_blank'>
               <span>www.4block.com.au </span>
             </Link>
             - Want to know more?
