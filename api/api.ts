@@ -94,6 +94,18 @@ export const addDefaultCoupon = async (payload: {
     throw new Error("Failed to creat a default coupon");
   }
 };
+
+export const updateDefaultCoupon = async (payload: {
+  description: string; // Make 'endpoint' optional
+  expireDate: string; // Change to 'string'
+}) => {
+  try {
+    const response = await axios.put(`${API_URL}/defaultCoupon`, payload);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update a default coupon");
+  }
+};
 export const fetchDefaultCoupon = async () => {
   try {
     const response = await axios.get(`${API_URL}/defaultCoupon`);
