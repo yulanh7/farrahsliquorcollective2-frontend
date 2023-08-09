@@ -80,10 +80,10 @@ export default function Post() {
       newErrors.agreedAge = 'You must be at least 18 years old.';
       isValid = false;
     }
-    if (!agreedNotigications) {
-      newErrors.agreedNotigications = 'You must agreen to allow to show notifications in this browser.';
-      isValid = false;
-    }
+    // if (!agreedNotigications) {
+    //   newErrors.agreedNotigications = 'You must agreen to allow to show notifications in this browser.';
+    //   isValid = false;
+    // }
 
     setErrors(newErrors);
 
@@ -261,7 +261,7 @@ export default function Post() {
                 </label>
                 {errors.agreedAge && <div className="invalid-feedback">{errors.agreedAge}</div>}
               </div>
-              <div>
+              {/* <div>
                 <label className={`${errors.agreedNotigications && 'is-invalid'} ${errors.agreedNotigications && 'form-control'}`}>
                   <input
                     type="checkbox"
@@ -271,7 +271,7 @@ export default function Post() {
                   <span>  It is an offence to supply alcohol to a person under the age of 18 years – penalties apply. A.C.T. Liquor Licence Number 14005716.</span>
                 </label>
                 {errors.agreedNotigications && <div className="invalid-feedback">{errors.agreedNotigications}</div>}
-              </div>
+              </div> */}
             </Col>
             <Col sm="12" md="6" className={utilStyles.rightCol}>
               <h5 className={`${utilStyles.pB10px}`}>
