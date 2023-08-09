@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import { formatDateForInput, formatDatetimeLocal, formatDatetimeLocalForInput, formatDate } from "../../utils/utils";
 import utilStyles from "../styles/utils.module.scss";
-import { redeemCouponSlice } from "../../store/couponSlice"
+import { redeemCouponSlice, addCouponSlice } from "../../store/couponSlice"
 import { RootState, useAppDispatch } from '../../store';
 
 interface Coupon {
@@ -41,6 +41,38 @@ const CouponTable: React.FC<CouponTableProps> = () => {
   const [description, setDescription] = useState('');
   const [expireDate, setExpireDate] = useState('');
   const [scheduleTime, setScheduleTime] = useState('');
+  const [errors, setErrors] = useState<{
+    description?: string;
+    expireDate?: string;
+    scheduleTime?: string;
+  }>({});
+
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors: {
+      description?: string;
+      expireDate?: string;
+      scheduleTime?: string;
+
+    } = {};
+
+    if (description.trim() === '') {
+      newErrors.description = 'Description is required';
+      isValid = false;
+    }
+
+    if (expireDate.trim() === '') {
+      newErrors.expireDate = 'Expire Date is required';
+      isValid = false;
+    }
+    if (scheduleTime.trim() === '') {
+      newErrors.scheduleTime = 'Expire Date is required';
+      isValid = false;
+    }
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleEditClick = (couponId: string) => {
     setEditingCouponId(couponId);
@@ -77,6 +109,18 @@ const CouponTable: React.FC<CouponTableProps> = () => {
     }
   };
 
+  const handleAddCoupon = () => {
+    if (validateForm()) {
+      const payload = {
+        description,
+        expireDate,
+        scheduleTime
+      };
+      dispatch(addCouponSlice(payload));
+
+    }
+  }
+
   return (
     <Table striped bordered hover>
       <thead>
@@ -89,6 +133,50 @@ const CouponTable: React.FC<CouponTableProps> = () => {
         </tr>
       </thead>
       <tbody>
+        <tr>
+          <td></td>
+          <td>
+            <Form.Control type="text"
+              onChange={(e) => {
+                setDescription(e.target.value)
+              }}
+              className={`form-control ${errors.description && 'is-invalid'}`}
+            />
+            {errors.description && <div className="invalid-feedback">{errors.description}</div>}
+
+          </td>
+          <td>
+
+            <input
+              type="date"
+              className={`form-control ${errors.expireDate && 'is-invalid'}`}
+              id="expireDate"
+              value={formatDateForInput(expireDate)}
+              onChange={(e) => setExpireDate(e.target.value)}
+              onFocus={(e) => e.target.type = "date"}
+            />
+            {errors.expireDate && <div className="invalid-feedback">{errors.expireDate}</div>}
+
+          </td>
+          <td>
+            <Form.Control
+              type="datetime-local"
+              onChange={(e) => setScheduleTime(e.target.value)}
+              className={`form-control ${errors.scheduleTime && 'is-invalid'}`}
+            />
+            {errors.scheduleTime && <div className="invalid-feedback">{errors.scheduleTime}</div>}
+          </td>
+          <td>
+            <div className={utilStyles.pB10px}>
+              <Button variant="success" onClick={handleAddCoupon} className={utilStyles.tableButton}>
+                Save
+              </Button>
+            </div>
+            <Button variant="secondary" size="sm" onClick={handleCancelEdit} className={utilStyles.tableButton}>
+              Cancel
+            </Button>
+          </td>
+        </tr>
         {allCoupons.map((coupon: Coupon) => (
           <tr key={coupon._id}>
             <td>{coupon._id}</td>
@@ -120,9 +208,8 @@ const CouponTable: React.FC<CouponTableProps> = () => {
                 <Form.Control
                   type="datetime-local"
                   defaultValue={formatDatetimeLocalForInput(coupon.scheduleTime)}
-                  onChange={(e) => {
-                    // Update the coupon's scheduleTime in state when edited
-                  }}
+                  onChange={(e) => setScheduleTime(e.target.value)}
+
                 />
               ) : (
                 formatDatetimeLocal(coupon.scheduleTime)

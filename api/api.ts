@@ -70,12 +70,7 @@ export const addCoupon = async (payload: {
   scheduleTime: string; // Change to 'number | null'
 }) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/user/withBlockchainSubscribe`,
-      {
-        ...payload,
-      }
-    );
+    const response = await axios.post(`${API_URL}/coupon`, payload);
     return response.data;
   } catch (error) {
     throw new Error("Failed to creat a Coupon");
