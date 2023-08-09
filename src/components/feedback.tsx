@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { sendFeedbackSlice } from "../../store/userSlice";
+import { useAppDispatch } from "../../store";
 
 interface FeedbackFormProps {
   show: boolean;
@@ -8,6 +10,7 @@ interface FeedbackFormProps {
 
 export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
   const [feedback, setFeedback] = useState('');
+  const dispatch = useAppDispatch();
 
   const handleFeedbackChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFeedback(e.target.value);
@@ -17,7 +20,7 @@ export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
     // Handle feedback submission here
     // You can use an API call or dispatch a Redux action
     console.log('Feedback submitted:', feedback);
-
+    dispatch(sendFeedbackSlice({ feedback }))
     // Close the modal
     onHide();
   };

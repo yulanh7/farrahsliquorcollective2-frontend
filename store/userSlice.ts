@@ -1,17 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "./types";
-import { optIn, submitUnsubscribe, getUserInfo } from "../api/api";
+import {
+  optIn,
+  submitUnsubscribe,
+  getUserInfo,
+  sendFeedback,
+} from "../api/api";
 
 interface UserData {
   subsciption: any; // Replace any with the actual type for subsciption
   userWithData: any; // Replace any with the actual type for user
   userInfo: any;
+  feedback: any;
 }
 
 const initialState: UserData = {
   subsciption: null,
   userWithData: null,
   userInfo: null,
+  feedback: null,
 };
 
 const useSlice = createSlice({
@@ -27,10 +34,13 @@ const useSlice = createSlice({
     setUserInfo: (state, action: PayloadAction<any>) => {
       state.userInfo = action.payload;
     },
+    setFeedback: (state, action: PayloadAction<any>) => {
+      state.userInfo = action.payload;
+    },
   },
 });
 
-export const { setUnsubsciption, setUserWithData, setUserInfo } =
+export const { setUnsubsciption, setUserWithData, setUserInfo, setFeedback } =
   useSlice.actions;
 export default useSlice.reducer;
 
@@ -74,6 +84,18 @@ export const unsubscribeSlice =
   async (dispatch) => {
     try {
       await submitUnsubscribe(payload);
+    } catch (error) {
+      console.error("Error submitting payload:", error);
+    }
+  };
+
+export const sendFeedbackSlice =
+  (payload: {
+    feedback: string;
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      await sendFeedback(payload);
     } catch (error) {
       console.error("Error submitting payload:", error);
     }
