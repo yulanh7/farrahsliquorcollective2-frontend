@@ -81,6 +81,14 @@ export const addCoupon = async (payload: {
     throw new Error("Failed to creat a Coupon");
   }
 };
+export const redeemCoupon = async (payload: { _id: string }) => {
+  try {
+    const response = await axios.put(`${API_URL}/coupon/redeem/${payload._id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to delete a Coupon");
+  }
+};
 export const addDefaultCoupon = async (payload: {
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'

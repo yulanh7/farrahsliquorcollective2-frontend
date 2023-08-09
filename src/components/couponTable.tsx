@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import { formatDateForInput, formatDatetimeLocal, formatDatetimeLocalForInput, formatDate } from "../../utils/utils";
 import utilStyles from "../styles/utils.module.scss";
+import { redeemCouponSlice } from "../../store/couponSlice"
+import { RootState, useAppDispatch } from '../../store';
 
 interface Coupon {
   _id: string;
@@ -32,6 +34,9 @@ const allCoupons = [
 ]
 
 const CouponTable: React.FC<CouponTableProps> = () => {
+
+  const dispatch = useAppDispatch();
+
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
   const [description, setDescription] = useState('');
   const [expireDate, setExpireDate] = useState('');
@@ -41,21 +46,34 @@ const CouponTable: React.FC<CouponTableProps> = () => {
     setEditingCouponId(couponId);
   };
 
+
+
   const handleCancelEdit = () => {
     setEditingCouponId(null);
   };
 
-  const handleSaveEdit = (couponId: string) => {
+  const handleSaveEdit = async (couponId: string) => {
     // Dispatch action to update coupon data
     // dispatch(updateCoupon(coupon));
+    const payload = {
+      description,
+      expireDate,
+      scheduleTime
+    }
+
+
     setEditingCouponId(null);
   };
 
-  const handleDeleteClick = (couponId: string) => {
+  const handleDeleteClick = async (couponId: string) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this coupon?");
     if (confirmDelete) {
       // Perform the deletion logic here
       // dispatch(deleteCoupon(couponId));
+
+      await dispatch(redeemCouponSlice({ _id: couponId }));
+      setEditingCouponId(null);
+
     }
   };
 
