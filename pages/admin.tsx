@@ -4,15 +4,30 @@ import utilStyles from "../src/styles/utils.module.scss";
 import { Button, Row, Col } from "react-bootstrap";
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
-import { addDefaultCouponSlice, fetchDefaultCouponSlice } from '../store/couponSlice';
+import { addDefaultCouponSlice, fetchDefaultCouponSlice, updateDefaultCouponSlice } from '../store/couponSlice';
 import { formatDateForInput } from "../utils/utils";
+import CouponTable from '../src/components/couponTable';
 
-
+const allCoupons = [
+  {
+    "id": "1",
+    "description": "50% off on shoes",
+    "expireDate": "2023-08-31T00:00:00.000Z",
+    "scheduleTime": "2023-08-31T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "description": "$10 off on orders over $50",
+    "expireDate": "2023-08-31T00:00:00.000Z",
+    "scheduleTime": "2023-08-31T00:00:00.000Z"
+  }
+]
 
 export default function Post() {
 
   const dispatch = useAppDispatch();
   const { defaultCoupon, defaultCouponLoading } = useSelector((state: RootState) => state.coupon);
+
   const [description, setDescription] = useState('');
   const [expireDate, setExpireDate] = useState('');
   const [errors, setErrors] = useState<{
@@ -62,16 +77,21 @@ export default function Post() {
         expireDate,
       };
       console.log(payload);
-      dispatch(addDefaultCouponSlice(payload))
+      if (defaultCoupon) {
+
+        dispatch(addDefaultCouponSlice(payload))
+      } else {
+        dispatch(updateDefaultCouponSlice(payload));
+      }
     }
   };
 
 
   return (
-    <Layout title="Coupon Manager" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
+    <Layout title="Coupon Manager" logo="/images/logo.jpg" showFeedback width="lg">
       {defaultCoupon ?
-        <div>
-          <h3 className={utilStyles.textCenter}> Update Default Coupon</h3>
+        <div className={utilStyles.pB20px}>
+          <h4 className={`${utilStyles.textCenter} ${utilStyles.pB20px}`}>Default Coupon</h4>
           <form className={utilStyles.form} onSubmit={handleSubmit}>
             <Row>
               <Col sm="12" md="6" className={utilStyles.leftCol}>
@@ -115,14 +135,14 @@ export default function Post() {
                 type="submit"
                 className={utilStyles.button}
               >
-                Submit
+                UPDATE
               </Button>
             </div>
           </form>
         </div> :
-        <div>
+        <div className={utilStyles.pB20px}>
           <div>
-            <h3 className={utilStyles.textCenter}>Add Default Coupon</h3>
+            <h4 className={utilStyles.textCenter}>Add Default Coupon</h4>
             <form className={utilStyles.form} onSubmit={handleSubmit}>
               <Row>
                 <Col sm="12" md="6" className={utilStyles.leftCol}>
@@ -166,7 +186,7 @@ export default function Post() {
                   type="submit"
                   className={utilStyles.button}
                 >
-                  Submit
+                  ADD
                 </Button>
               </div>
             </form>
@@ -174,6 +194,10 @@ export default function Post() {
         </div>
       }
 
+      <h4 className={`${utilStyles.textCenter} ${utilStyles.pB20px}`}>All Coupons</h4>
+      {allCoupons && allCoupons.length &&
+        <CouponTable allCoupons={allCoupons} />
+      }
 
 
 
