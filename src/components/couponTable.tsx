@@ -164,7 +164,8 @@ const CouponTable: React.FC = () => {
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>ID</th>
+          <th>#</th>
+          <th>Status</th>
           <th>Description</th>
           <th>Expire Date</th>
           <th>Schedule Time</th>
@@ -173,6 +174,7 @@ const CouponTable: React.FC = () => {
       </thead>
       <tbody>
         <tr>
+          <td></td>
           <td></td>
           <td>
             <input
@@ -185,6 +187,7 @@ const CouponTable: React.FC = () => {
             {addErrors.addDescription && <div className="invalid-feedback">{addErrors.addDescription}</div>}
 
           </td>
+
           <td>
 
             <input
@@ -213,7 +216,7 @@ const CouponTable: React.FC = () => {
 
             <div className={utilStyles.pB10px}>
               <Button variant="success" onClick={handleAddCoupon} className={utilStyles.tableButton}>
-                Save
+                Add
               </Button>
             </div>
 
@@ -229,9 +232,10 @@ const CouponTable: React.FC = () => {
             </td>
           </tr>
         }
-        {allCoupons && allCoupons.length && !allCouponsLoading && allCoupons.map((coupon: Coupon) => (
+        {allCoupons && allCoupons.length && !allCouponsLoading && allCoupons.map((coupon: Coupon, index: number) => (
           <tr key={coupon._id}>
-            <td>{coupon._id}</td>
+            <td>{index + 1}</td>
+            <td>{coupon.isPushed ? "Pushed" : "Unpushed"}</td>
             <td>
               {editingCouponId === coupon._id ? (
                 <Form.Control type="text" defaultValue={coupon.description} onChange={(e) => {
@@ -282,8 +286,8 @@ const CouponTable: React.FC = () => {
               ) : (
                 <>
                   <div className={utilStyles.pB10px}>
-                    <Button variant="primary" onClick={() => handleEditClick(coupon._id)} className={`${utilStyles.tableButton} ${coupon.isPushed ? "hide" : ""}`} disabled={coupon.isPushed}>
-                      Edit
+                    <Button variant="primary" onClick={() => handleEditClick(coupon._id)} className={`${utilStyles.tableButton}`} disabled={coupon.isPushed}>
+                      {coupon.isPushed ? "Disable" : "Edit"}
                     </Button>
                   </div>
                   <Button variant="danger" onClick={() => handleDeleteClick(coupon._id)} className={`${utilStyles.tableButton} ${coupon.isPushed ? "hide" : ""}`} disabled={coupon.isPushed}>
