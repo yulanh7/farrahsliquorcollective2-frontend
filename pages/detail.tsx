@@ -25,8 +25,8 @@ export default function Post() {
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
   const [hash, setHash] = useState('');
-  const [agreedPromotion, setAgreedPromotion] = useState(true);
-  const [agreedAge, setAgreedAge] = useState(true);
+  const [agreedPromotion, setAgreedPromotion] = useState(false);
+  const [agreedAge, setAgreedAge] = useState(false);
   const [agreedNotigications, setAgreedNotigications] = useState(false);
   const [errors, setErrors] = useState<{
     firstName?: string;
@@ -80,10 +80,10 @@ export default function Post() {
       newErrors.agreedAge = 'You must be at least 18 years old.';
       isValid = false;
     }
-    // if (!agreedNotigications) {
-    //   newErrors.agreedNotigications = 'You must agreen to allow to show notifications in this browser.';
-    //   isValid = false;
-    // }
+    if (!agreedNotigications) {
+      newErrors.agreedNotigications = 'You must agreen to allow to show notifications from this website.';
+      isValid = false;
+    }
 
     setErrors(newErrors);
 
@@ -172,7 +172,7 @@ export default function Post() {
 
   return (
     <Layout title="YOUR DETAILS (SECURELY)" logo="/images/logo.jpg" subTitle="Private details; Private" showFeedback showABN>
-      <Badge />
+
       <NotificationAlertModule show={showModal} onHide={handleCloseModal} />
       <form className={utilStyles.form} onSubmit={handleSubmit}>
         <Container>
@@ -261,24 +261,27 @@ export default function Post() {
                 </label>
                 {errors.agreedAge && <div className="invalid-feedback">{errors.agreedAge}</div>}
               </div>
-              {/* <div>
+
+            </Col>
+            <Col sm="12" md="6" className={utilStyles.rightCol}>
+              <h5 className={`${utilStyles.pB10px}`}>
+                OPT IN OFFER TO REGISTRAR
+              </h5>
+              <div className={`${utilStyles.text} ${utilStyles.pB20px}`}>
+                Welcome to Farrah Liquor Collective members club. You will Receive{`<gift>`} for joining.
+              </div>
+              <div>
                 <label className={`${errors.agreedNotigications && 'is-invalid'} ${errors.agreedNotigications && 'form-control'}`}>
                   <input
                     type="checkbox"
                     checked={agreedNotigications}
                     onChange={(e) => setAgreedNotigications(e.target.checked)}
                   />
-                  <span>  It is an offence to supply alcohol to a person under the age of 18 years – penalties apply. A.C.T. Liquor Licence Number 14005716.</span>
+                  <span className={`${utilStyles.headingSm}`}> <span className={`${utilStyles.primaryColor}`}>Allow notifications</span> from Farrash Liquor Collectives</span>
+                  <div className={utilStyles.pL15px}> Receive exclusive offers, discounts, and updates on our latest activities directly to your device. Don't miss out!
+                  </div>
                 </label>
                 {errors.agreedNotigications && <div className="invalid-feedback">{errors.agreedNotigications}</div>}
-              </div> */}
-            </Col>
-            <Col sm="12" md="6" className={utilStyles.rightCol}>
-              <h5 className={`${utilStyles.pB10px}`}>
-                OPT IN OFFER TO REGISTRAR
-              </h5>
-              <div className={`${utilStyles.text} ${utilStyles.pB10px}`}>
-                Welcome to Farrah Liquor Collective members club. You will Receive{`<gift>`} for joining.
               </div>
               <Button
                 variant="primary"
@@ -287,6 +290,7 @@ export default function Post() {
               >
                 SUBMIT
               </Button>
+              <Badge />
             </Col>
           </Row>
         </Container>

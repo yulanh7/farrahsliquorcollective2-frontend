@@ -1,3 +1,5 @@
+$primaryColor: #004067;
+
 .heading2Xl {
   font-size: 2.5rem;
   line-height: 1.2;
@@ -22,6 +24,11 @@
   font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.5;
+}
+.headingSm {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .text2Xl {
@@ -94,6 +101,13 @@
 }
 .pB10px {
   padding-bottom: 10px;
+}
+
+.pR15px {
+  padding-right: 15px;
+}
+.pL15px {
+  padding-left: 15px;
 }
 .mB10px {
   margin-bottom: 10px;
@@ -224,10 +238,11 @@ canvas.qrcode40 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  // position: absolute;
   z-index: -1;
-  top: 420px;
-  left: 46%;
+  // top: 420px;
+  // left: 46%;
+  margin: 30px;
 }
 
 .leftCol {
@@ -243,6 +258,10 @@ canvas.qrcode40 {
 }
 .is-invalid.formControlNoBorder {
   border: 1px solid #dc3545;
+}
+
+.primaryColor {
+  color: #0d6efd;
 }
 
 @media (max-width:767px) {
