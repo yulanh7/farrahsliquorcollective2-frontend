@@ -79,14 +79,14 @@ export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
             onChange={handleFeedbackChange}
             rows={5}
           />
+          {errors.feedback && <div className="invalid-feedback">{errors.feedback}</div>}
         </div>
-        {errors.feedback && <div className="invalid-feedback">{errors.feedback}</div>}
-        <div>
 
-        </div>
         <ReCAPTCHA
           sitekey="6Le0ZpQnAAAAAOeIgiopQ3gPTwtVUR5mSmbQuPoz"
           onChange={handleRecaptchaChange}
+          className={`form-control ${errors.isRecaptchaVerified && 'is-invalid'}`}
+
         />
         {errors.isRecaptchaVerified && <div className="invalid-feedback">{errors.isRecaptchaVerified}</div>}
 
