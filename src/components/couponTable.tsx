@@ -3,16 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import { formatDateForInput, formatDatetimeLocal, formatDatetimeLocalForInput, formatDate } from "../../utils/utils";
 import utilStyles from "../styles/utils.module.scss";
-import { redeemCouponSlice, addCouponSlice } from "../../store/couponSlice"
+import { deleteCouponSlice, addCouponSlice, fetchAllCouponSlice } from "../../store/couponSlice"
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
-import { fetchAllCouponSlice } from "../../store/couponSlice";
 
 interface Coupon {
   _id: string;
   description: string;
   expireDate: string;
   scheduleTime: string;
+  isPushed: boolean;
 }
 
 // interface CouponTableProps {
@@ -95,7 +95,8 @@ const CouponTable: React.FC = () => {
       // Perform the deletion logic here
       // dispatch(deleteCoupon(couponId));
 
-      await dispatch(redeemCouponSlice({ _id: couponId }));
+      await dispatch(deleteCouponSlice({ _id: couponId }));
+      await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
       setEditingCouponId(null);
 
     }
@@ -233,13 +234,13 @@ const CouponTable: React.FC = () => {
               ) : (
                 <>
                   <div className={utilStyles.pB10px}>
-                    <Button variant="primary" onClick={() => handleEditClick(coupon._id)} className={utilStyles.tableButton}>
+                    <Button variant="primary" onClick={() => handleEditClick(coupon._id)} className={`${utilStyles.tableButton} ${coupon.isPushed ? "hide" : ""}`} disabled={coupon.isPushed}>
                       Edit
                     </Button>
                   </div>
-                  <Button variant="danger" onClick={() => handleDeleteClick(coupon._id)} className={utilStyles.tableButton}>
+                  <Button variant="danger" onClick={() => handleDeleteClick(coupon._id)} className={`${utilStyles.tableButton} ${coupon.isPushed ? "hide" : ""}`} disabled={coupon.isPushed}>
                     Delete
-                  </Button>{' '}
+                  </Button>
 
                 </>
               )}

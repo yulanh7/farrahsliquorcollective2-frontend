@@ -7,6 +7,7 @@ import {
   updateDefaultCoupon,
   redeemCoupon,
   fetchAllCoupons,
+  deleteCoupon,
 } from "../api/api";
 
 interface CouponData {
@@ -62,7 +63,7 @@ const useSlice = createSlice({
     setAddDefaultCoupon: (state, action: PayloadAction<any>) => {
       state.coupon = action.payload;
     },
-    deleteCoupon(state, action: PayloadAction<any>) {},
+    setDeleteCoupon(state, action: PayloadAction<any>) {},
   },
 });
 
@@ -76,7 +77,7 @@ export const {
   setAddCoupon,
   setAddDefaultCoupon,
   setUpdateDefaultCoupon,
-  deleteCoupon,
+  setDeleteCoupon,
 } = useSlice.actions;
 export default useSlice.reducer;
 
@@ -123,6 +124,17 @@ export const redeemCouponSlice =
       await redeemCoupon(payload);
     } catch (error) {
       console.error("Error submitting payload:", error);
+    }
+  };
+export const deleteCouponSlice =
+  (payload: {
+    _id: string;
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      await deleteCoupon(payload);
+    } catch (error) {
+      console.error("Fail to delete the coupon:", error);
     }
   };
 
