@@ -1,10 +1,12 @@
 // components/CouponTable.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import { formatDateForInput, formatDatetimeLocal, formatDatetimeLocalForInput, formatDate } from "../../utils/utils";
 import utilStyles from "../styles/utils.module.scss";
 import { redeemCouponSlice, addCouponSlice } from "../../store/couponSlice"
 import { RootState, useAppDispatch } from '../../store';
+import { useSelector } from 'react-redux';
+import { fetchAllCouponSlice } from "../../store/couponSlice";
 
 interface Coupon {
   _id: string;
@@ -13,17 +15,17 @@ interface Coupon {
   scheduleTime: string;
 }
 
-interface CouponTableProps {
-  allCoupons: Coupon[];
-}
+// interface CouponTableProps {
+//   allCoupons: Coupon[];
+// }
 
 
 
 
-const CouponTable: React.FC<CouponTableProps> = ({ allCoupons }) => {
+const CouponTable: React.FC = () => {
+  const { allCoupons, allCouponsLoading } = useSelector((state: RootState) => state.coupon);
 
   const dispatch = useAppDispatch();
-
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
   const [description, setDescription] = useState('');
   const [expireDate, setExpireDate] = useState('');
@@ -34,6 +36,9 @@ const CouponTable: React.FC<CouponTableProps> = ({ allCoupons }) => {
     scheduleTime?: string;
   }>({});
 
+  useEffect(() => {
+    dispatch(fetchAllCouponSlice());
+  }, [dispatch]);
 
   const validateForm = () => {
     let isValid = true;
@@ -80,7 +85,7 @@ const CouponTable: React.FC<CouponTableProps> = ({ allCoupons }) => {
       scheduleTime
     }
 
-
+    await dispatch(addCouponSlice(payload));
     setEditingCouponId(null);
   };
 
@@ -96,14 +101,16 @@ const CouponTable: React.FC<CouponTableProps> = ({ allCoupons }) => {
     }
   };
 
-  const handleAddCoupon = () => {
+  const handleAddCoupon = async () => {
     if (validateForm()) {
       const payload = {
         description,
         expireDate,
         scheduleTime
       };
-      dispatch(addCouponSlice(payload));
+      await dispatch(addCouponSlice(payload));
+      await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
+
 
     }
   }
@@ -166,7 +173,14 @@ const CouponTable: React.FC<CouponTableProps> = ({ allCoupons }) => {
             </Button>
           </td>
         </tr>
-        {allCoupons.map((coupon: Coupon) => (
+        {allCouponsLoading &&
+          <tr>
+            <td colSpan={5} className={utilStyles.loadingRow}>
+              Loading...
+            </td>
+          </tr>
+        }
+        {allCoupons && allCoupons.length && !allCouponsLoading && allCoupons.map((coupon: Coupon) => (
           <tr key={coupon._id}>
             <td>{coupon._id}</td>
             <td>

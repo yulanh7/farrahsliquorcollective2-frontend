@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "./types";
-import { getOffersData, getDefaultOfferData } from "../api/api";
+import { getOffersData, getDefaultCouponData } from "../api/api";
 
 interface OfferState {
   allOfferLoading: boolean;
@@ -76,7 +76,7 @@ export const fetchDefaultOffer =
   async (dispatch) => {
     try {
       dispatch(getDefaultOfferStart());
-      const response = await getDefaultOfferData(payload); // API call using axios
+      const response = await getDefaultCouponData(payload); // API call using axios
       dispatch(getDefaultOfferSuccess(response));
     } catch (error) {
       dispatch(getDefaultOfferFailure((error as Error).message));

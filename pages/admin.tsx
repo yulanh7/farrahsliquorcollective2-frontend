@@ -7,13 +7,12 @@ import { RootState, useAppDispatch } from '../store';
 import { addDefaultCouponSlice, fetchDefaultCouponSlice, updateDefaultCouponSlice } from '../store/couponSlice';
 import { formatDateForInput } from "../utils/utils";
 import CouponTable from '../src/components/couponTable';
-import { fetchAllCouponSlice } from "../store/couponSlice";
 
 
 export default function Post() {
 
   const dispatch = useAppDispatch();
-  const { defaultCoupon, defaultCouponLoading, allCouponSLoading, allCoupons } = useSelector((state: RootState) => state.coupon);
+  const { defaultCoupon, defaultCouponLoading } = useSelector((state: RootState) => state.coupon);
 
   const [description, setDescription] = useState('');
   const [expireDate, setExpireDate] = useState('');
@@ -26,7 +25,6 @@ export default function Post() {
 
   useEffect(() => {
     dispatch(fetchDefaultCouponSlice());
-    dispatch(fetchAllCouponSlice());
   }, [dispatch]);
 
   useEffect(() => {
@@ -181,9 +179,8 @@ export default function Post() {
       }
 
       <h4 className={`${utilStyles.textCenter} ${utilStyles.pB20px}`}>All Coupons</h4>
-      {allCoupons && allCoupons.length &&
-        <CouponTable allCoupons={allCoupons} />
-      }
+
+      <CouponTable />
 
 
 

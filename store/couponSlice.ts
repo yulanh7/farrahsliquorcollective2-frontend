@@ -10,7 +10,7 @@ import {
 } from "../api/api";
 
 interface CouponData {
-  allCouponSLoading: boolean;
+  allCouponsLoading: boolean;
   defaultCouponLoading: boolean;
   allCoupons: any; // Replace any with the actual type for subsciption
   coupon: any; // Replace any with the actual type for subsciption
@@ -19,7 +19,7 @@ interface CouponData {
 }
 
 const initialState: CouponData = {
-  allCouponSLoading: false,
+  allCouponsLoading: false,
   defaultCouponLoading: false,
   allCoupons: null, // Replace any with the actual type for subsciption
   coupon: null, // Replace any with the actual type for subsciption
@@ -32,16 +32,16 @@ const useSlice = createSlice({
   initialState,
   reducers: {
     getAllCouponsStart(state) {
-      state.allCouponSLoading = true;
+      state.allCouponsLoading = true;
       state.error = null;
     },
     getAllCouponsSuccess(state, action: PayloadAction<any>) {
-      state.allCouponSLoading = false;
+      state.allCouponsLoading = false;
       state.allCoupons = action.payload;
       state.error = null;
     },
     getAllCouponsFailure(state, action: PayloadAction<string>) {
-      state.allCouponSLoading = false;
+      state.allCouponsLoading = false;
       state.error = action.payload;
     },
     getDefaultCouponsStart(state) {
