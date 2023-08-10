@@ -25,9 +25,9 @@ export default function Post() {
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
   const [hash, setHash] = useState('');
-  const [agreedPromotion, setAgreedPromotion] = useState(false);
-  const [agreedAge, setAgreedAge] = useState(false);
-  const [agreedNotigications, setAgreedNotigications] = useState(false);
+  const [agreedPromotion, setAgreedPromotion] = useState(true);
+  const [agreedAge, setAgreedAge] = useState(true);
+  const [agreedNotigications, setAgreedNotigications] = useState(true);
   const [errors, setErrors] = useState<{
     firstName?: string;
     lastName?: string;
@@ -181,6 +181,9 @@ export default function Post() {
         <Container>
           <Row>
             <Col sm="12" md="6" className={utilStyles.leftCol}>
+              <h5>
+                Create your own sercure key:
+              </h5>
               <div className={utilStyles.pB10px}>
                 <label htmlFor="firstName" className="form-label">
                   First Name
@@ -271,7 +274,7 @@ export default function Post() {
                 OPT IN OFFER TO REGISTRAR
               </h5>
               <div className={`${utilStyles.text} ${utilStyles.pB20px}`}>
-                Welcome to Farrah Liquor Collective members club. You will Receive{`<gift>`} for joining.
+                Welcome to Farrah Liquor Collective members club. You will complimentary 6 packs of beer in store collection for joining.
               </div>
               <div>
                 <label className={`${errors.agreedNotigications && 'is-invalid'} ${errors.agreedNotigications && 'form-control'}`}>
