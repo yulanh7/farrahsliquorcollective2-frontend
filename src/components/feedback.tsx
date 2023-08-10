@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { sendFeedbackSlice } from "../../store/userSlice";
 import { useAppDispatch } from "../../store";
 import ReCAPTCHA from 'react-google-recaptcha';
+import utilStyles from "../styles/utils.module.scss";
 
 interface FeedbackFormProps {
   show: boolean;
@@ -12,8 +13,34 @@ interface FeedbackFormProps {
 export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
   const [feedback, setFeedback] = useState('');
   const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
+  const [errors, setErrors] = useState<{
+    feedback?: string;
+    isRecaptchaVerified?: string;
+  }>({});
 
   const dispatch = useAppDispatch();
+
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors: {
+      feedback?: string;
+      isRecaptchaVerified?: string;
+    } = {};
+
+    if (feedback.trim() === '') {
+      newErrors.feedback = 'Feedback is required';
+      isValid = false;
+    }
+
+    if (!isRecaptchaVerified) {
+      newErrors.isRecaptchaVerified = 'Expire Date is required';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleRecaptchaChange = (token: string | null) => {
     if (token) {
@@ -29,14 +56,13 @@ export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
   };
 
   const handleSubmit = () => {
-    if (isRecaptchaVerified) {
+    if (validateForm()) {
       // Process the form submission
       dispatch(sendFeedbackSlice({ feedback }))
       // Close the modal
       onHide();
-    } else {
-      alert('Please verify reCAPTCHA before submitting.');
     }
+
   };
 
   return (
@@ -45,17 +71,25 @@ export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
         <Modal.Title>Provide Feedback</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <textarea
-          className="form-control"
-          placeholder="Enter your feedback here..."
-          value={feedback}
-          onChange={handleFeedbackChange}
-          rows={5}
-        />
+        <div className={utilStyles.mB20px}>
+          <textarea
+            className={`form-control ${errors.feedback && 'is-invalid'}`}
+            placeholder="Enter your feedback here..."
+            value={feedback}
+            onChange={handleFeedbackChange}
+            rows={5}
+          />
+        </div>
+        {errors.feedback && <div className="invalid-feedback">{errors.feedback}</div>}
+        <div>
+
+        </div>
         <ReCAPTCHA
           sitekey="6Le0ZpQnAAAAAOeIgiopQ3gPTwtVUR5mSmbQuPoz"
           onChange={handleRecaptchaChange}
         />
+        {errors.isRecaptchaVerified && <div className="invalid-feedback">{errors.isRecaptchaVerified}</div>}
+
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
