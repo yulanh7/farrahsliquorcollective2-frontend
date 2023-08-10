@@ -127,6 +127,9 @@ export default function Post() {
             keys: newSubscription?.keys || {}
           };
           await dispatch(optInSlice(payload));
+          document.cookie = `userHash=${hash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+          document.cookie = `subscription=${JSON.stringify(newSubscription)};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+
         } else {
           alert("Please allow notification in this website ")
         }
@@ -151,20 +154,20 @@ export default function Post() {
   //   }
   // }, [hash, userWithData, router]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    // Redirect to the new page only if the user is not null
-    const hash = getCookie('userHash');
-    if (hash) {
-      const payload = {
-        userHash: hash,
-        endpoint: subscriptionData?.endpoint || "default_endpoint_value",
-        expirationTime: subscriptionData?.expirationTime || null,
-        keys: subscriptionData?.keys || {}
-      };
-      dispatch(getUserInfoSlice(payload));
-    }
-  }, []);
+  //   // Redirect to the new page only if the user is not null
+  //   const hash = getCookie('userHash');
+  //   if (hash) {
+  //     const payload = {
+  //       userHash: hash,
+  //       endpoint: subscriptionData?.endpoint || "default_endpoint_value",
+  //       expirationTime: subscriptionData?.expirationTime || null,
+  //       keys: subscriptionData?.keys || {}
+  //     };
+  //     dispatch(getUserInfoSlice(payload));
+  //   }
+  // }, []);
 
   const handleCloseModal = () => {
     setShowModal(false);

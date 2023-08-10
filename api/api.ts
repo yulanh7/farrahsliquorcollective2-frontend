@@ -39,7 +39,7 @@ export const getUserInfo = async (payload: {
     });
     return response.data;
   } catch (error) {
-    throw new Error("Failed to creat a user");
+    throw new Error("Failed to get the user's info");
   }
 };
 

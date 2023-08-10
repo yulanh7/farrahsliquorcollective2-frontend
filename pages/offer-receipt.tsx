@@ -11,14 +11,15 @@ import { useSelector } from 'react-redux';
 import { fetchDefaultOffer } from '../store/offerSlice';
 import { RootState, useAppDispatch } from '../store';
 import { getHash, getCookie } from "../utils/utils";
+import { getUserInfoSlice } from '../store/userSlice';
 
 export default function Post() {
   const router = useRouter();
+  const { userWithData, userInfo } = useSelector((state: RootState) => state.user);
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
   const { defaultOffer, defaultOfferLoading } = useSelector((state: RootState) => state.offer);
   const [url, setUrl] = useState("");
   // const uniqueId = router.query.uniqueId;
-  console.log(router.query);
   const dispatch = useAppDispatch();
   useEffect(() => {
     // Redirect to the new page only if the user is not null
@@ -31,7 +32,40 @@ export default function Post() {
     }
   }, [dispatch]);
 
-  console.log("aa", defaultOffer);
+  useEffect(() => {  // Make the useEffect function asynchronous
+    async function fetchData() {
+      // Redirect to the new page only if the user is not null
+      const hash = getCookie('userHash');
+      const subscription = getCookie('subscription');
+      if (hash && subscription) {
+        debugger
+        const newSubscription = JSON.parse(subscription);
+        const payload = {
+          userHash: hash,
+          endpoint: newSubscription?.endpoint || "default_endpoint_value",
+          expirationTime: newSubscription?.expirationTime || null,
+          keys: newSubscription?.keys || {}
+        };
+
+        // Use await here
+        const newUserInfo = await dispatch(getUserInfoSlice(payload));
+
+        // Redirect to the detail page if userInfo becomes null
+        if (newUserInfo === null) {
+          console.log("1111111");
+          // router.push("/detail"); // Replace "detail-page" with your actual detail page route
+        }
+      } else {
+        router.push("/offer-receipt");
+      }
+    }
+
+    fetchData(); // Immediately invoke the async function
+
+  }, [userInfo, dispatch, router]);
+
+
+
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showOptOut showABN>
       {defaultOfferLoading &&
