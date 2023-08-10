@@ -175,11 +175,12 @@ const CouponTable: React.FC = () => {
         <tr>
           <td></td>
           <td>
-            <Form.Control type="text"
-              onChange={(e) => {
-                setAddDescription(e.target.value)
-              }}
+            <input
+              type="text"
               className={`form-control ${addErrors.addDescription && 'is-invalid'}`}
+              id="addDescription"
+              value={addDescription}
+              onChange={(e) => setAddDescription(e.target.value)}
             />
             {addErrors.addDescription && <div className="invalid-feedback">{addErrors.addDescription}</div>}
 
