@@ -278,7 +278,7 @@ export default function Post() {
                     onChange={(e) => setAgreedNotigications(e.target.checked)}
                   />
                   <span className={`${utilStyles.headingSm}`}> <span className={`${utilStyles.primaryColor}`}>Allow notifications</span> from Farrash Liquor Collectives</span>
-                  <div className={utilStyles.pL15px}> Receive exclusive offers, discounts, and updates on our latest activities directly to your device. Don't miss out!
+                  <div className={utilStyles.pL15px}> Receive exclusive offers, discounts, and updates on our latest activities directly to your device. {`Don't`} miss out!
                   </div>
                 </label>
                 {errors.agreedNotigications && <div className="invalid-feedback">{errors.agreedNotigications}</div>}
