@@ -98,7 +98,7 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
             - Want to know more?
           </div>
           <div className={`${utilStyles.textSm} `}>
-            Copyright © 2023 – All rights reserved
+            ©2023 Farrahs Liquor Collective
           </div>
         </div>
       </footer>
