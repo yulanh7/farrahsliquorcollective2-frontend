@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { sendFeedbackSlice } from "../../store/userSlice";
 import { useAppDispatch } from "../../store";
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface FeedbackFormProps {
   show: boolean;
@@ -10,19 +11,32 @@ interface FeedbackFormProps {
 
 export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
   const [feedback, setFeedback] = useState('');
+  const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
+
   const dispatch = useAppDispatch();
 
+  const handleRecaptchaChange = (token: string | null) => {
+    if (token) {
+      setIsRecaptchaVerified(true);
+    } else {
+      setIsRecaptchaVerified(false);
+    }
+  };
+
   const handleFeedbackChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+
     setFeedback(e.target.value);
   };
 
   const handleSubmit = () => {
-    // Handle feedback submission here
-    // You can use an API call or dispatch a Redux action
-    console.log('Feedback submitted:', feedback);
-    dispatch(sendFeedbackSlice({ feedback }))
-    // Close the modal
-    onHide();
+    if (isRecaptchaVerified) {
+      // Process the form submission
+      dispatch(sendFeedbackSlice({ feedback }))
+      // Close the modal
+      onHide();
+    } else {
+      alert('Please verify reCAPTCHA before submitting.');
+    }
   };
 
   return (
@@ -37,6 +51,10 @@ export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
           value={feedback}
           onChange={handleFeedbackChange}
           rows={5}
+        />
+        <ReCAPTCHA
+          sitekey="6Le0ZpQnAAAAAOeIgiopQ3gPTwtVUR5mSmbQuPoz"
+          onChange={handleRecaptchaChange}
         />
       </Modal.Body>
       <Modal.Footer>
