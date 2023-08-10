@@ -35,7 +35,7 @@ export default function MyWallet() {
 
 
   return (
-    <Layout title="My wallet" logo="/images/logo.jpg" showFeedback>
+    <Layout title="My Wallet" logo="/images/logo.jpg" showFeedback>
 
       {allCoupons && allCoupons.length &&
         <WalletTable allCoupons={allCoupons} />

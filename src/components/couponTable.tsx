@@ -27,6 +27,9 @@ const CouponTable: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
+  const [addDescription, setAddDescription] = useState('');
+  const [addExpireDate, setAddExpireDate] = useState('');
+  const [addScheduleTime, setAddScheduleTime] = useState('');
   const [description, setDescription] = useState('');
   const [expireDate, setExpireDate] = useState('');
   const [scheduleTime, setScheduleTime] = useState('');
@@ -35,12 +38,43 @@ const CouponTable: React.FC = () => {
     expireDate?: string;
     scheduleTime?: string;
   }>({});
+  const [addErrors, setAddErrors] = useState<{
+    addDescription?: string;
+    addExpireDate?: string;
+    addScheduleTime?: string;
+  }>({});
 
   useEffect(() => {
     dispatch(fetchAllCouponSlice());
   }, [dispatch]);
 
-  const validateForm = () => {
+  const validateAddForm = () => {
+    let isValid = true;
+    const newErrors: {
+      addDescription?: string;
+      addExpireDate?: string;
+      addScheduleTime?: string;
+
+    } = {};
+
+    if (addDescription.trim() === '') {
+      newErrors.addDescription = 'Description is required';
+      isValid = false;
+    }
+
+    if (addExpireDate.trim() === '') {
+      newErrors.addExpireDate = 'Expire Date is required';
+      isValid = false;
+    }
+    if (addScheduleTime.trim() === '') {
+      newErrors.addScheduleTime = 'Expire Date is required';
+      isValid = false;
+    }
+    setAddErrors(newErrors);
+    return isValid;
+  };
+
+  const validateEditForm = () => {
     let isValid = true;
     const newErrors: {
       description?: string;
@@ -79,12 +113,15 @@ const CouponTable: React.FC = () => {
   const handleSaveEdit = async (couponId: string) => {
     // Dispatch action to update coupon data
     // dispatch(updateCoupon(coupon));
+    const isoExpireDate = new Date(expireDate).toISOString(); // Format expireDate to ISO8601
+    const isoScheduleTime = new Date(scheduleTime).toISOString(); // Format scheduleTime to ISO8601
+
     const payload = {
       description,
-      expireDate,
-      scheduleTime
+      expireDate: isoExpireDate,
+      scheduleTime: isoScheduleTime,
     }
-
+    debugger
     await dispatch(addCouponSlice(payload));
     setEditingCouponId(null);
   };
@@ -103,14 +140,21 @@ const CouponTable: React.FC = () => {
   };
 
   const handleAddCoupon = async () => {
-    if (validateForm()) {
+    if (validateAddForm()) {
+      const isoExpireDate = new Date(addExpireDate).toISOString(); // Format addEto ISO8601
+      const isoScheduleTime = new Date(addScheduleTime).toISOString(); // Format scheduleTime to ISO8601
+
       const payload = {
-        description,
-        expireDate,
-        scheduleTime
+        description: addDescription,
+        expireDate: isoExpireDate,
+        scheduleTime: isoScheduleTime,
       };
+
       await dispatch(addCouponSlice(payload));
       await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
+      setAddDescription('');
+      setAddExpireDate('');
+      setAddScheduleTime('');
 
 
     }
@@ -133,33 +177,36 @@ const CouponTable: React.FC = () => {
           <td>
             <Form.Control type="text"
               onChange={(e) => {
-                setDescription(e.target.value)
+                setAddDescription(e.target.value)
               }}
-              className={`form-control ${errors.description && 'is-invalid'}`}
+              className={`form-control ${addErrors.addDescription && 'is-invalid'}`}
             />
-            {errors.description && <div className="invalid-feedback">{errors.description}</div>}
+            {addErrors.addDescription && <div className="invalid-feedback">{addErrors.addDescription}</div>}
 
           </td>
           <td>
 
             <input
               type="date"
-              className={`form-control ${errors.expireDate && 'is-invalid'}`}
-              id="expireDate"
-              value={formatDateForInput(expireDate)}
-              onChange={(e) => setExpireDate(e.target.value)}
+              className={`form-control ${addErrors.addExpireDate && 'is-invalid'}`}
+              id="addExpireDate"
+              value={formatDateForInput(addExpireDate)}
+              onChange={(e) => setAddExpireDate(e.target.value)}
               onFocus={(e) => e.target.type = "date"}
             />
-            {errors.expireDate && <div className="invalid-feedback">{errors.expireDate}</div>}
+            {addErrors.addExpireDate && <div className="invalid-feedback">{addErrors.addExpireDate}</div>}
 
           </td>
           <td>
-            <Form.Control
+            <input
               type="datetime-local"
-              onChange={(e) => setScheduleTime(e.target.value)}
-              className={`form-control ${errors.scheduleTime && 'is-invalid'}`}
+              className={`form-control ${addErrors.addScheduleTime && 'is-invalid'}`}
+              id="addScheduleTime"
+              value={formatDatetimeLocalForInput(addScheduleTime)}
+              onChange={(e) => setAddScheduleTime(e.target.value)}
             />
-            {errors.scheduleTime && <div className="invalid-feedback">{errors.scheduleTime}</div>}
+
+            {addErrors.addScheduleTime && <div className="invalid-feedback">{addErrors.addScheduleTime}</div>}
           </td>
           <td>
 
