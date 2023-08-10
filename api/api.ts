@@ -43,7 +43,7 @@ export const getUserInfo = async (payload: {
   }
 };
 
-export const getDefaultOfferData = async (payload: { userHash: string }) => {
+export const getDefaultCouponData = async (payload: { userHash: string }) => {
   try {
     const response = await axios.post(`${API_URL}/user/defaultCoupon`, {
       ...payload,
@@ -76,6 +76,15 @@ export const addCoupon = async (payload: {
     throw new Error("Failed to creat a Coupon");
   }
 };
+export const fetchAllCoupons = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/coupons/nonDefault`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch data");
+  }
+};
+
 export const redeemCoupon = async (payload: { _id: string }) => {
   try {
     const response = await axios.put(`${API_URL}/coupon/redeem/${payload._id}`);

@@ -6,6 +6,7 @@ import {
   fetchDefaultCoupon,
   updateDefaultCoupon,
   redeemCoupon,
+  fetchAllCoupons,
 } from "../api/api";
 
 interface CouponData {
@@ -56,12 +57,8 @@ const useSlice = createSlice({
       state.defaultCouponLoading = false;
       state.error = action.payload;
     },
-    setAddCoupon: (state, action: PayloadAction<any>) => {
-      state.allCoupons = action.payload;
-    },
-    setUpdateDefaultCoupon: (state, action: PayloadAction<any>) => {
-      // state.allCoupons = action.payload;
-    },
+    setAddCoupon: (state, action: PayloadAction<any>) => {},
+    setUpdateDefaultCoupon: (state, action: PayloadAction<any>) => {},
     setAddDefaultCoupon: (state, action: PayloadAction<any>) => {
       state.coupon = action.payload;
     },
@@ -170,5 +167,17 @@ export const fetchDefaultCouponSlice =
       dispatch(getDefaultCouponsSuccess(response));
     } catch (error) {
       dispatch(getDefaultCouponsFailure((error as Error).message));
+    }
+  };
+
+export const fetchAllCouponSlice =
+  (): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      dispatch(getAllCouponsStart());
+      const response = await fetchAllCoupons(); // API call using axios
+      dispatch(getAllCouponsSuccess(response));
+    } catch (error) {
+      dispatch(getAllCouponsFailure((error as Error).message));
     }
   };

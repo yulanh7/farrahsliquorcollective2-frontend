@@ -7,26 +7,13 @@ import { RootState, useAppDispatch } from '../store';
 import { addDefaultCouponSlice, fetchDefaultCouponSlice, updateDefaultCouponSlice } from '../store/couponSlice';
 import { formatDateForInput } from "../utils/utils";
 import CouponTable from '../src/components/couponTable';
+import { fetchAllCouponSlice } from "../store/couponSlice";
 
-const allCoupons = [
-  {
-    "_id": "1",
-    "description": "50% off on shoes",
-    "expireDate": "2023-08-31T00:00:00.000Z",
-    "scheduleTime": "2023-08-31T00:00:00.000Z"
-  },
-  {
-    "_id": "2",
-    "description": "$10 off on orders over $50",
-    "expireDate": "2023-08-31T00:00:00.000Z",
-    "scheduleTime": "2023-08-31T00:00:00.000Z"
-  }
-]
 
 export default function Post() {
 
   const dispatch = useAppDispatch();
-  const { defaultCoupon, defaultCouponLoading } = useSelector((state: RootState) => state.coupon);
+  const { defaultCoupon, defaultCouponLoading, allCouponSLoading, allCoupons } = useSelector((state: RootState) => state.coupon);
 
   const [description, setDescription] = useState('');
   const [expireDate, setExpireDate] = useState('');
@@ -39,6 +26,7 @@ export default function Post() {
 
   useEffect(() => {
     dispatch(fetchDefaultCouponSlice());
+    dispatch(fetchAllCouponSlice());
   }, [dispatch]);
 
   useEffect(() => {

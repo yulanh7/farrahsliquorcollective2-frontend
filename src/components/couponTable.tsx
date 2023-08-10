@@ -18,22 +18,9 @@ interface CouponTableProps {
 }
 
 
-const allCoupons = [
-  {
-    "_id": "64d1e52d776d8e0f1544820b",
-    "expireDate": "2023-08-31T00:00:00.000Z",
-    "description": "This is 3-a default coupon",
-    "scheduleTime": "2023-08-31T00:00:00.000Z"
-  },
-  {
-    "_id": "64d1e52d776d8e0f1544820k",
-    "expireDate": "2023-08-31T00:00:00.000Z",
-    "description": "This is 3-a default coupon",
-    "scheduleTime": "2023-08-31T00:00:00.000Z"
-  }
-]
 
-const CouponTable: React.FC<CouponTableProps> = (isForAdmin) => {
+
+const CouponTable: React.FC<CouponTableProps> = ({ allCoupons }) => {
 
   const dispatch = useAppDispatch();
 
