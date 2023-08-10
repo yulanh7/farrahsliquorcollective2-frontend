@@ -8,6 +8,7 @@ import {
   redeemCoupon,
   fetchAllCoupons,
   deleteCoupon,
+  updateCoupon,
 } from "../api/api";
 
 interface CouponData {
@@ -64,6 +65,7 @@ const useSlice = createSlice({
       state.coupon = action.payload;
     },
     setDeleteCoupon(state, action: PayloadAction<any>) {},
+    setUpdateCoupon(state, action: PayloadAction<any>) {},
   },
 });
 
@@ -78,6 +80,7 @@ export const {
   setAddDefaultCoupon,
   setUpdateDefaultCoupon,
   setDeleteCoupon,
+  setUpdateCoupon,
 } = useSlice.actions;
 export default useSlice.reducer;
 
@@ -107,7 +110,7 @@ export const updateCouponSlice =
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
-      const { coupon } = await addCoupon(payload);
+      const { coupon } = await updateCoupon(payload);
       dispatch(setAddCoupon(coupon));
       // document.cookie = `couponHash=${coupon.couponHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       // window.location.href = "/offer-receipt";

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import { formatDateForInput, formatDatetimeLocal, formatDatetimeLocalForInput, formatDate } from "../../utils/utils";
 import utilStyles from "../styles/utils.module.scss";
-import { deleteCouponSlice, addCouponSlice, fetchAllCouponSlice } from "../../store/couponSlice"
+import { deleteCouponSlice, addCouponSlice, fetchAllCouponSlice, updateCouponSlice } from "../../store/couponSlice"
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
 
@@ -120,9 +120,9 @@ const CouponTable: React.FC = () => {
       description,
       expireDate: isoExpireDate,
       scheduleTime: isoScheduleTime,
+      _id: couponId
     }
-    debugger
-    await dispatch(addCouponSlice(payload));
+    await dispatch(updateCouponSlice(payload));
     setEditingCouponId(null);
   };
 

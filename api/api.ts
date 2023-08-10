@@ -93,6 +93,24 @@ export const redeemCoupon = async (payload: { _id: string }) => {
     throw new Error("Failed to delete a Coupon");
   }
 };
+
+export const updateCoupon = async (payload: {
+  _id: string;
+  description: string;
+  expireDate: string;
+  scheduleTime: string;
+}) => {
+  try {
+    const response = await axios.put(`${API_URL}/coupon/${payload._id}`, {
+      description: payload.description,
+      expireDate: payload.expireDate,
+      scheduleTime: payload.scheduleTime,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to delete a Coupon");
+  }
+};
 export const deleteCoupon = async (payload: { _id: string }) => {
   try {
     const response = await axios.delete(`${API_URL}/coupon/${payload._id}`);
