@@ -34,7 +34,7 @@ export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
     }
 
     if (!isRecaptchaVerified) {
-      newErrors.isRecaptchaVerified = 'Expire Date is required';
+      newErrors.isRecaptchaVerified = 'Please verify reCAPTCHA before submitting.';
       isValid = false;
     }
 
