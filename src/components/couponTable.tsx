@@ -27,6 +27,8 @@ const CouponTable: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
+  const [editingCoupons, setEditingCoupons] = useState<Map<string, Coupon>>(new Map());
+
   const [addDescription, setAddDescription] = useState('');
   const [addExpireDate, setAddExpireDate] = useState('');
   const [addScheduleTime, setAddScheduleTime] = useState('');
@@ -102,8 +104,13 @@ const CouponTable: React.FC = () => {
 
   const handleEditClick = (couponId: string) => {
     setEditingCouponId(couponId);
+    const couponToEdit = allCoupons.find((coupon: Coupon) => coupon._id === couponId);
+    if (couponToEdit) {
+      const updatedEditingCoupons = new Map(editingCoupons);
+      updatedEditingCoupons.set(couponId, { ...couponToEdit });
+      setEditingCoupons(updatedEditingCoupons);
+    }
   };
-
 
 
   const handleCancelEdit = () => {
@@ -111,18 +118,25 @@ const CouponTable: React.FC = () => {
   };
 
   const handleSaveEdit = async (couponId: string) => {
-    // Dispatch action to update coupon data
-    // dispatch(updateCoupon(coupon));
-    const isoExpireDate = new Date(expireDate).toISOString(); // Format expireDate to ISO8601
-    const isoScheduleTime = new Date(scheduleTime).toISOString(); // Format scheduleTime to ISO8601
+    const editedCoupon = editingCoupons.get(couponId);
+
+    if (!editedCoupon) {
+      // Handle the case where the editedCoupon is not found (error handling)
+      return;
+    }
+
+    const isoExpireDate = new Date(editedCoupon.expireDate).toISOString();
+    const isoScheduleTime = new Date(editedCoupon.scheduleTime).toISOString();
 
     const payload = {
-      description,
+      description: editedCoupon.description,
       expireDate: isoExpireDate,
       scheduleTime: isoScheduleTime,
-      _id: couponId
-    }
+      _id: couponId,
+    };
+
     await dispatch(updateCouponSlice(payload));
+    await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
     setEditingCouponId(null);
   };
 
@@ -238,9 +252,21 @@ const CouponTable: React.FC = () => {
             <td>{coupon.isPushed ? "Pushed" : "Unpushed"}</td>
             <td>
               {editingCouponId === coupon._id ? (
-                <Form.Control type="text" defaultValue={coupon.description} onChange={(e) => {
-                  setDescription(e.target.value)
-                }} />
+                <Form.Control
+                  type="text"
+                  defaultValue={coupon.description}
+
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    const updatedEditingCoupons = new Map(editingCoupons);
+                    const editedCoupon = updatedEditingCoupons.get(coupon._id);
+                    if (editedCoupon) {
+                      editedCoupon.description = newValue;
+                      updatedEditingCoupons.set(coupon._id, editedCoupon);
+                      setEditingCoupons(updatedEditingCoupons);
+                    }
+                  }}
+                />
 
               ) : (
                 coupon.description
@@ -248,12 +274,19 @@ const CouponTable: React.FC = () => {
             </td>
             <td>
               {editingCouponId === coupon._id ? (
-
                 <Form.Control
                   type="date"
                   defaultValue={formatDateForInput(coupon.expireDate)}
-                  onChange={(e) => setExpireDate(e.target.value)}
-
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    const updatedEditingCoupons = new Map(editingCoupons);
+                    const editedCoupon = updatedEditingCoupons.get(coupon._id);
+                    if (editedCoupon) {
+                      editedCoupon.expireDate = newValue;
+                      updatedEditingCoupons.set(coupon._id, editedCoupon);
+                      setEditingCoupons(updatedEditingCoupons);
+                    }
+                  }}
                 />
               ) : (
                 formatDate(coupon.expireDate)
@@ -264,8 +297,16 @@ const CouponTable: React.FC = () => {
                 <Form.Control
                   type="datetime-local"
                   defaultValue={formatDatetimeLocalForInput(coupon.scheduleTime)}
-                  onChange={(e) => setScheduleTime(e.target.value)}
-
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    const updatedEditingCoupons = new Map(editingCoupons);
+                    const editedCoupon = updatedEditingCoupons.get(coupon._id);
+                    if (editedCoupon) {
+                      editedCoupon.scheduleTime = newValue;
+                      updatedEditingCoupons.set(coupon._id, editedCoupon);
+                      setEditingCoupons(updatedEditingCoupons);
+                    }
+                  }}
                 />
               ) : (
                 formatDatetimeLocal(coupon.scheduleTime)
