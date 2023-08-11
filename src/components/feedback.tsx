@@ -13,6 +13,7 @@ interface FeedbackFormProps {
 export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
   const [feedback, setFeedback] = useState('');
   const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
+  const [ifContact, setIfContact] = useState(false);
   const [yourName, setYourName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -43,16 +44,19 @@ export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
       newErrors.feedback = 'Feedback is required';
       isValid = false;
     }
-    if (yourName.trim() === '') {
-      newErrors.yourName = 'Your Name is required';
-      isValid = false;
-    }
-    if (email.trim() === '') {
-      newErrors.email = 'Email is required';
-      isValid = false;
-    } else if (!isValidEmail(email)) {
-      newErrors.email = 'Email is invalid';
-      isValid = false;
+
+    if (ifContact) {
+      if (yourName.trim() === '') {
+        newErrors.yourName = 'Your Name is required';
+        isValid = false;
+      }
+      if (email.trim() === '') {
+        newErrors.email = 'Email is required';
+        isValid = false;
+      } else if (!isValidEmail(email)) {
+        newErrors.email = 'Email is invalid';
+        isValid = false;
+      }
     }
 
     if (!isRecaptchaVerified) {
@@ -109,54 +113,70 @@ export default function FeedbackForm({ show, onHide }: FeedbackFormProps) {
           />
           {errors.feedback && <div className="invalid-feedback">{errors.feedback}</div>}
         </div>
-        <Row>
-          <Col sm="12" md="6" className={utilStyles.formLeftCol}>
-            <div className={utilStyles.pB10px}>
-              <input
-                type="text"
-                placeholder="Your Name"
-                className={`form-control ${errors.yourName && 'is-invalid'}`}
-                id="yourName"
-                value={yourName}
-                onChange={(e) => setYourName(e.target.value)}
-              />
-              {errors.yourName && (
-                <div className="invalid-feedback">{errors.yourName}</div>
-              )}
-            </div>
-          </Col>
-          <Col sm="12" md="6" className={utilStyles.formRightCol}>
-            <div className={utilStyles.pB10px}>
-              <input
-                type="phone"
-                placeholder="Phone"
-                className={`form-control`}
-                id="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="12">
-            <div className={utilStyles.pB10px}>
-              <input
-                type="email"
-                placeholder="Email"
-                className={`form-control ${errors.email && 'is-invalid'}`}
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {errors.email && (
-                <div className="invalid-feedback">{errors.email}</div>
-              )}
-            </div>
+        <div className={utilStyles.mB20px}>
+          <label>
+            <input
+              type="checkbox"
+              checked={ifContact}
+              onChange={(e) => setIfContact(e.target.checked)}
+            />
+            <span> Contact me.</span>
+          </label>
+        </div>
+        {
+          ifContact && (
+            <>
+              <Row>
+                <Col sm="12" md="6" className={utilStyles.formLeftCol}>
+                  <div className={utilStyles.pB10px}>
+                    <input
+                      type="text"
+                      placeholder="Your Name*"
+                      className={`form-control ${errors.yourName && 'is-invalid'}`}
+                      id="yourName"
+                      value={yourName}
+                      onChange={(e) => setYourName(e.target.value)}
+                    />
+                    {errors.yourName && (
+                      <div className="invalid-feedback">{errors.yourName}</div>
+                    )}
+                  </div>
+                </Col>
+                <Col sm="12" md="6" className={utilStyles.formRightCol}>
+                  <div className={utilStyles.pB10px}>
+                    <input
+                      type="phone"
+                      placeholder="Phone"
+                      className={`form-control`}
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm="12">
+                  <div className={utilStyles.pB10px}>
+                    <input
+                      type="email"
+                      placeholder="Email*"
+                      className={`form-control ${errors.email && 'is-invalid'}`}
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    {errors.email && (
+                      <div className="invalid-feedback">{errors.email}</div>
+                    )}
+                  </div>
 
-          </Col>
+                </Col>
 
-        </Row>
+              </Row>
+            </>
+          )
+        }
 
         <ReCAPTCHA
           sitekey="6Le0ZpQnAAAAAOeIgiopQ3gPTwtVUR5mSmbQuPoz"
