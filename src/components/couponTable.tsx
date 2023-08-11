@@ -32,9 +32,9 @@ const CouponTable: React.FC = () => {
   const [addDescription, setAddDescription] = useState('');
   const [addExpireDate, setAddExpireDate] = useState('');
   const [addScheduleTime, setAddScheduleTime] = useState('');
-  const [description, setDescription] = useState('');
-  const [expireDate, setExpireDate] = useState('');
-  const [scheduleTime, setScheduleTime] = useState('');
+  // const [description, setDescription] = useState('');
+  // const [expireDate, setExpireDate] = useState('');
+  // const [scheduleTime, setScheduleTime] = useState('');
   const [errors, setErrors] = useState<{
     description?: string;
     expireDate?: string;
@@ -51,12 +51,14 @@ const CouponTable: React.FC = () => {
   }, [dispatch]);
 
   const validateAddForm = () => {
+    const now = new Date();
+    const newAddExpireDate = new Date(addExpireDate);
+    const newAddScheduleTime = new Date(addScheduleTime);
     let isValid = true;
     const newErrors: {
       addDescription?: string;
       addExpireDate?: string;
       addScheduleTime?: string;
-
     } = {};
 
     if (addDescription.trim() === '') {
@@ -64,40 +66,59 @@ const CouponTable: React.FC = () => {
       isValid = false;
     }
 
+
     if (addExpireDate.trim() === '') {
       newErrors.addExpireDate = 'Expire Date is required';
       isValid = false;
-    }
-    if (addScheduleTime.trim() === '') {
-      newErrors.addScheduleTime = 'Expire Date is required';
+    } else if (newAddExpireDate <= now) {
+      newErrors.addExpireDate = 'Expire Date must be greater than now';
       isValid = false;
     }
+
+    if (addScheduleTime.trim() === '') {
+      newErrors.addScheduleTime = 'Schedule Time is required';
+      isValid = false;
+    } else if (newAddScheduleTime <= now) {
+      newErrors.addScheduleTime = 'Schedule Time must be greater than now';
+      isValid = false;
+    }
+
     setAddErrors(newErrors);
     return isValid;
   };
 
-  const validateEditForm = () => {
+  const validateEditForm = (editedCoupon: Coupon) => {
+    const now = new Date();
+    const newExpireDate = new Date(editedCoupon.expireDate);
+    const newScheduleTime = new Date(editedCoupon.scheduleTime);
     let isValid = true;
     const newErrors: {
       description?: string;
       expireDate?: string;
       scheduleTime?: string;
-
     } = {};
 
-    if (description.trim() === '') {
+    if (editedCoupon.description.trim() === '') {
       newErrors.description = 'Description is required';
       isValid = false;
     }
 
-    if (expireDate.trim() === '') {
+    if (editedCoupon.expireDate.trim() === '') {
       newErrors.expireDate = 'Expire Date is required';
       isValid = false;
-    }
-    if (scheduleTime.trim() === '') {
-      newErrors.scheduleTime = 'Expire Date is required';
+    } else if (newExpireDate <= now) {
+      newErrors.expireDate = 'Expire Date must be greater than now';
       isValid = false;
     }
+
+    if (editedCoupon.scheduleTime.trim() === '') {
+      newErrors.scheduleTime = 'Schedule Time is required';
+      isValid = false;
+    } else if (newScheduleTime <= now) {
+      newErrors.scheduleTime = 'Schedule Time must be greater than now';
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -124,20 +145,21 @@ const CouponTable: React.FC = () => {
       // Handle the case where the editedCoupon is not found (error handling)
       return;
     }
+    if (validateEditForm(editedCoupon)) {
+      const isoExpireDate = new Date(editedCoupon.expireDate).toISOString();
+      const isoScheduleTime = new Date(editedCoupon.scheduleTime).toISOString();
+      const payload = {
+        description: editedCoupon.description,
+        expireDate: isoExpireDate,
+        scheduleTime: isoScheduleTime,
+        _id: couponId,
+      };
+      await dispatch(updateCouponSlice(payload));
+      await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
+      setEditingCouponId(null);
+    }
 
-    const isoExpireDate = new Date(editedCoupon.expireDate).toISOString();
-    const isoScheduleTime = new Date(editedCoupon.scheduleTime).toISOString();
 
-    const payload = {
-      description: editedCoupon.description,
-      expireDate: isoExpireDate,
-      scheduleTime: isoScheduleTime,
-      _id: couponId,
-    };
-
-    await dispatch(updateCouponSlice(payload));
-    await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
-    setEditingCouponId(null);
   };
 
   const handleDeleteClick = async (couponId: string) => {
@@ -252,21 +274,25 @@ const CouponTable: React.FC = () => {
             <td>{coupon.isPushed ? "Pushed" : "Unpushed"}</td>
             <td>
               {editingCouponId === coupon._id ? (
-                <Form.Control
-                  type="text"
-                  defaultValue={coupon.description}
+                <>
+                  <Form.Control
+                    type="text"
+                    defaultValue={coupon.description}
+                    className={errors.description && 'is-invalid'}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const updatedEditingCoupons = new Map(editingCoupons);
+                      const editedCoupon = updatedEditingCoupons.get(coupon._id);
+                      if (editedCoupon) {
+                        editedCoupon.description = newValue;
+                        updatedEditingCoupons.set(coupon._id, editedCoupon);
+                        setEditingCoupons(updatedEditingCoupons);
+                      }
+                    }}
+                  />
+                  {errors.description && <div className="invalid-feedback">{errors.description}</div>}
 
-                  onChange={(e) => {
-                    const newValue = e.target.value;
-                    const updatedEditingCoupons = new Map(editingCoupons);
-                    const editedCoupon = updatedEditingCoupons.get(coupon._id);
-                    if (editedCoupon) {
-                      editedCoupon.description = newValue;
-                      updatedEditingCoupons.set(coupon._id, editedCoupon);
-                      setEditingCoupons(updatedEditingCoupons);
-                    }
-                  }}
-                />
+                </>
 
               ) : (
                 coupon.description
@@ -274,40 +300,51 @@ const CouponTable: React.FC = () => {
             </td>
             <td>
               {editingCouponId === coupon._id ? (
-                <Form.Control
-                  type="date"
-                  defaultValue={formatDateForInput(coupon.expireDate)}
-                  onChange={(e) => {
-                    const newValue = e.target.value;
-                    const updatedEditingCoupons = new Map(editingCoupons);
-                    const editedCoupon = updatedEditingCoupons.get(coupon._id);
-                    if (editedCoupon) {
-                      editedCoupon.expireDate = newValue;
-                      updatedEditingCoupons.set(coupon._id, editedCoupon);
-                      setEditingCoupons(updatedEditingCoupons);
-                    }
-                  }}
-                />
+                <>
+                  <Form.Control
+                    type="date"
+                    className={errors.expireDate && 'is-invalid'}
+
+                    defaultValue={formatDateForInput(coupon.expireDate)}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const updatedEditingCoupons = new Map(editingCoupons);
+                      const editedCoupon = updatedEditingCoupons.get(coupon._id);
+                      if (editedCoupon) {
+                        editedCoupon.expireDate = newValue;
+                        updatedEditingCoupons.set(coupon._id, editedCoupon);
+                        setEditingCoupons(updatedEditingCoupons);
+                      }
+                    }}
+                  />
+                  {errors.expireDate && <div className="invalid-feedback">{errors.expireDate}</div>}
+
+                </>
               ) : (
                 formatDate(coupon.expireDate)
               )}
             </td>
             <td>
               {editingCouponId === coupon._id ? (
-                <Form.Control
-                  type="datetime-local"
-                  defaultValue={formatDatetimeLocalForInput(coupon.scheduleTime)}
-                  onChange={(e) => {
-                    const newValue = e.target.value;
-                    const updatedEditingCoupons = new Map(editingCoupons);
-                    const editedCoupon = updatedEditingCoupons.get(coupon._id);
-                    if (editedCoupon) {
-                      editedCoupon.scheduleTime = newValue;
-                      updatedEditingCoupons.set(coupon._id, editedCoupon);
-                      setEditingCoupons(updatedEditingCoupons);
-                    }
-                  }}
-                />
+                <>
+                  <Form.Control
+                    type="datetime-local"
+                    defaultValue={formatDatetimeLocalForInput(coupon.scheduleTime)}
+                    className={errors.scheduleTime && 'is-invalid'}
+
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const updatedEditingCoupons = new Map(editingCoupons);
+                      const editedCoupon = updatedEditingCoupons.get(coupon._id);
+                      if (editedCoupon) {
+                        editedCoupon.scheduleTime = newValue;
+                        updatedEditingCoupons.set(coupon._id, editedCoupon);
+                        setEditingCoupons(updatedEditingCoupons);
+                      }
+                    }}
+                  />
+                  {errors.scheduleTime && <div className="invalid-feedback">{errors.scheduleTime}</div>}
+                </>
               ) : (
                 formatDatetimeLocal(coupon.scheduleTime)
               )}
