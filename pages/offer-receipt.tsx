@@ -12,6 +12,7 @@ import { fetchDefaultOffer } from '../store/offerSlice';
 import { RootState, useAppDispatch } from '../store';
 import { getCookie, formatDate } from "../utils/utils";
 import { getUserInfoSlice } from '../store/userSlice';
+import Link from 'next/link';
 
 
 export default function Post() {
@@ -59,7 +60,7 @@ export default function Post() {
 
 
   return (
-    <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showOptOut showABN>
+    <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
       {defaultOfferLoading &&
         <div>
           loading...</div>
@@ -73,12 +74,23 @@ export default function Post() {
                   <QRCodeGenerator url={defaultOffer.couponId} className="qrcode80" />
                 </Col>
                 <Col sm="12" md="6" className={`${utilStyles.pT30px}`}>
-                  <span className={`${utilStyles.headingSm}`}>Unique ID:</span><span>{defaultOffer.couponId}</span>
+                  <span className={`${utilStyles.headingSm}`}>Unique ID:</span><span> {defaultOffer.couponId}</span>
                   <div
                     className={`${utilStyles.text} ${utilStyles.pB10px} ${utilStyles.pT10px}`}
                   >
                     {defaultOffer.description}
 
+                  </div>
+                  <div className={` ${utilStyles.pT30px}`}>
+                    <Link href="/opt-out">
+                      <Button
+                        variant="primary"
+                        className={utilStyles.button}
+                      >
+                        <div className={utilStyles.textXs}>UNSUBSCRIBE</div>
+                        OPT OUT
+                      </Button>
+                    </Link>
                   </div>
                 </Col>
               </Row>
