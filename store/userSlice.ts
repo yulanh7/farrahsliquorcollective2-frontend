@@ -71,6 +71,10 @@ export const getUserInfoSlice =
   async (dispatch) => {
     try {
       const userInfo = await getUserInfo(payload);
+      if (userInfo && !userInfo.subscriptionStatus) {
+        window.location.href = "/detail";
+      }
+
       dispatch(setUserInfo(userInfo));
     } catch (error) {
       console.error("Error submitting payload:", error);
