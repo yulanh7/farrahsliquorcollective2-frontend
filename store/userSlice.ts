@@ -70,12 +70,11 @@ export const getUserInfoSlice =
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
-      const userInfo = await getUserInfo(payload);
-      if (userInfo && !userInfo.subscriptionStatus) {
+      const { userGet } = await getUserInfo(payload);
+      if (userGet && !userGet.subscriptionStatus && !userGet) {
         window.location.href = "/detail";
       }
-
-      dispatch(setUserInfo(userInfo));
+      dispatch(setUserInfo(userGet));
     } catch (error) {
       console.error("Error submitting payload:", error);
     }

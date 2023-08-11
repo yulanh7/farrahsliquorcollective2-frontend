@@ -73,23 +73,22 @@ export default function Post() {
                   <QRCodeGenerator url={defaultOffer.couponId} className="qrcode80" />
                 </Col>
                 <Col sm="12" md="6" className={`${utilStyles.pT30px}`}>
-                  <h5 className={`${utilStyles.pB10px}`}>Unique ID:</h5>
-                  <div>{defaultOffer.couponId} </div>
+                  <span className={`${utilStyles.headingSm}`}>Unique ID:</span><span>{defaultOffer.couponId}</span>
+                  <div
+                    className={`${utilStyles.text} ${utilStyles.pB10px} ${utilStyles.pT10px}`}
+                  >
+                    {defaultOffer.description}
+
+                  </div>
                 </Col>
               </Row>
             </Container>
             <div
-              className={`${utilStyles.text} ${utilStyles.pB10px} ${utilStyles.textCenter} ${utilStyles.pT30px}`}
+              className={`${utilStyles.pB10px} ${utilStyles.textCenter} ${utilStyles.pT30px}`}
             >
-              {defaultOffer.description}
-              <div>
-                Expire Date: {formatDate(defaultOffer.expireDate)}
-              </div>
-            </div>
-            <div className={utilStyles.textCenter}>
-              <Button variant="primary" type="submit" className={utilStyles.button}>
-                SUBMIT
-              </Button>
+              <span className={`${utilStyles.headingMd}`}>Expire Date:</span><span className={`${utilStyles.textMd}`}> {formatDate(defaultOffer.expireDate)}</span>
+
+
             </div>
           </>
         )

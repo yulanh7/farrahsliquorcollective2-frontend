@@ -274,7 +274,7 @@ export default function Post() {
                 OPT IN OFFER TO REGISTRAR
               </h5>
               <div className={`${utilStyles.text} ${utilStyles.pB20px}`}>
-                Welcome to Farrah Liquor Collective members club. You will complimentary 6 packs of beer in store collection for joining.
+                Welcome to Farrah Liquor Collective members club. You will complimentary 6 pack of beer in store collection for joining.
               </div>
               <div>
                 <label className={`${errors.agreedNotigications && 'is-invalid'} ${errors.agreedNotigications && 'form-control'}`}>
