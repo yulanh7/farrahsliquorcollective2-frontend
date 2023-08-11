@@ -10,24 +10,21 @@ import QRCodeGenerator from "../utils/QRCodeUtils";
 import { useSelector } from 'react-redux';
 import { fetchDefaultOffer } from '../store/offerSlice';
 import { RootState, useAppDispatch } from '../store';
-import { getHash, getCookie } from "../utils/utils";
+import { getCookie, formatDate } from "../utils/utils";
 import { getUserInfoSlice } from '../store/userSlice';
+
 
 export default function Post() {
   const router = useRouter();
-  const { userWithData, userInfo } = useSelector((state: RootState) => state.user);
   const [hash, setHash] = useState<string>(""); // Specify the type explicitly as string
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
   const { defaultOffer, defaultOfferLoading } = useSelector((state: RootState) => state.offer);
-  const [url, setUrl] = useState("");
-  // const uniqueId = router.query.uniqueId;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const userHash = getCookie('userHash');
     const subscriptionDataStr = getCookie('subscription');
     const parsedSubscriptionData = subscriptionDataStr ? JSON.parse(subscriptionDataStr) : null;
-
     setHash(userHash || ""); // Set the initial state with a default value
     setSubscriptionData(parsedSubscriptionData); // Set the parsed subscription data
   }, []);
@@ -86,7 +83,7 @@ export default function Post() {
             >
               {defaultOffer.description}
               <div>
-                Expire Date: {defaultOffer.expireDate}
+                Expire Date: {formatDate(defaultOffer.expireDate)}
               </div>
             </div>
             <div className={utilStyles.textCenter}>
