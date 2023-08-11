@@ -54,15 +54,20 @@ export default function Post() {
     e.preventDefault();
     // if (validateForm()) {
     const hash = getCookie('userHash');
-    if (hash) {
-      const payload = {
-        userHash: hash
+    const subscription = getCookie('subscription');
+    if (subscription && hash) {
+      const newSubscription = JSON.parse(subscription);
+      if (hash) {
+        const payload = {
+          userHash: hash,
+          endpoint: newSubscription.endpoint
+        }
+        dispatch(unsubscribeSlice(payload));
       }
-      dispatch(unsubscribeSlice(payload));
+      // Form is valid, perform form submission logic here
+      setOptOut(true);
+      // }
     }
-    // Form is valid, perform form submission logic here
-    setOptOut(true);
-    // }
 
   }
 

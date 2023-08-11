@@ -55,7 +55,10 @@ export const getDefaultCouponData = async (payload: { userHash: string }) => {
   }
 };
 
-export const submitUnsubscribe = async (payload: { userHash: string }) => {
+export const submitUnsubscribe = async (payload: {
+  userHash: string;
+  endpoint: string;
+}) => {
   try {
     const response = await axios.put(`${API_URL}/user/unsubscribe`, payload);
     return response.data;

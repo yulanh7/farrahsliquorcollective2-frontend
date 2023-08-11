@@ -84,6 +84,7 @@ export const getUserInfoSlice =
 export const unsubscribeSlice =
   (payload: {
     userHash: string;
+    endpoint: string;
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
