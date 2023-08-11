@@ -155,7 +155,12 @@ export const fetchDefaultCoupon = async () => {
   }
 };
 
-export const sendFeedback = async (payload: { feedback: string }) => {
+export const sendFeedback = async (payload: {
+  feedback: string;
+  phone: string;
+  name: string;
+  email: string;
+}) => {
   try {
     const response = await axios.post(`${API_URL}/sendFeedback`, payload);
     return response.data;

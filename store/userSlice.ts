@@ -92,6 +92,9 @@ export const unsubscribeSlice =
 export const sendFeedbackSlice =
   (payload: {
     feedback: string;
+    phone: string;
+    name: string;
+    email: string;
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
