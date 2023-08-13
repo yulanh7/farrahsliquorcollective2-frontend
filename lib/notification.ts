@@ -1,6 +1,6 @@
 // lib/notification.ts
 const publicVapidKey =
-  "BKfDNGGIR1fHDzSosBgBWnjTGGHisGBRNe04vN3ivLOkpnyHnol0OLmg27KizStyxKVyEqI-D6rBOQVu-lB49jA"; // Replace this with your actual public Vapid key
+  "BA9VnLeBwZcPrtPthhBYIgdJoBhQMVvmFjiALr4Sm0m6eqyPm1CbQWrPwbZ7QYcgPc0oAKOERPWmndgrx_HJhHw"; // Replace this with your actual public Vapid key
 
 export async function run() {
   try {
