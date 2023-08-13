@@ -9,11 +9,13 @@ import {
   fetchAllCoupons,
   deleteCoupon,
   updateCoupon,
+  fetchCoupon,
 } from "../api/api";
 
 interface CouponData {
   allCouponsLoading: boolean;
   defaultCouponLoading: boolean;
+  couponLoading: boolean;
   allCoupons: any; // Replace any with the actual type for subsciption
   coupon: any; // Replace any with the actual type for subsciption
   defaultCoupon: any;
@@ -23,6 +25,7 @@ interface CouponData {
 const initialState: CouponData = {
   allCouponsLoading: false,
   defaultCouponLoading: false,
+  couponLoading: false,
   allCoupons: null, // Replace any with the actual type for subsciption
   coupon: null, // Replace any with the actual type for subsciption
   defaultCoupon: null,
@@ -46,17 +49,30 @@ const useSlice = createSlice({
       state.allCouponsLoading = false;
       state.error = action.payload;
     },
-    getDefaultCouponsStart(state) {
+    getDefaultCouponStart(state) {
       state.defaultCouponLoading = true;
       state.error = null;
     },
-    getDefaultCouponsSuccess(state, action: PayloadAction<any>) {
+    getDefaultCouponSuccess(state, action: PayloadAction<any>) {
       state.defaultCouponLoading = false;
       state.defaultCoupon = action.payload;
       state.error = null;
     },
-    getDefaultCouponsFailure(state, action: PayloadAction<string>) {
+    getDefaultCouponFailure(state, action: PayloadAction<string>) {
       state.defaultCouponLoading = false;
+      state.error = action.payload;
+    },
+    getCouponStart(state) {
+      state.couponLoading = true;
+      state.error = null;
+    },
+    getCouponSuccess(state, action: PayloadAction<any>) {
+      state.couponLoading = false;
+      state.coupon = action.payload;
+      state.error = null;
+    },
+    getCouponFailure(state, action: PayloadAction<string>) {
+      state.couponLoading = false;
       state.error = action.payload;
     },
     setAddCoupon: (state, action: PayloadAction<any>) => {},
@@ -73,9 +89,12 @@ export const {
   getAllCouponsStart,
   getAllCouponsSuccess,
   getAllCouponsFailure,
-  getDefaultCouponsStart,
-  getDefaultCouponsSuccess,
-  getDefaultCouponsFailure,
+  getDefaultCouponStart,
+  getDefaultCouponSuccess,
+  getDefaultCouponFailure,
+  getCouponStart,
+  getCouponSuccess,
+  getCouponFailure,
   setAddCoupon,
   setAddDefaultCoupon,
   setUpdateDefaultCoupon,
@@ -177,11 +196,24 @@ export const fetchDefaultCouponSlice =
   (): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
-      dispatch(getDefaultCouponsStart());
+      dispatch(getDefaultCouponStart());
       const response = await fetchDefaultCoupon(); // API call using axios
-      dispatch(getDefaultCouponsSuccess(response));
+      dispatch(getDefaultCouponSuccess(response));
     } catch (error) {
-      dispatch(getDefaultCouponsFailure((error as Error).message));
+      dispatch(getDefaultCouponFailure((error as Error).message));
+    }
+  };
+export const fetchCouponSlice =
+  (payload: {
+    _id: string;
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      dispatch(getCouponStart());
+      const response = await fetchCoupon(payload); // API call using axios
+      dispatch(getCouponSuccess(response));
+    } catch (error) {
+      dispatch(getCouponFailure((error as Error).message));
     }
   };
 
