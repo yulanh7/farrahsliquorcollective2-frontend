@@ -8,7 +8,6 @@ import { RootState, useAppDispatch } from '../store';
 import { getCookie, formatDate } from "../utils/utils";
 import CouponComponent from '../src/components/couponComponent';
 
-const HOME_URL = process.env.NEXT_PUBLIC_HOME_URL;
 
 export default function Post() {
   const router = useRouter();
@@ -57,7 +56,13 @@ export default function Post() {
 
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
-      <CouponComponent coupon={defaultOffer} loading={offerLoading} />
+      {offerLoading && (
+        <div>Loading</div>
+      )}
+      {
+        defaultOffer && !offerLoading &&
+        <CouponComponent coupon={defaultOffer} loading={offerLoading} offerId={defaultOffer._id} />
+      }
     </Layout>
   );
 }
