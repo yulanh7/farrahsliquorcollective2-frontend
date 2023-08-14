@@ -104,6 +104,14 @@ export const fetchCoupon = async (payload: { _id: string }) => {
     throw new Error("Failed to fetch data");
   }
 };
+export const fetchAllOffers = async (payload: { userHash: string }) => {
+  try {
+    const response = await axios.post(`${API_URL}/user/coupons`, payload);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch data");
+  }
+};
 
 export const fetchOffer = async (payload: { _id: string }) => {
   try {

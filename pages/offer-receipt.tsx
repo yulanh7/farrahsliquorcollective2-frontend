@@ -14,7 +14,7 @@ export default function Post() {
   const router = useRouter();
   const [hash, setHash] = useState<string>(""); // Specify the type explicitly as string
   const [subscriptionData, setSubscriptionData] = useState<PushSubscriptionJSON | null | undefined>(null);
-  const { defaultOffer, defaultOfferLoading } = useSelector((state: RootState) => state.offer);
+  const { defaultOffer, offerLoading } = useSelector((state: RootState) => state.offer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function Post() {
 
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
-      <CouponComponent coupon={defaultOffer} loading={defaultOfferLoading} />
+      <CouponComponent coupon={defaultOffer} loading={offerLoading} />
     </Layout>
   );
 }

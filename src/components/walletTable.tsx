@@ -1,66 +1,40 @@
 // components/WalletTable.tsx
-import React, { useState } from 'react';
-import { Button, Form, Table } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Button, Table } from 'react-bootstrap';
 import { formatDateForInput, formatDatetimeLocal, formatDatetimeLocalForInput, formatDate } from "../../utils/utils";
 import utilStyles from "../styles/utils.module.scss";
-import { redeemCouponSlice, addCouponSlice } from "../../store/couponSlice"
 import { RootState, useAppDispatch } from '../../store';
+import { useSelector } from 'react-redux';
+import { fetchAllOffersSlice } from '../../store/offerSlice';
+import { getCookie } from "../../utils/utils";
 
 interface Coupon {
   _id: string;
   description: string;
   expireDate: string;
   scheduleTime: string;
-}
-
-interface WalletTableProps {
-  allCoupons: Coupon[];
+  isPushed: boolean;
 }
 
 
-const allCoupons = [
-  {
-    "_id": "64d1e52d776d8e0f1544820b",
-    "expireDate": "2023-08-31T00:00:00.000Z",
-    "description": "This is 3-a default coupon",
-    "scheduleTime": "2023-08-31T00:00:00.000Z"
-  },
-  {
-    "_id": "64d1e52d776d8e0f1544820k",
-    "expireDate": "2023-08-31T00:00:00.000Z",
-    "description": "This is 3-a default coupon",
-    "scheduleTime": "2023-08-31T00:00:00.000Z"
-  }
-]
 
-const WalletTable: React.FC<WalletTableProps> = (isForAdmin) => {
+
+
+const WalletTable: React.FC = () => {
 
   const dispatch = useAppDispatch();
-
-  const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
-  const [description, setDescription] = useState('');
-  const [expireDate, setExpireDate] = useState('');
-  const [scheduleTime, setScheduleTime] = useState('');
-  const [errors, setErrors] = useState<{
-    description?: string;
-    expireDate?: string;
-    scheduleTime?: string;
-  }>({});
+  const { allOffers, offerLoading } = useSelector((state: RootState) => state.offer);
 
 
-
-
-  const handleDeleteClick = async (couponId: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this coupon?");
-    if (confirmDelete) {
-      // Perform the deletion logic here
-      // dispatch(deleteCoupon(couponId));
-
-      await dispatch(redeemCouponSlice({ _id: couponId }));
-      setEditingCouponId(null);
-
+  useEffect(() => {
+    const userHash = getCookie("userHash");
+    if (userHash) {
+      const payload = {
+        userHash
+      }
+      dispatch(fetchAllOffersSlice(payload));
     }
-  };
+  }, [dispatch]);
 
 
   return (
@@ -75,7 +49,7 @@ const WalletTable: React.FC<WalletTableProps> = (isForAdmin) => {
         </tr>
       </thead>
       <tbody>
-        {allCoupons.map((coupon: Coupon) => (
+        {allOffers && allOffers.length && allOffers.map((coupon: Coupon) => (
           <tr key={coupon._id}>
             <td>{coupon._id}</td>
             <td>
@@ -92,7 +66,7 @@ const WalletTable: React.FC<WalletTableProps> = (isForAdmin) => {
 
             </td>
             <td>
-              <Button variant="danger" onClick={() => handleDeleteClick(coupon._id)} className={utilStyles.tableButton}>
+              <Button variant="danger" className={utilStyles.tableButton}>
                 Delete
               </Button>
 

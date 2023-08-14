@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "./types";
-import { getOffersData, getDefaultCouponData, fetchOffer } from "../api/api";
+import { fetchAllOffers, getDefaultCouponData, fetchOffer } from "../api/api";
 
 interface OfferState {
-  allOfferLoading: boolean;
-  defaultOfferLoading: boolean;
   offerLoading: boolean;
   allOffers: any;
   offer: any;
@@ -13,8 +11,6 @@ interface OfferState {
 }
 
 const initialState: OfferState = {
-  allOfferLoading: false,
-  defaultOfferLoading: false,
   offerLoading: false,
   allOffers: null,
   offer: null,
@@ -27,29 +23,29 @@ const offerSlice = createSlice({
   initialState,
   reducers: {
     getAllOffersStart(state) {
-      state.allOfferLoading = true;
+      state.offerLoading = true;
       state.error = null;
     },
     getAllOffersSuccess(state, action: PayloadAction<any>) {
-      state.allOfferLoading = false;
+      state.offerLoading = false;
       state.allOffers = action.payload;
       state.error = null;
     },
     getAllOffersFailure(state, action: PayloadAction<string>) {
-      state.allOfferLoading = false;
+      state.offerLoading = false;
       state.error = action.payload;
     },
     getDefaultOfferStart(state) {
-      state.defaultOfferLoading = true;
+      state.offerLoading = true;
       state.error = null;
     },
     getDefaultOfferSuccess(state, action: PayloadAction<any>) {
-      state.defaultOfferLoading = false;
+      state.offerLoading = false;
       state.defaultOffer = action.payload;
       state.error = null;
     },
     getDefaultOfferFailure(state, action: PayloadAction<string>) {
-      state.defaultOfferLoading = false;
+      state.offerLoading = false;
       state.error = action.payload;
     },
     getOfferStart(state) {
@@ -82,15 +78,17 @@ export const {
 
 export default offerSlice.reducer;
 
-export const fetchAllOffers = (): AppThunk => async (dispatch) => {
-  try {
-    dispatch(getAllOffersStart());
-    const response = await getOffersData(); // API call using axios
-    dispatch(getAllOffersSuccess(response));
-  } catch (error) {
-    dispatch(getAllOffersFailure((error as Error).message));
-  }
-};
+export const fetchAllOffersSlice =
+  (payload: { userHash: string }): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(getAllOffersStart());
+      const response = await fetchAllOffers(payload); // API call using axios
+      dispatch(getAllOffersSuccess(response));
+    } catch (error) {
+      dispatch(getAllOffersFailure((error as Error).message));
+    }
+  };
 export const fetchDefaultOfferSlice =
   (payload: { userHash: string }): AppThunk =>
   async (dispatch) => {

@@ -40,7 +40,7 @@ const faqItems = [
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { allOfferLoading, allOffers, error } = useSelector((state: RootState) => state.offer);
+  const { offerLoading, allOffers, error } = useSelector((state: RootState) => state.offer);
   useEffect(() => {
     dispatch(fetchAllOffers());
   }, [dispatch]);
@@ -63,7 +63,7 @@ const HomePage: React.FC = () => {
   }
 
 
-  if (allOfferLoading) {
+  if (offerLoading) {
     return <div>Loading...</div>;
   }
 
