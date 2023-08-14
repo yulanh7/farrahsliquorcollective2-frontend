@@ -1,11 +1,18 @@
 import React, { useEffect, useState, FormEvent } from "react";
 import Layout from "../src/components/layout";
+import utilStyles from "../src/styles/utils.module.scss";
 import { useRouter } from "next/router";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Button } from "react-bootstrap";
+import QRCodeGenerator from "../utils/QRCodeUtils";
 import { useSelector } from 'react-redux';
 import { fetchDefaultOffer } from '../store/offerSlice';
 import { RootState, useAppDispatch } from '../store';
 import { getCookie, formatDate } from "../utils/utils";
 import { getUserInfoSlice } from '../store/userSlice';
+import Link from 'next/link';
 import CouponComponent from '../src/components/couponComponent';
 
 const HOME_URL = process.env.NEXT_PUBLIC_HOME_URL;
@@ -57,6 +64,50 @@ export default function Post() {
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
       <CouponComponent coupon={defaultOffer} loading={defaultOfferLoading} />
+      {defaultOfferLoading &&
+        <div>
+          loading...</div>
+      }
+      {
+        !defaultOfferLoading && defaultOffer && (
+          <>
+            <Container>
+              <Row>
+                <Col sm="12" md="6">
+                  <QRCodeGenerator url={`${HOME_URL}/coupon/${defaultOffer._id}?redeem=true`} className="qrcode80" />
+                </Col>
+                <Col sm="12" md="6" className={`${utilStyles.pT30px}`}>
+                  <span className={`${utilStyles.headingSm}`}>Unique ID:</span><span> {defaultOffer.couponId}</span>
+                  <div
+                    className={`${utilStyles.text} ${utilStyles.pB10px} ${utilStyles.pT10px}`}
+                  >
+                    {defaultOffer.description}
+
+                  </div>
+                  <div className={` ${utilStyles.pT30px}`}>
+                    <Link href="/opt-out">
+                      <Button
+                        variant="primary"
+                        className={utilStyles.button}
+                      >
+                        <div className={utilStyles.textXs}>UNSUBSCRIBE</div>
+                        OPT OUT
+                      </Button>
+                    </Link>
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+            <div
+              className={`${utilStyles.pB10px} ${utilStyles.textCenter} ${utilStyles.pT30px}`}
+            >
+              <span className={`${utilStyles.headingMd}`}>Expire Date:</span><span className={`${utilStyles.textMd}`}> {formatDate(defaultOffer.expireDate)}</span>
+
+
+            </div>
+          </>
+        )
+      }
 
     </Layout>
   );

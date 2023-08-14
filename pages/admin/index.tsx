@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import Layout from "../src/components/layout";
-import utilStyles from "../src/styles/utils.module.scss";
+import Layout from "../../src/components/layout";
+import utilStyles from "../../src/styles/utils.module.scss";
 import { Button, Row, Col } from "react-bootstrap";
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../store';
-import { addDefaultCouponSlice, fetchDefaultCouponSlice, updateDefaultCouponSlice } from '../store/couponSlice';
-import { formatDateForInput } from "../utils/utils";
-import CouponTable from '../src/components/couponTable';
+import { RootState, useAppDispatch } from '../../store';
+import { addDefaultCouponSlice, fetchDefaultCouponSlice, updateDefaultCouponSlice } from '../../store/couponSlice';
+import { formatDateForInput } from "../../utils/utils";
+import CouponTable from '../../src/components/couponTable';
 
 
 export default function Post() {
