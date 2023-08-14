@@ -109,6 +109,9 @@ export const addCouponSlice =
     try {
       const { coupon } = await addCoupon(payload);
       dispatch(setAddCoupon(coupon));
+      dispatch(getAllCouponsStart());
+      const response = await fetchAllCoupons(); // API call using axios
+      dispatch(getAllCouponsSuccess(response));
       // document.cookie = `couponHash=${coupon.couponHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       // window.location.href = "/offer-receipt";
     } catch (error) {
@@ -127,6 +130,9 @@ export const updateCouponSlice =
     try {
       const { coupon } = await updateCoupon(payload);
       dispatch(setAddCoupon(coupon));
+      dispatch(getAllCouponsStart());
+      const response = await fetchAllCoupons(); // API call using axios
+      dispatch(getAllCouponsSuccess(response));
       // document.cookie = `couponHash=${coupon.couponHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       // window.location.href = "/offer-receipt";
     } catch (error) {
@@ -155,6 +161,9 @@ export const deleteCouponSlice =
   async (dispatch) => {
     try {
       await deleteCoupon(payload);
+      dispatch(getAllCouponsStart());
+      const response = await fetchAllCoupons(); // API call using axios
+      dispatch(getAllCouponsSuccess(response));
     } catch (error) {
       console.error("Fail to delete the coupon:", error);
     }
@@ -169,6 +178,9 @@ export const addDefaultCouponSlice =
     try {
       const { coupon } = await addDefaultCoupon(payload);
       dispatch(setAddCoupon(coupon));
+      dispatch(getDefaultCouponStart());
+      const response = await fetchDefaultCoupon(); // API call using axios
+      dispatch(getDefaultCouponSuccess(response));
       // document.cookie = `couponHash=${coupon.couponHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       // window.location.href = "/offer-receipt";
     } catch (error) {
@@ -185,6 +197,9 @@ export const updateDefaultCouponSlice =
     try {
       const { coupon } = await updateDefaultCoupon(payload);
       dispatch(setUpdateDefaultCoupon(coupon));
+      dispatch(getDefaultCouponStart());
+      const response = await fetchDefaultCoupon(); // API call using axios
+      dispatch(getDefaultCouponSuccess(response));
       // document.cookie = `couponHash=${coupon.couponHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       // window.location.href = "/offer-receipt";
     } catch (error) {

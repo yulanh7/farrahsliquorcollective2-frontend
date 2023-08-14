@@ -12,7 +12,7 @@ import CouponTable from '../../src/components/couponTable';
 export default function Post() {
 
   const dispatch = useAppDispatch();
-  const { defaultCoupon, defaultCouponLoading } = useSelector((state: RootState) => state.coupon);
+  const { defaultCoupon, couponLoading } = useSelector((state: RootState) => state.coupon);
 
   const [description, setDescription] = useState('');
   const [expireDate, setExpireDate] = useState('');
@@ -73,7 +73,7 @@ export default function Post() {
 
   return (
     <Layout title="Coupon Manager" logo="/images/logo.jpg" showFeedback width="lg">
-      {defaultCoupon ?
+      {defaultCoupon && !couponLoading ?
         <div className={utilStyles.pB20px}>
           <h4 className={`${utilStyles.textCenter} ${utilStyles.pB20px}`}>Default Coupon</h4>
           <form className={utilStyles.form} onSubmit={handleSubmit}>
@@ -177,13 +177,8 @@ export default function Post() {
           </div>
         </div>
       }
-
       <h4 className={`${utilStyles.textCenter} ${utilStyles.pB20px}`}>All Coupons</h4>
-
       <CouponTable />
-
-
-
 
     </Layout>
   );

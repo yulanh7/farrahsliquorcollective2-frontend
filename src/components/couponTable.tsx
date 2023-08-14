@@ -23,7 +23,7 @@ interface Coupon {
 
 
 const CouponTable: React.FC = () => {
-  const { allCoupons, allCouponsLoading } = useSelector((state: RootState) => state.coupon);
+  const { allCoupons, couponLoading } = useSelector((state: RootState) => state.coupon);
 
   const dispatch = useAppDispatch();
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
@@ -155,21 +155,15 @@ const CouponTable: React.FC = () => {
         _id: couponId,
       };
       await dispatch(updateCouponSlice(payload));
-      await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
       setEditingCouponId(null);
     }
-
 
   };
 
   const handleDeleteClick = async (couponId: string) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this coupon?");
     if (confirmDelete) {
-      // Perform the deletion logic here
-      // dispatch(deleteCoupon(couponId));
-
       await dispatch(deleteCouponSlice({ _id: couponId }));
-      await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
       setEditingCouponId(null);
 
     }
@@ -185,14 +179,10 @@ const CouponTable: React.FC = () => {
         expireDate: isoExpireDate,
         scheduleTime: isoScheduleTime,
       };
-
       await dispatch(addCouponSlice(payload));
-      await dispatch(fetchAllCouponSlice()); // Fetch all coupons to refresh the table
       setAddDescription('');
       setAddExpireDate('');
       setAddScheduleTime('');
-
-
     }
   }
 
@@ -261,14 +251,14 @@ const CouponTable: React.FC = () => {
             </Button>
           </td>
         </tr>
-        {allCouponsLoading &&
+        {couponLoading &&
           <tr>
             <td colSpan={5} className={utilStyles.loadingRow}>
               Loading...
             </td>
           </tr>
         }
-        {allCoupons && allCoupons.length && !allCouponsLoading && allCoupons.map((coupon: Coupon, index: number) => (
+        {allCoupons && allCoupons.length && !couponLoading && allCoupons.map((coupon: Coupon, index: number) => (
           <tr key={coupon._id}>
             <td>{index + 1}</td>
             <td>{coupon.isPushed ? "Pushed" : "Unpushed"}</td>
