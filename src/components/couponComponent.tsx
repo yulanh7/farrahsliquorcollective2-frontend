@@ -38,7 +38,7 @@ export default function CouponComponent({ coupon, loading }: CouponComponentProp
             <Container>
               <Row>
                 <Col sm="12" md="6">
-                  <QRCodeGenerator url={`${HOME_URL}/coupon/${coupon._id}?redeem=true`} className="qrcode80" />
+                  <QRCodeGenerator url={`${HOME_URL}/admin/coupon/${coupon._id}?redeem=true`} className="qrcode80" />
                 </Col>
                 <Col sm="12" md="6" className={`${utilStyles.pT30px}`}>
                   <span className={`${utilStyles.headingSm}`}>Unique ID:</span><span> {coupon.couponId}</span>
