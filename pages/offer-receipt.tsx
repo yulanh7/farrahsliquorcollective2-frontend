@@ -72,7 +72,7 @@ export default function Post() {
             <Container>
               <Row>
                 <Col sm="12" md="6">
-                  <QRCodeGenerator url={`${HOME_URL}/coupon/${defaultOffer.couponId}?redeem=true`} className="qrcode80" />
+                  <QRCodeGenerator url={`${HOME_URL}/coupon/${defaultOffer._id}?redeem=true`} className="qrcode80" />
                 </Col>
                 <Col sm="12" md="6" className={`${utilStyles.pT30px}`}>
                   <span className={`${utilStyles.headingSm}`}>Unique ID:</span><span> {defaultOffer.couponId}</span>
