@@ -28,13 +28,13 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
     if (couponId) {
       dispatch(fetchCouponSlice({ _id: couponId }));
     }
-  }, [couponId, dispatch]);
+  }, []);
 
 
   const handleRedeemCoupon = async () => {
     const confirmDelete = window.confirm("Are you sure you want to redeem this coupon?");
     if (confirmDelete && couponId) {
-      await dispatch(redeemCouponSlice({ _id: coupon.id }));
+      await dispatch(redeemCouponSlice({ _id: couponId }));
       dispatch(fetchCouponSlice({ _id: couponId }));
     }
   };

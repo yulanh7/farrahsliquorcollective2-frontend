@@ -19,7 +19,7 @@ const CouponPage = () => {
     if (couponId) {
       dispatch(fetchCouponSlice({ _id: couponId }));
     }
-  }, [couponId, dispatch]);
+  }, []);
 
 
   return (
