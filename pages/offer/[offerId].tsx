@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { fetchCouponSlice, redeemCouponSlice } from "../../store/couponSlice";
+import { fetchOffer } from "../../store/offerSlice";
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
 import CouponComponent from '../../src/components/couponComponent';
@@ -11,20 +11,20 @@ import Layout from "../../src/components/layout";
 
 const CouponPage = () => {
   const router = useRouter();
-  const couponId = Array.isArray(router.query.couponId) ? router.query.couponId[0] : router.query.couponId;
+  const offerId = Array.isArray(router.query.offerId) ? router.query.offerId[0] : router.query.offerId;
   const dispatch = useAppDispatch();
-  const { coupon, couponLoading } = useSelector((state: RootState) => state.coupon);
+  const { offer, offerLoading } = useSelector((state: RootState) => state.offer);
 
   useEffect(() => {
-    if (couponId) {
-      dispatch(fetchCouponSlice({ _id: couponId }));
+    if (offerId) {
+      dispatch(fetchOffer({ _id: offerId }));
     }
-  }, []);
+  }, [offerId]);
 
 
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
-      <CouponComponent coupon={coupon} loading={couponLoading} />
+      <CouponComponent coupon={offer} loading={offerLoading} />
     </Layout>
   )
 }

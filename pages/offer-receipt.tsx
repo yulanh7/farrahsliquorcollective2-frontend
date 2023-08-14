@@ -1,11 +1,11 @@
-import React, { useEffect, useState, FormEvent } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../src/components/layout";
 import { useRouter } from "next/router";
 import { useSelector } from 'react-redux';
-import { fetchDefaultOffer } from '../store/offerSlice';
+import { fetchDefaultOfferSlice } from '../store/offerSlice';
+import { getUserInfoSlice } from '../store/userSlice';
 import { RootState, useAppDispatch } from '../store';
 import { getCookie, formatDate } from "../utils/utils";
-import { getUserInfoSlice } from '../store/userSlice';
 import CouponComponent from '../src/components/couponComponent';
 
 const HOME_URL = process.env.NEXT_PUBLIC_HOME_URL;
@@ -21,36 +21,39 @@ export default function Post() {
     const userHash = getCookie('userHash');
     const subscriptionDataStr = getCookie('subscription');
     const parsedSubscriptionData = subscriptionDataStr ? JSON.parse(subscriptionDataStr) : null;
-    setHash(userHash || ""); // Set the initial state with a default value
-    setSubscriptionData(parsedSubscriptionData); // Set the parsed subscription data
+    setHash(userHash || "");
+    setSubscriptionData(parsedSubscriptionData);
   }, []);
 
   useEffect(() => {
-    // Redirect to the new page only if the user is not null
-    const hash = getCookie('userHash');
-    if (hash) {
-      const payload = {
-        userHash: hash,
-      };
-      dispatch(fetchDefaultOffer(payload));
+    async function fetchData() {
+      if (hash) {
+        const payload = {
+          userHash: hash,
+        };
+        await dispatch(fetchDefaultOfferSlice(payload));
+      }
     }
-  }, [dispatch]);
+    fetchData();
+  }, [hash, dispatch]);
 
-  useEffect(() => {  // Make the useEffect function asynchronous
-    if (hash && subscriptionData) {
-      const payload = {
-        userHash: hash,
-        endpoint: subscriptionData?.endpoint || "default_endpoint_value",
-        expirationTime: subscriptionData?.expirationTime || null,
-        keys: subscriptionData?.keys || {}
-      };
+  useEffect(() => {
+    async function fetchUserData() {
+      if (hash && subscriptionData) {
+        const payload = {
+          userHash: hash,
+          endpoint: subscriptionData?.endpoint || "default_endpoint_value",
+          expirationTime: subscriptionData?.expirationTime || null,
+          keys: subscriptionData?.keys || {}
+        };
 
-      dispatch(getUserInfoSlice(payload));
-    } else {
-      router.push("/offer-receipt");
+        await dispatch(getUserInfoSlice(payload));
+      } else {
+        // router.push("/detail");
+      }
     }
-
-  }, []);
+    fetchUserData();
+  }, [hash, subscriptionData, router, dispatch]);
 
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
