@@ -13,8 +13,6 @@ import {
 } from "../api/api";
 
 interface CouponData {
-  allCouponsLoading: boolean;
-  defaultCouponLoading: boolean;
   couponLoading: boolean;
   allCoupons: any; // Replace any with the actual type for subsciption
   coupon: any; // Replace any with the actual type for subsciption
@@ -23,8 +21,6 @@ interface CouponData {
 }
 
 const initialState: CouponData = {
-  allCouponsLoading: false,
-  defaultCouponLoading: false,
   couponLoading: false,
   allCoupons: null, // Replace any with the actual type for subsciption
   coupon: null, // Replace any with the actual type for subsciption
@@ -37,29 +33,29 @@ const useSlice = createSlice({
   initialState,
   reducers: {
     getAllCouponsStart(state) {
-      state.allCouponsLoading = true;
+      state.couponLoading = true;
       state.error = null;
     },
     getAllCouponsSuccess(state, action: PayloadAction<any>) {
-      state.allCouponsLoading = false;
+      state.couponLoading = false;
       state.allCoupons = action.payload;
       state.error = null;
     },
     getAllCouponsFailure(state, action: PayloadAction<string>) {
-      state.allCouponsLoading = false;
+      state.couponLoading = false;
       state.error = action.payload;
     },
     getDefaultCouponStart(state) {
-      state.defaultCouponLoading = true;
+      state.couponLoading = true;
       state.error = null;
     },
     getDefaultCouponSuccess(state, action: PayloadAction<any>) {
-      state.defaultCouponLoading = false;
+      state.couponLoading = false;
       state.defaultCoupon = action.payload;
       state.error = null;
     },
     getDefaultCouponFailure(state, action: PayloadAction<string>) {
-      state.defaultCouponLoading = false;
+      state.couponLoading = false;
       state.error = action.payload;
     },
     getCouponStart(state) {
@@ -144,8 +140,12 @@ export const redeemCouponSlice =
   async (dispatch) => {
     try {
       await redeemCoupon(payload);
+      dispatch(getCouponStart());
+      const response = await fetchCoupon(payload); // API call using axios
+      dispatch(getCouponSuccess(response));
     } catch (error) {
       console.error("Error submitting payload:", error);
+      dispatch(getCouponFailure((error as Error).message));
     }
   };
 export const deleteCouponSlice =

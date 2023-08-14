@@ -20,7 +20,6 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
 
   useEffect(() => {
     if (coupon && redeem === 'true' && !coupon.isRedeemed && couponId) {
-
       dispatch(redeemCouponSlice({ _id: couponId }));
     }
   }, [coupon, redeem, dispatch, couponId]);
@@ -32,11 +31,10 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
   }, [couponId, dispatch]);
 
 
-  const handleRedeemCoupon = async () => {
+  const handleRedeemCoupon = () => {
     const confirmDelete = window.confirm("Are you sure you want to redeem this coupon?");
     if (confirmDelete && couponId) {
-      await dispatch(redeemCouponSlice({ _id: couponId }));
-      dispatch(fetchCouponSlice({ _id: couponId }));
+      dispatch(redeemCouponSlice({ _id: couponId }));
     }
   };
 
