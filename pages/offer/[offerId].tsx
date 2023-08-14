@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { fetchOffer } from "../../store/offerSlice";
+import { fetchOfferSlice } from "../../store/offerSlice";
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
 import CouponComponent from '../../src/components/couponComponent';
@@ -17,7 +17,7 @@ const CouponPage = () => {
 
   useEffect(() => {
     if (offerId) {
-      dispatch(fetchOffer({ _id: offerId }));
+      dispatch(fetchOfferSlice({ _id: offerId }));
     }
   }, [offerId]);
 
