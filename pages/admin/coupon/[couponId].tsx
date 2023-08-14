@@ -28,7 +28,7 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
     if (couponId) {
       dispatch(fetchCouponSlice({ _id: couponId }));
     }
-  }, []);
+  }, [couponId]);
 
 
   const handleRedeemCoupon = async () => {
