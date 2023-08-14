@@ -226,13 +226,13 @@ canvas.qrcode40 {
 .badge {
   background-image: url("/images/Security-Shield-Logo-1.png");
   padding: 30px;
-  background-position: center;
+  background-position: left;
   /* Center the image */
   background-repeat: no-repeat;
   /* Do not repeat the image */
-  background-size: cover;
+  background-size: contain;
   /* Resize the background image to cover the entire container */
-  width: 150px;
+  width: auto;
   height: 150px;
   display: flex;
   flex-direction: column;
