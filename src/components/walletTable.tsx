@@ -1,7 +1,6 @@
 // components/WalletTable.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Table } from 'react-bootstrap';
-import { useRouter } from "next/router";
 import { formatDate } from "../../utils/utils";
 import utilStyles from "../styles/utils.module.scss";
 import { RootState, useAppDispatch } from '../../store';
@@ -10,23 +9,16 @@ import { fetchAllOffersSlice } from '../../store/offerSlice';
 import { getCookie } from "../../utils/utils";
 
 interface Coupon {
-  _id: string;
+  block_id: string;
+  couponId: string;
   description: string;
   expireDate: string;
-  scheduleTime: string;
-  isPushed: boolean;
+  isRedeemed: boolean;
 }
 
-
-
-
-
 const WalletTable: React.FC = () => {
-  const router = useRouter();
-
   const dispatch = useAppDispatch();
   const { allOffers, offerLoading } = useSelector((state: RootState) => state.offer);
-
 
   useEffect(() => {
     const userHash = getCookie("userHash");
@@ -38,37 +30,40 @@ const WalletTable: React.FC = () => {
     }
   }, [dispatch]);
 
-  function handleDetail(_id: string) {
-    router.push(`/coupon/${_id}`);
-
-  }
 
   return (
     <Table striped bordered hover>
       <thead>
         <tr>
+          <th>#</th>
           <th>ID</th>
           <th>Description</th>
           <th>Expire Date</th>
+          <th>Status</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {allOffers && allOffers.length && allOffers.map((coupon: Coupon) => (
-          <tr key={coupon._id}>
-            <td>{coupon._id}</td>
+        {allOffers && allOffers.length && allOffers.map((coupon: Coupon, index: number) => (
+          <tr key={coupon.block_id}>
+            <td>{index + 1}</td>
+            <td>{coupon.couponId}</td>
             <td>
-              {coupon.description}
-
-            </td>
+              {coupon.description}</td>
             <td>
               {formatDate(coupon.expireDate)}
 
             </td>
             <td>
-              <Button variant="danger" className={utilStyles.tableButton} onClick={() => handleDetail(coupon._id)}>
-                Detail
-              </Button>
+              {coupon.isRedeemed ? <span>Redeemed</span> : <span>Default</span>}
+            </td>
+            <td>
+              <a href={`/offer/${coupon.block_id}`} target="_blank">
+
+                <Button variant="danger" className={utilStyles.tableButton}>
+                  Detail
+                </Button>
+              </a>
 
             </td>
           </tr>
