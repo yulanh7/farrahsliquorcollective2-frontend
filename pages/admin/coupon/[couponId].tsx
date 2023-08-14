@@ -19,16 +19,17 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
   const { coupon, couponLoading } = useSelector((state: RootState) => state.coupon);
 
   useEffect(() => {
-    if (coupon && redeem === 'true') {
-      dispatch(redeemCouponSlice({ _id: coupon.id }));
+    if (coupon && redeem === 'true' && !coupon.isRedeemed && couponId) {
+
+      dispatch(redeemCouponSlice({ _id: couponId }));
     }
-  }, [coupon, redeem, dispatch]);
+  }, [coupon, redeem, dispatch, couponId]);
 
   useEffect(() => {
     if (couponId) {
       dispatch(fetchCouponSlice({ _id: couponId }));
     }
-  }, [couponId]);
+  }, [couponId, dispatch]);
 
 
   const handleRedeemCoupon = async () => {
@@ -52,8 +53,7 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
             <h3>Coupon : {coupon.couponId}</h3>
             <p>Description: {coupon.description}</p>
             <p>Expire Date: {formatDate(coupon.expireDate)}</p>
-
-            {coupon.redeemed ? (
+            {coupon.isRedeemed ? (
               <p>Status: Redeemed.</p>
             ) : (
               <div>
