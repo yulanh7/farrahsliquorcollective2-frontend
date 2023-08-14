@@ -19,12 +19,14 @@ const CouponPage = () => {
     if (offerId) {
       dispatch(fetchOfferSlice({ _id: offerId }));
     }
-  }, [offerId]);
+  }, [offerId, dispatch]);
 
 
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
-      <CouponComponent coupon={offer} loading={offerLoading} />
+      {offerId &&
+        <CouponComponent coupon={offer} loading={offerLoading} offerId={offerId} />
+      }
     </Layout>
   )
 }
