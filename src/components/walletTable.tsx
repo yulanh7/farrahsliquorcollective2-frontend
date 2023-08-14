@@ -1,7 +1,8 @@
 // components/WalletTable.tsx
 import React, { useState, useEffect } from 'react';
 import { Button, Table } from 'react-bootstrap';
-import { formatDateForInput, formatDatetimeLocal, formatDatetimeLocalForInput, formatDate } from "../../utils/utils";
+import { useRouter } from "next/router";
+import { formatDate } from "../../utils/utils";
 import utilStyles from "../styles/utils.module.scss";
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
@@ -21,6 +22,7 @@ interface Coupon {
 
 
 const WalletTable: React.FC = () => {
+  const router = useRouter();
 
   const dispatch = useAppDispatch();
   const { allOffers, offerLoading } = useSelector((state: RootState) => state.offer);
@@ -36,6 +38,10 @@ const WalletTable: React.FC = () => {
     }
   }, [dispatch]);
 
+  function handleDetail(_id: string) {
+    router.push(`/coupon/${_id}`);
+
+  }
 
   return (
     <Table striped bordered hover>
@@ -44,7 +50,6 @@ const WalletTable: React.FC = () => {
           <th>ID</th>
           <th>Description</th>
           <th>Expire Date</th>
-          <th>Schedule Time</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -61,13 +66,8 @@ const WalletTable: React.FC = () => {
 
             </td>
             <td>
-              {formatDatetimeLocal(coupon.scheduleTime)}
-
-
-            </td>
-            <td>
-              <Button variant="danger" className={utilStyles.tableButton}>
-                Delete
+              <Button variant="danger" className={utilStyles.tableButton} onClick={() => handleDetail(coupon._id)}>
+                Detail
               </Button>
 
             </td>
