@@ -1,30 +1,78 @@
-// sw.js
-self.addEventListener("install", async () => {
-  console.log("Service Worker installed");
+/// <reference lib="webworker" />
+
+let unsubscribeURL = "";
+
+self.addEventListener("install", function(_) {
+    self.skipWaiting();
 });
 
-self.addEventListener("activate", async () => {
-  console.log("Service Worker activated");
+self.addEventListener('push', async function(event) {
+    console.log('Push message received.');
+
+    if (!event.data) {
+        console.log("No event data received");
+        return;
+    }
+
+    const data = await event.data.json()
+    data.actions ??= [];
+    data.body ??= "No data sent by server";
+    data.title ??= "No title sent by server"
+    data.url ??= "https://4block.com.au/debug";
+    unsubscribeURL = data.usuburl ?? "https://4block.com.au/unsubscribe";
+    // Ensuring that there's always the option to unsubscribe, no matter what the server is sending.
+    data.actions.push(
+        {
+            action: 'unsubscribe',
+            type: 'button',
+            title: '👎 Unsubscribe'
+        }
+    );
+
+    const notificationOptions = {
+        body: data.body,
+        icon: '/src/images/logo_new-512x512.png',
+        badge: '/src/images/logo_new-72x72.png',
+        data: {
+            url: data.url,
+        },
+        actions: data.actions
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(
+            data.title,
+            notificationOptions,
+        ),
+    );
 });
 
-self.addEventListener("push", function (event) {
-  const title = "Simple Title";
+self.addEventListener('notificationclick', function(event) {
+    console.log('Notification clicked.');
+    
+    let clickResponsePromise = Promise.resolve();
+    
+    switch (event.action) {
+    case 'view-offer':
+        console.log('Viewing offer')
+        if (event.notification.data && event.notification.data.url) {
+            clickResponsePromise = clients.openWindow(event.notification.data.url);
+        }
+        //event.notification.close();
+        break;
+    case 'unsubscribe':
+        console.log('Unsubscribing');
+        if (event.notification.data && event.notification.data.url) {
+            clickResponsePromise = clients.openWindow(unsubscribeURL);
+        }
+        //event.notification.close();
+        break;
+    }
 
-  const options = {
-    body: "Simple piece of body text.\nSecond line of body text :)",
-  };
 
-  event.waitUntil(self.registration.showNotification(title, options));
+    event.waitUntil(clickResponsePromise);
 });
 
-self.addEventListener("notificationclick", function (event) {
-  var notification = event.notification;
-  var action = event.action;
-
-  if (action === "close") {
-    notification.close();
-  } else {
-    clients.openWindow("https://www.google.com");
-    notification.close();
-  }
+self.addEventListener('activate', function(event) {
+    event.waitUntil(clients.claim());
 });
