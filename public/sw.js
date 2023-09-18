@@ -31,8 +31,8 @@ self.addEventListener('push', async function(event) {
 
     const notificationOptions = {
         body: data.body,
-        icon: '/src/images/logo_new-512x512.png',
-        badge: '/src/images/logo_new-72x72.png',
+        icon: '/images/4Block-512x512.png',
+        badge: '/images/4Block-72x72.png',
         data: {
             url: data.url,
         },
