@@ -73,7 +73,7 @@ self.addEventListener("activate", function (event) {
 
 self.addEventListener("pushsubscriptionchange", function (event) {
   event.waitUntil(
-    fetch("https://farrahsliquorcollective2.com:3008/pushsubscriptionchange", {
+    fetch("https://farrahsliquorcollective2.com:3008/user/pushsubscriptionchange", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
