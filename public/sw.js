@@ -34,6 +34,7 @@ self.addEventListener("push", async function (event) {
     data: {
       url: data.url,
     },
+    requireInteraction: true,
     actions: data.actions,
   };
 
