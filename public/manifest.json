@@ -1,0 +1,27 @@
+{
+  "gcm_sender_id": "653317226796",
+  "name": "4Block",
+  "short_name": "4Block",
+  "start_url": "/?utm_source=homescreen",
+  "display": "standalone",
+  "theme_color": "#288990",
+  "background_color": "#f9f9f8",
+  "icons": [
+    {
+      "src": "/images/4Block-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/4Block-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/4Block-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
