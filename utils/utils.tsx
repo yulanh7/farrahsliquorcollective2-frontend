@@ -1,3 +1,5 @@
+import CryptoJS from "crypto-js";
+
 export const companyName = "Farrah's Liquor Collective";
 
 export const getHash = async (
@@ -61,3 +63,7 @@ export const formatDatetimeLocalForInput = (scheduleTime: string) => {
   const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
   return formattedDate;
 }
+
+export const hashPassword = (password: string) => {
+  return CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+};

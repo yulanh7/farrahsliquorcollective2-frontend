@@ -1,68 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import { Card } from 'react-bootstrap';
-import Layout from '../src/components/Layout';
-import utilStyles from '../src/styles/utils.module.scss';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../store';
-import LoginComponent from "../src/components/login";  // Assuming LoginComponent is imported here
-import ResetPassword from "../src/components/ResetPassword";
-import ForgetPassword from "../src/components/ForgetPassword";
-import { useRouter } from 'next/router';
-import { resetForm } from "../store/userSlice";
+import React, { useState } from 'react';
+import { Form, Button, InputGroup } from 'react-bootstrap';
+import utilStyles from '../../src/styles/utils.module.scss'
+import { loginSlice } from "../store/userSlice";
+import { useAppDispatch } from '../store';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { hashPassword } from "../ultility/ultility";
 
 type ActiveSection = 'login' | 'forgetPassword' | 'resetPassword';
 
 interface LoginComponentProps {
-  handleActiveSection: (section: ActiveSection) => void;
-  // ... potentially other props ...
+  handleActiveSection?: (section: ActiveSection) => void;
+  submitUserError: string | null;
+  submitUserLoading: boolean
 }
 
-const LoginPage: React.FC = () => {
-  const router = useRouter();
+const LoginComponent: React.FC<LoginComponentProps> = ({ handleActiveSection, submitUserError, submitUserLoading }) => {
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+    showPassword: false
+  });
+
   const dispatch = useAppDispatch();
-  const { token, para } = router.query;
 
-  const [activeSection, setActiveSection] = useState<ActiveSection>('login');
-  const [userToken, setUserToken] = useState('');
-
-
-  const { submitUserError, submitUserMessage, submitUserLoading } = useSelector((state: RootState) => state.user);
-
-  useEffect(() => {
-    const wasReloaded = performance.navigation.type === performance.navigation.TYPE_RELOAD;
-    if (wasReloaded) {
-      // If the page was reloaded, use the section stored in localStorage
-      const storedSection = localStorage.getItem('accountActiveSection');
-      if (storedSection) {
-        setActiveSection(storedSection as ActiveSection);
-      }
-    } else {
-      if (para === 'resetPassword') setActiveSection('resetPassword');
-    }
-    if (token && typeof token === 'string') setUserToken(token);
-  }, [para, token]);
-
-  const handleBackToLogin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setActiveSection('login');
-    dispatch(resetForm());
-    localStorage.setItem('loginActiveSection', "login"); // Store the selected section in localStorage
-
-  }
-
-  const componentsMap = {
-    login: <LoginComponent handleActiveSection={setActiveSection} submitUserError={submitUserError} submitUserLoading={submitUserLoading} />,   // Use setActiveSection directly
-    forgetPassword: <ForgetPassword handleBackToLogin={handleBackToLogin} submitUserError={submitUserError} submitUserMessage={submitUserMessage} submitUserLoading={submitUserLoading} />,
-    resetPassword: <ResetPassword handleBackToLogin={handleBackToLogin} token={userToken} submitUserError={submitUserError} submitUserMessage={submitUserMessage} submitUserLoading={submitUserLoading} />
+    const hashedPassword = hashPassword(credentials.password);
+    const payload = {
+      email: credentials.email,
+      password: hashedPassword,
+    }
+    dispatch(loginSlice(payload));
   };
 
+
   return (
-    <Layout>
-      <Card className={`mt-5 page-section ${utilStyles.indexPageContainer}`}>
-        {componentsMap[activeSection]}
-      </Card>
-    </Layout>
+    <Form onSubmit={handleLogin}>
+      <Form.Group controlId="email">
+        <Form.Control
+          type="text"
+          placeholder="Email"
+          value={credentials.email}
+          onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
+          required
+        />
+      </Form.Group>
+
+      <Form.Group controlId="password">
+        <InputGroup>
+          <Form.Control
+            type={credentials.showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={credentials.password}
+            onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
+            required
+          />
+          <InputGroup.Text onClick={() => setCredentials(prev => ({ ...prev, showPassword: !prev.showPassword }))}>
+            {credentials.showPassword ? <FaEyeSlash /> : <FaEye />}
+          </InputGroup.Text>
+        </InputGroup>
+      </Form.Group>
+
+      {submitUserError && <div className="error-message">{submitUserError}</div>}
+
+      <div className={utilStyles.actionContainer}>
+        <Button variant="primary" type="submit" disabled={submitUserLoading}>{submitUserLoading ? "Submitting..." : "Login"}</Button>
+        <Button
+          variant="link"
+          onClick={() => handleActiveSection && handleActiveSection('forgetPassword')}
+          className="back-link">
+          Forgot Password?
+        </Button>
+      </div>
+    </Form>
   );
 };
 
-export default LoginPage;
+export default LoginComponent;
