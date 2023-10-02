@@ -5,13 +5,19 @@ import {
   submitUnsubscribe,
   getUserInfo,
   sendFeedback,
+  login,
 } from "../api/api";
+import Router from "next/router";
 
 interface UserData {
   subsciption: any; // Replace any with the actual type for subsciption
   userWithData: any; // Replace any with the actual type for user
   userInfo: any;
   feedback: any;
+  token: any;
+  submitUserLoading: boolean;
+  submitUserError: string | null;
+  submitUserMessage: string | null;
 }
 
 const initialState: UserData = {
@@ -19,12 +25,20 @@ const initialState: UserData = {
   userWithData: null,
   userInfo: null,
   feedback: null,
+  token: null,
+  submitUserLoading: false,
+  submitUserError: null,
+  submitUserMessage: null,
 };
 
 const useSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    resetForm: (state) => {
+      state.submitUserError = null;
+      state.submitUserMessage = null;
+    },
     setUnsubsciption: (state, action: PayloadAction<any[]>) => {
       state.subsciption = action.payload;
     },
@@ -37,11 +51,33 @@ const useSlice = createSlice({
     setFeedback: (state, action: PayloadAction<any>) => {
       state.userInfo = action.payload;
     },
+    submitUserStart: (state) => {
+      state.submitUserLoading = true;
+      state.submitUserError = null;
+      state.submitUserMessage = null;
+    },
+    submitLoginSuccess: (state, action: PayloadAction<any>) => {
+      state.submitUserLoading = false;
+      state.submitUserMessage = "Fetch successfully";
+      state.token = action.payload;
+    },
+    submitUserFailure: (state, action: PayloadAction<any>) => {
+      state.submitUserLoading = false;
+      state.submitUserMessage = null;
+      state.submitUserError = action.payload;
+    },
   },
 });
 
-export const { setUnsubsciption, setUserWithData, setUserInfo, setFeedback } =
-  useSlice.actions;
+export const {
+  setUnsubsciption,
+  setUserWithData,
+  setUserInfo,
+  setFeedback,
+  submitUserStart,
+  submitLoginSuccess,
+  submitUserFailure,
+} = useSlice.actions;
 export default useSlice.reducer;
 
 export const optInSlice =
@@ -105,5 +141,22 @@ export const sendFeedbackSlice =
       await sendFeedback(payload);
     } catch (error) {
       console.error("Error submitting payload:", error);
+    }
+  };
+
+export const loginSlice =
+  (payload: {
+    username: string;
+    password: string;
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      dispatch(submitUserStart());
+      const { token } = await login(payload);
+      dispatch(submitLoginSuccess(token));
+      localStorage.setItem("farrahsliquorcollectiveToken", token);
+      Router.push("/admin"); // Navigate to home page
+    } catch (error: any) {
+      dispatch(submitUserFailure(error.message));
     }
   };

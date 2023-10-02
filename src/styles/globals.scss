@@ -120,3 +120,18 @@ table .form-control {
 .hide {
   display: none!important;
 }
+
+.login-container {
+
+  width:80%;
+  margin: 50px auto;
+  max-width: 400px;
+  
+  input.form-control {
+    margin-bottom: 10px!important;
+    height: 50px;
+  }
+  .input-group-text {
+    height: 50px;
+  }
+}

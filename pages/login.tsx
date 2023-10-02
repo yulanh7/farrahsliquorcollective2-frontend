@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Form, Button, InputGroup } from 'react-bootstrap';
+import { Form, Button, InputGroup, Container } from 'react-bootstrap';
 import utilStyles from '../../src/styles/utils.module.scss'
 import { loginSlice } from "../store/userSlice";
-import { useAppDispatch } from '../store';
+import { RootState, useAppDispatch } from '../store';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { hashPassword } from "../ultility/ultility";
+import { hashPassword } from "../utils/utils";
+import { useSelector } from 'react-redux';
+import Layout from "../src/components/layout";
 
 type ActiveSection = 'login' | 'forgetPassword' | 'resetPassword';
 
@@ -14,9 +16,11 @@ interface LoginComponentProps {
   submitUserLoading: boolean
 }
 
-const LoginComponent: React.FC<LoginComponentProps> = ({ handleActiveSection, submitUserError, submitUserLoading }) => {
+const LoginComponent: React.FC<LoginComponentProps> = ({ handleActiveSection }) => {
+  const { submitUserError, submitUserLoading } = useSelector((state: RootState) => state.user);
+
   const [credentials, setCredentials] = useState({
-    email: '',
+    username: '',
     password: '',
     showPassword: false
   });
@@ -27,52 +31,49 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ handleActiveSection, su
     e.preventDefault();
     const hashedPassword = hashPassword(credentials.password);
     const payload = {
-      email: credentials.email,
-      password: hashedPassword,
+      username: credentials.username,
+      password: credentials.password,
     }
     dispatch(loginSlice(payload));
   };
 
 
   return (
-    <Form onSubmit={handleLogin}>
-      <Form.Group controlId="email">
-        <Form.Control
-          type="text"
-          placeholder="Email"
-          value={credentials.email}
-          onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
-          required
-        />
-      </Form.Group>
+    <Layout title="Login" logo="/images/logo.jpg" showFeedback width="lg">
+      <div className='login-container'>
+        <Form onSubmit={handleLogin}>
+          <Form.Group controlId="username">
+            <Form.Control
+              type="text"
+              placeholder="User"
+              value={credentials.username}
+              onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="password">
+            <InputGroup>
+              <Form.Control
+                type={credentials.showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={credentials.password}
+                onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
+                required
+              />
+              <InputGroup.Text onClick={() => setCredentials(prev => ({ ...prev, showPassword: !prev.showPassword }))}>
+                {credentials.showPassword ? <FaEyeSlash /> : <FaEye />}
+              </InputGroup.Text>
+            </InputGroup>
+          </Form.Group>
 
-      <Form.Group controlId="password">
-        <InputGroup>
-          <Form.Control
-            type={credentials.showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={credentials.password}
-            onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
-            required
-          />
-          <InputGroup.Text onClick={() => setCredentials(prev => ({ ...prev, showPassword: !prev.showPassword }))}>
-            {credentials.showPassword ? <FaEyeSlash /> : <FaEye />}
-          </InputGroup.Text>
-        </InputGroup>
-      </Form.Group>
+          {submitUserError && <div className="error-message">{submitUserError}</div>}
 
-      {submitUserError && <div className="error-message">{submitUserError}</div>}
-
-      <div className={utilStyles.actionContainer}>
-        <Button variant="primary" type="submit" disabled={submitUserLoading}>{submitUserLoading ? "Submitting..." : "Login"}</Button>
-        <Button
-          variant="link"
-          onClick={() => handleActiveSection && handleActiveSection('forgetPassword')}
-          className="back-link">
-          Forgot Password?
-        </Button>
+          <div>
+            <Button variant="primary" type="submit" disabled={submitUserLoading}>{submitUserLoading ? "Submitting..." : "Login"}</Button>
+          </div>
+        </Form>
       </div>
-    </Form>
+    </Layout>
   );
 };
 
