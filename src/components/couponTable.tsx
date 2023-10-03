@@ -258,7 +258,7 @@ const CouponTable: React.FC = () => {
             </td>
           </tr>
         }
-        {allCoupons && allCoupons.length && !couponLoading && allCoupons.map((coupon: Coupon, index: number) => (
+        {allCoupons && allCoupons.length > 0 && !couponLoading && allCoupons.map((coupon: Coupon, index: number) => (
           <tr key={coupon._id}>
             <td>{index + 1}</td>
             <td>{coupon.isPushed ? "Pushed" : "Unpushed"}</td>
