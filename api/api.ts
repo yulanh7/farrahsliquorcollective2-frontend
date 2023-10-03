@@ -159,9 +159,11 @@ export const fetchAllCoupons = async () => {
   }
 };
 
-export const redeemCoupon = async (payload: { _id: string }) => {
+export const redeemCoupon = async (payload: { blockId: string }) => {
   try {
-    const response = await axios.put(`${API_URL}/coupon/redeem/${payload._id}`);
+    const response = await axios.put(
+      `${API_URL}/coupon/redeem/${payload.blockId}`
+    );
     return response.data;
   } catch (error) {
     throw new Error("Failed to delete a Coupon");

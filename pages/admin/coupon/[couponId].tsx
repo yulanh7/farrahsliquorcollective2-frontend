@@ -20,7 +20,11 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
 
   useEffect(() => {
     if (coupon && redeem === 'true' && !coupon.isRedeemed && couponId) {
-      dispatch(redeemCouponSlice({ _id: couponId }));
+      const payload = {
+        _id: couponId,
+        blockId: coupon.blockId
+      }
+      dispatch(redeemCouponSlice(payload));
     }
   }, [coupon, redeem, dispatch, couponId]);
 
@@ -34,7 +38,11 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
   const handleRedeemCoupon = () => {
     const confirmDelete = window.confirm("Are you sure you want to redeem this coupon?");
     if (confirmDelete && couponId) {
-      dispatch(redeemCouponSlice({ _id: couponId }));
+      const payload = {
+        _id: couponId,
+        blockId: coupon.blockId
+      }
+      dispatch(redeemCouponSlice(payload));
     }
   };
 
@@ -55,7 +63,7 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
               <p>Status: Redeemed.</p>
             ) : (
               <div>
-                <p>Status: Default.</p>
+                <p>Status: UnRedeem</p>
                 <Button
                   variant="primary"
                   className={utilStyles.button}

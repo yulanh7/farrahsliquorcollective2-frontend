@@ -142,6 +142,7 @@ export const updateCouponSlice =
 export const redeemCouponSlice =
   (payload: {
     _id: string;
+    blockId: string;
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
