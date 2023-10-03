@@ -138,37 +138,18 @@ export const submitUnsubscribe = async (payload: {
   }
 };
 
-export const addCoupon = async (payload: {
+export const addCoupon = (payload: {
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'
   scheduleTime: string; // Change to 'number | null'
-}) => {
-  try {
-    const response = await axios.post(`${API_URL}/coupon`, payload);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to creat a Coupon");
-  }
-};
-export const fetchAllCoupons = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/coupons/nonDefault`);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to fetch data");
-  }
-};
+}) => makeRequest("post", `${API_URL}/coupon`, payload);
 
-export const redeemCoupon = async (payload: { blockId: string }) => {
-  try {
-    const response = await axios.put(
-      `${API_URL}/coupon/redeem/${payload.blockId}`
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to delete a Coupon");
-  }
-};
+export const redeemCoupon = (payload: { blockId: string }) =>
+  makeRequest("put", `${API_URL}/coupon/redeem/${payload.blockId}`, payload);
+
+export const fetchAllCoupons = () =>
+  makeRequest("get", `${API_URL}/coupons/nonDefault`);
+
 export const fetchCoupon = async (payload: { _id: string }) => {
   try {
     const response = await axios.get(`${API_URL}/coupon/${payload._id}`);
@@ -195,57 +176,25 @@ export const fetchOffer = async (payload: { _id: string }) => {
   }
 };
 
-export const updateCoupon = async (payload: {
+export const updateCoupon = (payload: {
   _id: string;
   description: string;
   expireDate: string;
   scheduleTime: string;
-}) => {
-  try {
-    const response = await axios.put(`${API_URL}/coupon/${payload._id}`, {
-      description: payload.description,
-      expireDate: payload.expireDate,
-      scheduleTime: payload.scheduleTime,
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to delete a Coupon");
-  }
-};
-export const deleteCoupon = async (payload: { _id: string }) => {
-  try {
-    const response = await axios.delete(`${API_URL}/coupon/${payload._id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to delete a Coupon");
-  }
-};
+}) => makeRequest("put", `${API_URL}/coupon/${payload._id}`, payload);
 
-export const addDefaultCoupon = async (payload: {
+export const deleteCoupon = (payload: { _id: string }) =>
+  makeRequest("delete", `${API_URL}/coupon/${payload._id}`);
+
+export const addDefaultCoupon = (payload: {
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'
-}) => {
-  try {
-    const response = await axios.post(`${API_URL}/defaultCoupon`, {
-      ...payload,
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to creat a default coupon");
-  }
-};
+}) => makeRequest("post", `${API_URL}/defaultCoupon`, payload);
 
-export const updateDefaultCoupon = async (payload: {
+export const updateDefaultCoupon = (payload: {
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'
-}) => {
-  try {
-    const response = await axios.put(`${API_URL}/defaultCoupon`, payload);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to update a default coupon");
-  }
-};
+}) => makeRequest("put", `${API_URL}/defaultCoupon`, payload);
 
 export const fetchDefaultCoupon = async () => {
   try {

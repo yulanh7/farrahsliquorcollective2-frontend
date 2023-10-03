@@ -61,7 +61,7 @@ export default function Post() {
       )}
       {
         defaultOffer && !offerLoading &&
-        <CouponComponent coupon={defaultOffer} loading={offerLoading} offerId={defaultOffer._id} />
+        <CouponComponent coupon={defaultOffer} loading={offerLoading} />
       }
     </Layout>
   );
