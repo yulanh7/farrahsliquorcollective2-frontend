@@ -45,7 +45,7 @@ const WalletTable: React.FC = () => {
       </thead>
       <tbody>
         {allOffers && allOffers.length && allOffers.map((coupon: Coupon, index: number) => (
-          <tr key={coupon.block_id}>
+          <tr key={coupon.couponId}>
             <td>{index + 1}</td>
             <td>{coupon.couponId}</td>
             <td>
@@ -55,10 +55,10 @@ const WalletTable: React.FC = () => {
 
             </td>
             <td>
-              {coupon.isRedeemed ? <span>Redeemed</span> : <span>Default</span>}
+              {coupon.isRedeemed ? <span>Redeemed</span> : <span>UnRedeemed</span>}
             </td>
             <td>
-              <a href={`/offer/${coupon.block_id}`} target="_blank">
+              <a href={`/offer/${coupon.couponId}`} target="_blank">
 
                 <Button variant="danger" className={utilStyles.tableButton}>
                   Detail
