@@ -42,30 +42,17 @@ export default function Post() {
     agreedNotigications?: string;
   }>({});
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputDate = new Date(e.target.value);
-    const today = new Date();
-    const eighteenYearsAgo = new Date(
-      today.getFullYear() - 18,
-      today.getMonth(),
-      today.getDate()
-    );
-    if (inputDate <= eighteenYearsAgo) {
-      setDob(e.target.value);
-      // Clear the dob error if it was set previously
-      setErrors((prevErrors) => ({ ...prevErrors, dob: undefined }));
-    } else {
-      // Set an error for dob if the user is under 18
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        dob: "You must be at least 18 years old.",
-      }));
-    }
-  };
-
   const validateForm = () => {
     let isValid = true;
-    const newErrors = { ...errors }; // copy existing errors
+    const newErrors: {
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      dob?: string;
+      agreedPromotion?: string;
+      agreedAge?: string;
+      agreedNotigications?: string;
+    } = {};
 
     if (firstName.trim() === "") {
       newErrors.firstName = "First name is required";
@@ -101,19 +88,6 @@ export default function Post() {
     if (!agreedNotigications) {
       newErrors.agreedNotigications =
         "You must agreen to allow to show notifications from this website.";
-      isValid = false;
-    }
-
-    // Validate age based on dob
-    const dobDate = new Date(dob);
-    const today = new Date();
-    const eighteenYearsAgo = new Date(
-      today.getFullYear() - 18,
-      today.getMonth(),
-      today.getDate()
-    );
-    if (dobDate > eighteenYearsAgo) {
-      newErrors.dob = "You must be at least 18 years old.";
       isValid = false;
     }
 
@@ -274,7 +248,7 @@ export default function Post() {
                   className={`form-control ${errors.dob && "is-invalid"}`}
                   id="dob"
                   value={dob}
-                  onChange={handleDateChange}
+                  onChange={(e) => setDob(e.target.value)}
                   onFocus={(e) => (e.target.type = "date")}
                 />
                 {errors.dob && (
@@ -328,9 +302,7 @@ export default function Post() {
                 OPT IN OFFER TO REGISTER
               </h5>
               <div className={`${utilStyles.text} ${utilStyles.pB20px}`}>
-                Welcome to Farrah Liquor Collective members club. You will
-                receive a complimentary 6-pack of beer for in-store collection
-                upon joining.
+                Welcome to Farrah Liquor Collective members club. You will receive a complimentary 6-pack of beer for in-store collection upon joining.
               </div>
               <div>
                 <label
