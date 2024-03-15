@@ -21,8 +21,8 @@ self.addEventListener("push", async function (event) {
   data.title ??= "No title sent by server";
   data.url ??= "https://4block.com.au/debug";
   unsubscribeURL =
-    data.usuburl ?? "https://farrahsliquorcollective2.com/opt-out";
-  viewOfferURL = "https://farrahsliquorcollective2.com/detail";
+    data.usuburl ?? "https://dev.farrahsliquorcollective2.com/opt-out";
+  viewOfferURL = "https://dev.farrahsliquorcollective2.com/detail";
   // Ensuring that there's always the option to unsubscribe, no matter what the server is sending.
   data.actions.push(
     {
@@ -31,9 +31,9 @@ self.addEventListener("push", async function (event) {
       title: '👀 Opt In'
     },
     {
-    action: "unsubscribe",
-    type: "button",
-    title: "👎 Unsubscribe",
+      action: "unsubscribe",
+      type: "button",
+      title: "👎 Unsubscribe",
     }
   );
 
@@ -85,7 +85,7 @@ self.addEventListener("activate", function (event) {
 self.addEventListener("pushsubscriptionchange", function (event) {
   event.waitUntil(
     fetch(
-      "https://farrahsliquorcollective2.com:3008/user/pushsubscriptionchange",
+      "https://dev.farrahsliquorcollective2.com:3101/user/pushsubscriptionchange",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -13,7 +13,7 @@ export default function NotificationAlertModule({ show, onHide }: NotificationAl
     const userAgent = window.navigator.userAgent;
     console.log(userAgent);
     if (userAgent.includes("Edg")) {
-      alertText = "edge://settings/content/siteDetails?site=https://farrahsliquorcollective2.com/";
+      alertText = "edge://settings/content/siteDetails?site=https://dev.farrahsliquorcollective2.com/";
     } else if (userAgent.includes("Chrome")) {
       alertText = "chrome://settings/content/notifications?search=notification";
     } else if (userAgent.includes("Firefox")) {
