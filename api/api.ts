@@ -73,70 +73,55 @@ const makeRequest = async (
 export const login = (payload: { username: string; password: string }) =>
   makeRequest("post", `/admin/login`, payload, false); // login doesn't need auth
 
-export const getOffersData = async () => {
-  const response = await axios.get("/api/offer"); // Replace with your actual API endpoint
-  return response.data;
-};
+export const getOffersData = makeRequest("get", "/offer");
 
-export const optIn = async (payload: {
+export const optIn = (payload: {
   userHash: string;
   endpoint?: string; // Make 'endpoint' optional
   expirationTime: number | null; // Change to 'number | null'
   keys: Record<string, string>;
-}) => {
-  try {
-    const response = await axios.post(
-      `${API_URL}/user/withBlockchainSubscribe`,
-      {
-        ...payload,
-        companyName,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to creat a user");
-  }
-};
-export const getUserInfo = async (payload: {
+}) =>
+  makeRequest(
+    "post",
+    "/user/withBlockchainSubscribe",
+    {
+      ...payload,
+      companyName,
+    },
+    false
+  );
+
+export const getUserInfo = (payload: {
   userHash: string;
   endpoint?: string; // Make 'endpoint' optional
   expirationTime: number | null; // Change to 'number | null'
   keys: Record<string, string>;
-}) => {
-  try {
-    const response = await axios.post(`${API_URL}/user/getInfo`, {
+}) =>
+  makeRequest(
+    "post",
+    "/user/getInfo",
+    {
       ...payload,
       companyName,
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to get the user's info");
-  }
-};
+    },
+    false
+  );
 
-export const getDefaultCouponData = async (payload: { userHash: string }) => {
-  try {
-    const response = await axios.post(`${API_URL}/user/defaultCoupon`, {
+export const getDefaultCouponData = (payload: { userHash: string }) =>
+  makeRequest(
+    "post",
+    "/user/defaultCoupon",
+    {
       ...payload,
       companyName,
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to get a default offer");
-  }
-};
+    },
+    false
+  );
 
-export const submitUnsubscribe = async (payload: {
+export const submitUnsubscribe = (payload: {
   userHash: string;
   endpoint: string;
-}) => {
-  try {
-    const response = await axios.put(`${API_URL}/user/unsubscribe`, payload);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to unsubcribe");
-  }
-};
+}) => makeRequest("put", "/user/unsubscribe", payload, false);
 
 export const addCoupon = (payload: {
   description: string; // Make 'endpoint' optional
@@ -154,31 +139,14 @@ export const redeemCoupon = (payload: { blockId: string }) =>
 export const fetchAllCoupons = () =>
   makeRequest("get", `${API_URL}/admin/coupons/nonDefault`);
 
-export const fetchCoupon = async (payload: { _id: string }) => {
-  try {
-    const response = await axios.get(`${API_URL}/admin/coupon/${payload._id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to fetch data");
-  }
-};
-export const fetchAllOffers = async (payload: { userHash: string }) => {
-  try {
-    const response = await axios.post(`${API_URL}/user/coupons`, payload);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to fetch data");
-  }
-};
+export const fetchCoupon = async (payload: { _id: string }) =>
+  makeRequest("get", `/admin/coupon/${payload._id}`, {});
 
-export const fetchOffer = async (payload: { _id: string }) => {
-  try {
-    const response = await axios.get(`${API_URL}/coupon/${payload._id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to fetch data");
-  }
-};
+export const fetchAllOffers = async (payload: { userHash: string }) =>
+  makeRequest("get", "/user/coupons", payload, false);
+
+export const fetchOffer = async (payload: { _id: string }) =>
+  makeRequest("get", `/coupon/${payload._id}`, {}, false);
 
 export const updateCoupon = (payload: {
   _id: string;
@@ -191,34 +159,21 @@ export const deleteCoupon = (payload: { _id: string }) =>
   makeRequest("delete", `${API_URL}/admin/coupon/${payload._id}`);
 
 export const addDefaultCoupon = (payload: {
-  description: string; // Make 'endpoint' optional
-  expireDate: string; // Change to 'string'
+  description: string;
+  expireDate: string;
 }) => makeRequest("post", `${API_URL}/admin/defaultCoupon`, payload);
 
 export const updateDefaultCoupon = (payload: {
-  description: string; // Make 'endpoint' optional
-  expireDate: string; // Change to 'string'
+  description: string;
+  expireDate: string;
 }) => makeRequest("put", `${API_URL}/admin/defaultCoupon`, payload);
 
-export const fetchDefaultCoupon = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/defaultCoupon`);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to creat a default coupon");
-  }
-};
+export const fetchDefaultCoupon = () =>
+  makeRequest("get", "/admin/defaultCoupon");
 
 export const sendFeedback = async (payload: {
   feedback: string;
   phone: string;
   name: string;
   email: string;
-}) => {
-  try {
-    const response = await axios.post(`${API_URL}/sendFeedback`, payload);
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to seed your feedback");
-  }
-};
+}) => makeRequest("post", "/sendFeedback", payload, false);
