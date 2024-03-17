@@ -142,17 +142,21 @@ export const addCoupon = (payload: {
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'
   scheduleTime: string; // Change to 'number | null'
-}) => makeRequest("post", `${API_URL}/coupon`, payload);
+}) => makeRequest("post", `${API_URL}/admin/coupon`, payload);
 
 export const redeemCoupon = (payload: { blockId: string }) =>
-  makeRequest("put", `${API_URL}/coupon/redeem/${payload.blockId}`, payload);
+  makeRequest(
+    "put",
+    `${API_URL}/admin/coupon/redeem/${payload.blockId}`,
+    payload
+  );
 
 export const fetchAllCoupons = () =>
-  makeRequest("get", `${API_URL}/coupons/nonDefault`);
+  makeRequest("get", `${API_URL}/admin/coupons/nonDefault`);
 
 export const fetchCoupon = async (payload: { _id: string }) => {
   try {
-    const response = await axios.get(`${API_URL}/coupon/${payload._id}`);
+    const response = await axios.get(`${API_URL}/admin/coupon/${payload._id}`);
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch data");
@@ -181,20 +185,20 @@ export const updateCoupon = (payload: {
   description: string;
   expireDate: string;
   scheduleTime: string;
-}) => makeRequest("put", `${API_URL}/coupon/${payload._id}`, payload);
+}) => makeRequest("put", `${API_URL}/admin/coupon/${payload._id}`, payload);
 
 export const deleteCoupon = (payload: { _id: string }) =>
-  makeRequest("delete", `${API_URL}/coupon/${payload._id}`);
+  makeRequest("delete", `${API_URL}/admin/coupon/${payload._id}`);
 
 export const addDefaultCoupon = (payload: {
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'
-}) => makeRequest("post", `${API_URL}/defaultCoupon`, payload);
+}) => makeRequest("post", `${API_URL}/admin/defaultCoupon`, payload);
 
 export const updateDefaultCoupon = (payload: {
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'
-}) => makeRequest("put", `${API_URL}/defaultCoupon`, payload);
+}) => makeRequest("put", `${API_URL}/admin/defaultCoupon`, payload);
 
 export const fetchDefaultCoupon = async () => {
   try {
