@@ -137,7 +137,7 @@ export const redeemCoupon = (payload: { blockId: string }) =>
   );
 
 export const fetchAllCoupons = () =>
-  makeRequest("get", `${API_URL}/admin/coupons/nonDefault`);
+  makeRequest("get", `/admin/coupons/nonDefault`);
 
 export const fetchCoupon = async (payload: { _id: string }) =>
   makeRequest("get", `/admin/coupon/${payload._id}`, {});
