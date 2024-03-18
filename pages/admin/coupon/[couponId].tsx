@@ -48,34 +48,36 @@ const CouponPage = ({ params }: { params: { couponId: string } }) => {
 
   return (
     <Layout title="Coupon Detail" logo="/images/logo.jpg" showABN>
-      {couponLoading &&
-        <div>
-          Loading
-        </div>
-      }
-      {
-        !couponLoading && coupon && (
+      <>
+        {couponLoading &&
           <div>
-            <h3>Coupon : {coupon.couponId}</h3>
-            <p>Description: {coupon.description}</p>
-            <p>Expire Date: {formatDate(coupon.expireDate)}</p>
-            {coupon.isRedeemed ? (
-              <p>Status: Redeemed.</p>
-            ) : (
-              <div>
-                <p>Status: UnRedeem</p>
-                <Button
-                  variant="primary"
-                  className={utilStyles.button}
-                  onClick={handleRedeemCoupon}
-                >
-                  Redeem
-                </Button>
-              </div>
-            )}
+            Loading
           </div>
-        )
-      }
+        }
+        {
+          !couponLoading && coupon && (
+            <div>
+              <h3>Coupon : {coupon.couponId}</h3>
+              <p>Description: {coupon.description}</p>
+              <p>Expire Date: {formatDate(coupon.expireDate)}</p>
+              {coupon.isRedeemed ? (
+                <p>Status: Redeemed.</p>
+              ) : (
+                <div>
+                  <p>Status: UnRedeem</p>
+                  <Button
+                    variant="primary"
+                    className={utilStyles.button}
+                    onClick={handleRedeemCoupon}
+                  >
+                    Redeem
+                  </Button>
+                </div>
+              )}
+            </div>
+          )
+        }
+      </>
     </Layout>
   )
 }

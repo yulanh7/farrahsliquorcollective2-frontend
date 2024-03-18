@@ -56,13 +56,15 @@ export default function Post() {
 
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
-      {offerLoading && (
-        <div>Loading</div>
-      )}
-      {
-        defaultOffer && !offerLoading &&
-        <CouponComponent coupon={defaultOffer} loading={offerLoading} />
-      }
+      <>
+        {offerLoading && (
+          <div>Loading</div>
+        )}
+        {
+          defaultOffer && !offerLoading &&
+          <CouponComponent coupon={defaultOffer} loading={offerLoading} />
+        }
+      </>
     </Layout>
   );
 }

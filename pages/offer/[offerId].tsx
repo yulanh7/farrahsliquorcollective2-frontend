@@ -24,9 +24,11 @@ const CouponPage = () => {
 
   return (
     <Layout title="OFFER RECEIPT" logo="/images/logo.jpg" showABN>
-      {offer &&
-        <CouponComponent coupon={offer} loading={offerLoading} />
-      }
+      <>
+        {offer &&
+          <CouponComponent coupon={offer} loading={offerLoading} />
+        }
+      </>
     </Layout>
   )
 }
