@@ -42,7 +42,7 @@ export default function Layout({ children, title, subTitle, logo, showFeedback, 
           <div className={styles.logoBox}>
 
             <a target="_blank" rel="noopener noreferrer" href="https://farrahsliquorcollective.com/">
-              <Image src={logo} alt="logo" width={100} height={50} className={styles.logo} />
+              <Image src={logo} alt="logo" width={100} height={50} className={styles.logo} unoptimized />
             </a>
             {
               showABN &&
