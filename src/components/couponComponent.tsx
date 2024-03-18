@@ -16,6 +16,7 @@ interface Coupon {
   expireDate: string;
   scheduleTime: string;
   isPushed: boolean;
+  isRedeemed: boolean;
 }
 
 interface CouponComponentProps {
@@ -48,6 +49,7 @@ export default function CouponComponent({ coupon, loading }: CouponComponentProp
                     {coupon.description}
 
                   </div>
+
                   <div className={` ${utilStyles.pT30px}`}>
                     <Link href="/opt-out">
                       <Button
@@ -65,10 +67,14 @@ export default function CouponComponent({ coupon, loading }: CouponComponentProp
             <div
               className={`${utilStyles.pB10px} ${utilStyles.textCenter} ${utilStyles.pT30px}`}
             >
-              <span className={`${utilStyles.headingMd}`}>Expire Date:</span><span className={`${utilStyles.textMd}`}> {formatDate(coupon.expireDate)}</span>
-
-
+              <div>
+                <span className={`${utilStyles.headingMd}`}>Expire Date:</span><span className={`${utilStyles.textMd}`}> {formatDate(coupon.expireDate)}</span>
+              </div>
+              {coupon.isRedeemed &&
+                <span className={`${utilStyles.textMd}`}> Redeemed</span>
+              }
             </div>
+
           </>
         )
       }
