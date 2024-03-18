@@ -140,13 +140,10 @@ export const fetchAllCoupons = () =>
   makeRequest("get", `/admin/coupons/nonDefault`);
 
 export const fetchCoupon = async (payload: { _id: string }) =>
-  makeRequest("get", `/admin/coupon/${payload._id}`, {});
+  makeRequest("get", `/coupon/${payload._id}`, {}, false);
 
 export const fetchAllOffers = async (payload: { userHash: string }) =>
   makeRequest("post", "/user/coupons", payload, false);
-
-export const fetchOffer = async (payload: { _id: string }) =>
-  makeRequest("get", `/coupon/${payload._id}`, {}, false);
 
 export const updateCoupon = (payload: {
   _id: string;
