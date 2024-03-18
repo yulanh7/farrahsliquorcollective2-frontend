@@ -16,7 +16,7 @@ const navigateToHomeOnTokenError = (error: any) => {
   ) {
     isTokenErrorHandled = true;
     localStorage.removeItem("userInfo");
-    alert("Please login. Your session is invalid or expired.");
+    // alert("Please login. Your session is invalid or expired.");
     Router.push("/login")
       .then(() => {
         // Reset the flag after navigation so it can work for subsequent errors
