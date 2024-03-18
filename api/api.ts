@@ -30,8 +30,13 @@ const navigateToHomeOnTokenError = (error: any) => {
 };
 
 const getHeaders = () => {
-  const token = localStorage.getItem("farrahsliquorcollectiveToken");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  // Check if running in the browser
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("farrahsliquorcollectiveToken");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }
+  // Return empty headers object if not running in the browser
+  return {};
 };
 
 const makeRequest = async (
@@ -72,8 +77,6 @@ const makeRequest = async (
 
 export const login = (payload: { username: string; password: string }) =>
   makeRequest("post", `/admin/login`, payload, false); // login doesn't need auth
-
-export const getOffersData = makeRequest("get", "/offer");
 
 export const optIn = (payload: {
   userHash: string;
