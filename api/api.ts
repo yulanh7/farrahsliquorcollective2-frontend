@@ -130,14 +130,10 @@ export const addCoupon = (payload: {
   description: string; // Make 'endpoint' optional
   expireDate: string; // Change to 'string'
   scheduleTime: string; // Change to 'number | null'
-}) => makeRequest("post", `${API_URL}/admin/coupon`, payload);
+}) => makeRequest("post", `/admin/coupon`, payload);
 
 export const redeemCoupon = (payload: { blockId: string }) =>
-  makeRequest(
-    "put",
-    `${API_URL}/admin/coupon/redeem/${payload.blockId}`,
-    payload
-  );
+  makeRequest("put", `/admin/coupon/redeem/${payload.blockId}`, payload);
 
 export const fetchAllCoupons = () =>
   makeRequest("get", `/admin/coupons/nonDefault`);
@@ -153,20 +149,20 @@ export const updateCoupon = (payload: {
   description: string;
   expireDate: string;
   scheduleTime: string;
-}) => makeRequest("put", `${API_URL}/admin/coupon/${payload._id}`, payload);
+}) => makeRequest("put", `/admin/coupon/${payload._id}`, payload);
 
 export const deleteCoupon = (payload: { _id: string }) =>
-  makeRequest("delete", `${API_URL}/admin/coupon/${payload._id}`);
+  makeRequest("delete", `/admin/coupon/${payload._id}`);
 
 export const addDefaultCoupon = (payload: {
   description: string;
   expireDate: string;
-}) => makeRequest("post", `${API_URL}/admin/defaultCoupon`, payload);
+}) => makeRequest("post", `/admin/defaultCoupon`, payload);
 
 export const updateDefaultCoupon = (payload: {
   description: string;
   expireDate: string;
-}) => makeRequest("put", `${API_URL}/admin/defaultCoupon`, payload);
+}) => makeRequest("put", `/admin/defaultCoupon`, payload);
 
 export const fetchDefaultCoupon = () =>
   makeRequest("get", "/admin/defaultCoupon");
