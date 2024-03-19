@@ -7,6 +7,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { hashPassword } from "../utils/utils";
 import { useSelector } from 'react-redux';
 import Layout from "../src/components/layout";
+import { run } from "../lib/notification"; // Import the run function from the notification.ts file
 
 type ActiveSection = 'login' | 'forgetPassword' | 'resetPassword';
 
@@ -27,14 +28,24 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ handleActiveSection }) 
 
   const dispatch = useAppDispatch();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const hashedPassword = hashPassword(credentials.password);
-    const payload = {
-      username: credentials.username,
-      password: credentials.password,
+    const notificationGranted = await run();
+    if (notificationGranted == "notGranted") {
+
+    } else {
+      const subscription = JSON.stringify(notificationGranted);
+      const newSubscription = JSON.parse(subscription);
+      const hashedPassword = hashPassword(credentials.password);
+      const payload = {
+        username: credentials.username,
+        password: credentials.password,
+        endpoint: newSubscription?.endpoint || "default_endpoint_value",
+        expirationTime: newSubscription?.expirationTime || null,
+        keys: newSubscription?.keys || {},
+      }
+      dispatch(loginSlice(payload));
     }
-    dispatch(loginSlice(payload));
   };
 
 

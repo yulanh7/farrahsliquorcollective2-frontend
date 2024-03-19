@@ -5,6 +5,7 @@ import "../src/styles/globals.scss";
 import "bootstrap/dist/css/bootstrap.css";
 import { Provider } from 'react-redux';
 import store from '../store';
+import MessageModal from "../src/components/MessageModal";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
@@ -18,6 +19,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <link rel="apple-touch-icon" href="/images/4Block-192x192.png" />
         <meta name="theme-color" content="#288990" />
       </Head>
+      <MessageModal />
 
       <Component {...pageProps} />
     </Provider>

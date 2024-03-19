@@ -75,8 +75,13 @@ const makeRequest = async (
   }
 };
 
-export const login = (payload: { username: string; password: string }) =>
-  makeRequest("post", `/admin/login`, payload, false); // login doesn't need auth
+export const login = (payload: {
+  username: string;
+  password: string;
+  endpoint?: string; // Make 'endpoint' optional
+  expirationTime: number | null; // Change to 'number | null'
+  keys: Record<string, string>;
+}) => makeRequest("post", `/admin/login`, payload, false); // login doesn't need auth
 
 export const optIn = (payload: {
   userHash: string;
@@ -173,3 +178,13 @@ export const sendFeedback = async (payload: {
   name: string;
   email: string;
 }) => makeRequest("post", "/sendFeedback", payload, false);
+
+export const sendMessage = async (payload: {
+  userHash: string;
+  endpoint?: string; // Make 'endpoint' optional
+  expirationTime: number | null; // Change to 'number | null'
+  keys: Record<string, string>;
+  message: string;
+}) => makeRequest("post", "/user/send-message", payload, false);
+
+export const fetchAdminInfo = async () => makeRequest("get", "/admin/getAdmin");

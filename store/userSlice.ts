@@ -6,6 +6,7 @@ import {
   getUserInfo,
   sendFeedback,
   login,
+  fetchAdminInfo,
 } from "../api/api";
 import Router from "next/router";
 
@@ -18,6 +19,7 @@ interface UserData {
   submitUserLoading: boolean;
   submitUserError: string | null;
   submitUserMessage: string | null;
+  admin: any;
 }
 
 const initialState: UserData = {
@@ -29,6 +31,7 @@ const initialState: UserData = {
   submitUserLoading: false,
   submitUserError: null,
   submitUserMessage: null,
+  admin: null,
 };
 
 const useSlice = createSlice({
@@ -44,6 +47,9 @@ const useSlice = createSlice({
     },
     setUserWithData: (state, action: PayloadAction<any>) => {
       state.userWithData = action.payload;
+    },
+    setAdminInfo: (state, action: PayloadAction<any>) => {
+      state.admin = action.payload;
     },
     setUserInfo: (state, action: PayloadAction<any>) => {
       state.userInfo = action.payload;
@@ -77,6 +83,7 @@ export const {
   submitUserStart,
   submitLoginSuccess,
   submitUserFailure,
+  setAdminInfo,
 } = useSlice.actions;
 export default useSlice.reducer;
 
@@ -116,6 +123,17 @@ export const getUserInfoSlice =
     }
   };
 
+export const getAdminInfoSlice =
+  (): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      const response = await fetchAdminInfo();
+      dispatch(setAdminInfo(response));
+    } catch (error) {
+      console.error("Error submitting payload:", error);
+    }
+  };
+
 export const unsubscribeSlice =
   (payload: {
     userHash: string;
@@ -148,6 +166,9 @@ export const loginSlice =
   (payload: {
     username: string;
     password: string;
+    endpoint?: string; // Make 'endpoint' optional
+    expirationTime: number | null; // Change to 'number | null'
+    keys: Record<string, string>;
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
