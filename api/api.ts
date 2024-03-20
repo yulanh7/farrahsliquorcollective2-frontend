@@ -179,12 +179,5 @@ export const sendFeedback = async (payload: {
   email: string;
 }) => makeRequest("post", "/sendFeedback", payload, false);
 
-export const sendMessage = async (payload: {
-  userHash: string;
-  endpoint?: string; // Make 'endpoint' optional
-  expirationTime: number | null; // Change to 'number | null'
-  keys: Record<string, string>;
-  message: string;
-}) => makeRequest("post", "/user/send-message", payload, false);
-
-export const fetchAdminInfo = async () => makeRequest("get", "/admin/getAdmin");
+export const sendMessage = async (payload: { message: string }) =>
+  makeRequest("post", "/user/send-message", payload, false);

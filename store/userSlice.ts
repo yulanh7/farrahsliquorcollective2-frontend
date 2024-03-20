@@ -6,7 +6,7 @@ import {
   getUserInfo,
   sendFeedback,
   login,
-  fetchAdminInfo,
+  sendMessage,
 } from "../api/api";
 import Router from "next/router";
 
@@ -19,7 +19,7 @@ interface UserData {
   submitUserLoading: boolean;
   submitUserError: string | null;
   submitUserMessage: string | null;
-  admin: any;
+  messageWithAdminInfo: any;
 }
 
 const initialState: UserData = {
@@ -31,7 +31,7 @@ const initialState: UserData = {
   submitUserLoading: false,
   submitUserError: null,
   submitUserMessage: null,
-  admin: null,
+  messageWithAdminInfo: null,
 };
 
 const useSlice = createSlice({
@@ -48,14 +48,15 @@ const useSlice = createSlice({
     setUserWithData: (state, action: PayloadAction<any>) => {
       state.userWithData = action.payload;
     },
-    setAdminInfo: (state, action: PayloadAction<any>) => {
-      state.admin = action.payload;
-    },
+
     setUserInfo: (state, action: PayloadAction<any>) => {
       state.userInfo = action.payload;
     },
     setFeedback: (state, action: PayloadAction<any>) => {
       state.userInfo = action.payload;
+    },
+    setSendMessage: (state, action: PayloadAction<any>) => {
+      state.messageWithAdminInfo = action.payload;
     },
     submitUserStart: (state) => {
       state.submitUserLoading = true;
@@ -83,7 +84,7 @@ export const {
   submitUserStart,
   submitLoginSuccess,
   submitUserFailure,
-  setAdminInfo,
+  setSendMessage,
 } = useSlice.actions;
 export default useSlice.reducer;
 
@@ -97,6 +98,20 @@ export const optInSlice =
   async (dispatch) => {
     try {
       const { user } = await optIn(payload);
+      dispatch(setUserWithData(user));
+      // document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+      // window.location.href = "/offer-receipt";
+    } catch (error) {
+      console.error("Error submitting payload:", error);
+    }
+  };
+export const sendMessageSlice =
+  (payload: {
+    message: string;
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      const { user } = await sendMessage(payload);
       dispatch(setUserWithData(user));
       // document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       // window.location.href = "/offer-receipt";
@@ -118,17 +133,6 @@ export const getUserInfoSlice =
         window.location.href = "/detail";
       }
       dispatch(setUserInfo(userGet));
-    } catch (error) {
-      console.error("Error submitting payload:", error);
-    }
-  };
-
-export const getAdminInfoSlice =
-  (): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
-  async (dispatch) => {
-    try {
-      const response = await fetchAdminInfo();
-      dispatch(setAdminInfo(response));
     } catch (error) {
       console.error("Error submitting payload:", error);
     }
