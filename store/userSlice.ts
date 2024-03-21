@@ -6,7 +6,8 @@ import {
   getUserInfo,
   sendFeedback,
   login,
-  sendMessage,
+  sendMessageFromClient,
+  sendMessageFromAdmin,
 } from "../api/api";
 import Router from "next/router";
 
@@ -16,13 +17,13 @@ interface UserData {
   userInfo: any;
   feedback: any;
   token: any;
-  message: any;
   submitUserLoading: boolean;
   submitUserError: string | null;
   submitUserMessage: string | null;
   showModal: boolean;
   isForClient: boolean;
-  messageWithAdminInfo: any;
+  messageFromClient: any;
+  messageFromAdmin: any;
 }
 
 const initialState: UserData = {
@@ -30,14 +31,14 @@ const initialState: UserData = {
   userWithData: null,
   userInfo: null,
   feedback: null,
-  message: null,
   token: null,
   submitUserLoading: false,
   submitUserError: null,
   submitUserMessage: null,
   showModal: false,
   isForClient: true,
-  messageWithAdminInfo: null,
+  messageFromClient: null,
+  messageFromAdmin: null,
 };
 
 const useSlice = createSlice({
@@ -61,8 +62,8 @@ const useSlice = createSlice({
     setFeedback: (state, action: PayloadAction<any>) => {
       state.userInfo = action.payload;
     },
-    setSendMessage: (state, action: PayloadAction<any>) => {
-      state.messageWithAdminInfo = action.payload;
+    setSendMessageFromClient: (state, action: PayloadAction<any>) => {
+      state.messageFromClient = action.payload;
     },
     submitUserStart: (state) => {
       state.submitUserLoading = true;
@@ -93,7 +94,7 @@ export const {
   setUserWithData,
   setUserInfo,
   setFeedback,
-  setSendMessage,
+  setSendMessageFromClient,
   submitUserStart,
   submitLoginSuccess,
   submitUserFailure,
@@ -120,14 +121,35 @@ export const optInSlice =
     }
   };
 
-export const sendMessageSlice =
+export const sendMessageFromClientSlice =
   (payload: {
     message: string;
+    userHash: string;
+    endpoint?: string; // Make 'endpoint' optional
+    expirationTime: number | null; // Change to 'number | null'
+    keys: Record<string, string>;
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
-      const { user } = await sendMessage(payload);
-      dispatch(setUserWithData(user));
+      const response = await sendMessageFromClient(payload);
+      dispatch(setSendMessageFromClient(response));
+      // document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+      // window.location.href = "/offer-receipt";
+    } catch (error) {
+      console.error("Error submitting payload:", error);
+    }
+  };
+export const sendMessageFromAdminSlice =
+  (payload: {
+    message: string;
+    userHash: string;
+    endpoint?: string; // Make 'endpoint' optional
+    expirationTime: number | null; // Change to 'number | null'
+    keys: Record<string, string>;
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      const response = await sendMessageFromAdmin(payload);
       // document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
       // window.location.href = "/offer-receipt";
     } catch (error) {
