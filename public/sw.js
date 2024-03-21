@@ -2,6 +2,7 @@
 
 let unsubscribeURL = "";
 let viewOfferURL = "";
+let messageId = "";
 
 self.addEventListener("install", function (_) {
   self.skipWaiting();
@@ -19,24 +20,27 @@ self.addEventListener("push", async function (event) {
   data.actions ??= [];
   data.body ??= "No data sent by server";
   data.title ??= "No title sent by server";
-  data.url ??= "https://4block.com.au/debug";
+  messageId =
+    data.messageId ??= "https://4block.com.au/debug";
   unsubscribeURL =
     data.usuburl ?? "https://dev.farrahsliquorcollective2.com/opt-out";
   viewOfferURL = "https://dev.farrahsliquorcollective2.com/detail";
   // Ensuring that there's always the option to unsubscribe, no matter what the server is sending.
   if (data.title && data.title == "Message From a Client") {
     data.actions.push(
-
       {
         action: "reply-client",
         type: "button",
         title: "💬 Reply",
       },
-      // {
-      //   action: "unsubscribe",
-      //   type: "button",
-      //   title: "👎 Unsubscribe",
-      // },
+    );
+  } else if (data.title && data.title == "Message From a Admin") {
+    data.actions.push(
+      {
+        action: "reply-admin",
+        type: "button",
+        title: "💬 Reply",
+      },
     );
   } else {
 
@@ -74,6 +78,7 @@ self.addEventListener("notificationclick", function (event) {
   console.log("Notification clicked.");
 
   let clickResponsePromise = Promise.resolve();
+  const channel = new BroadcastChannel("feedback-channel");
 
   switch (event.action) {
     case "view-offer":
@@ -91,9 +96,14 @@ self.addEventListener("notificationclick", function (event) {
       //event.notification.close();
       break;
     case "reply-client":
-      const channel = new BroadcastChannel("feedback-channel");
       // Send a message to the client
-      channel.postMessage({ action: "show-feedback-modal" });
+      channel.postMessage({ action: "show-reply-client-modal", messageId: messageId });
+      // Close the channel
+      channel.close();
+      break;
+    case "reply-admin":
+      // Send a message to the client
+      channel.postMessage({ action: "show-reply-admin-modal", messageId: messageId });
       // Close the channel
       channel.close();
       break;

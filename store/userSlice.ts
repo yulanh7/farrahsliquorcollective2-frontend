@@ -123,11 +123,13 @@ export const optInSlice =
 
 export const sendMessageFromClientSlice =
   (payload: {
-    message: string;
     messageId: string;
-    endpoint?: string; // Make 'endpoint' optional
-    expirationTime: number | null; // Change to 'number | null'
-    keys: Record<string, string>;
+    message: string;
+    clientInfo: {
+      endpoint?: string; // Make 'endpoint' optional
+      expirationTime: number | null; // Change to 'number | null'
+      keys: Record<string, string>;
+    };
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
@@ -141,11 +143,13 @@ export const sendMessageFromClientSlice =
   };
 export const sendMessageFromAdminSlice =
   (payload: {
+    messageId: string;
     message: string;
-    userHash: string;
-    endpoint?: string; // Make 'endpoint' optional
-    expirationTime: number | null; // Change to 'number | null'
-    keys: Record<string, string>;
+    clientInfo: {
+      endpoint?: string; // Make 'endpoint' optional
+      expirationTime: number | null; // Change to 'number | null'
+      keys: Record<string, string>;
+    };
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {

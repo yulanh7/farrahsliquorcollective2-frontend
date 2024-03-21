@@ -14,10 +14,11 @@ import { v4 as uuidv4 } from 'uuid';
 interface MessageModalProps {
   show: boolean;
   onHide: () => void;
-  forClient: boolean
+  forClient: boolean;
+  messageId?: string
 }
 
-const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) => {
+const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient, messageId }) => {
   const dispatch = useAppDispatch();
   const { showModal, isForClient } = useSelector((state: RootState) => state.user);
   const [message, setMessage] = useState(''); // State to hold the textarea value
@@ -65,26 +66,33 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) 
         const payload = {
           message,
           messageId,
-          endpoint: newSubscription?.endpoint || "default_endpoint_value",
-          expirationTime: newSubscription?.expirationTime || null,
-          keys: newSubscription?.keys || {},
+          clientInfo: {
+            endpoint: newSubscription?.endpoint || "default_endpoint_value",
+            expirationTime: newSubscription?.expirationTime || null,
+            keys: newSubscription?.keys || {},
+          }
         };
         dispatch(sendMessageFromClientSlice(payload));
       }
-
+      dispatch(toggleModal({ showModal: false }));
+      setMessage('');
 
     } else {
-      const payload = {
-        message,
-        userHash: 'your_user_hash_value_here', // Replace 'your_user_hash_value_here' with the actual user hash
-        endpoint: "default_endpoint_value",
-        expirationTime: null,
-        keys: {},
-      };
-      dispatch(sendMessageFromAdminSlice(payload));
+      if (messageId) {
+        const payload = {
+          message,
+          messageId: messageId,
+          clientInfo: {
+            endpoint: "default_endpoint_value",
+            expirationTime: null,
+            keys: {},
+          }
+        };
+        dispatch(sendMessageFromAdminSlice(payload));
+      }
+      dispatch(toggleModal({ showModal: false }));
+      setMessage('');
     }
-    dispatch(toggleModal({ showModal: false }));
-    setMessage('');
   };
 
   // Function to update state with the textarea's current value
@@ -110,6 +118,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) 
       {showModal && (
         <div className={utilStyles.messageBox}>
           <FiX size={24} className={utilStyles.closeIcon} onClick={onHide} />
+          {messageId && messageId}
           {isForClient ?
             <p>Your enquire</p> :
             <p> Reply to the client</p>

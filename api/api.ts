@@ -180,17 +180,21 @@ export const sendFeedback = async (payload: {
 }) => makeRequest("post", "/sendFeedback", payload, false);
 
 export const sendMessageFromClient = async (payload: {
+  messageId: string;
   message: string;
-  messageId?: string;
-  endpoint?: string; // Make 'endpoint' optional
-  expirationTime: number | null; // Change to 'number | null'
-  keys: Record<string, string>;
+  clientInfo: {
+    endpoint?: string; // Make 'endpoint' optional
+    expirationTime: number | null; // Change to 'number | null'
+    keys: Record<string, string>;
+  };
 }) => makeRequest("post", "/user/send-message", payload, false);
 
 export const sendMessageFromAdmin = async (payload: {
+  messageId: string;
   message: string;
-  userHash: string;
-  endpoint?: string; // Make 'endpoint' optional
-  expirationTime: number | null; // Change to 'number | null'
-  keys: Record<string, string>;
+  clientInfo: {
+    endpoint?: string; // Make 'endpoint' optional
+    expirationTime: number | null; // Change to 'number | null'
+    keys: Record<string, string>;
+  };
 }) => makeRequest("post", "/admin/reply-message", payload);

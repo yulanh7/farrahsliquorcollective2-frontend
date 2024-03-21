@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';  // Import the Head component
 import "../src/styles/globals.scss";
@@ -15,6 +15,7 @@ interface AppWrapperProps {
 }
 function AppWrapper({ children }: AppWrapperProps) {
   const dispatch = useAppDispatch();
+  const [messageId, setMessageId] = useState('');
   const { showModal } = useSelector((state: RootState) => state.user);
   const hideModal = () => dispatch(toggleModal({ showModal: false, title: '', content: '' }));
   useEffect(() => {
@@ -22,10 +23,16 @@ function AppWrapper({ children }: AppWrapperProps) {
     const channel = new BroadcastChannel('feedback-channel');
     channel.onmessage = (event) => {
       // When a message is received, check if it's for showing the modal
-      if (event.data.action === 'show-feedback-modal') {
+      if (event.data.action === 'show-reply-client-modal') {
         // Dispatch an action to toggle the modal
         dispatch(toggleModal({ showModal: true }));
         dispatch(setIsForClient({ isForClient: false }));
+        setMessageId(event.data.messageId);
+
+      } else {
+        dispatch(toggleModal({ showModal: true }));
+        dispatch(setIsForClient({ isForClient: true }));
+        setMessageId(event.data.messageId);
       }
     };
 
@@ -35,7 +42,7 @@ function AppWrapper({ children }: AppWrapperProps) {
     };
   }, [dispatch]);
   return <>
-    <MessageModal show={showModal} onHide={hideModal} forClient={true} />
+    <MessageModal show={showModal} onHide={hideModal} forClient={true} messageId={messageId} />
 
     {children}
   </>;
