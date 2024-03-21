@@ -21,6 +21,7 @@ interface UserData {
   submitUserError: string | null;
   submitUserMessage: string | null;
   showModal: boolean;
+  isForClient: boolean;
   messageWithAdminInfo: any;
 }
 
@@ -35,6 +36,7 @@ const initialState: UserData = {
   submitUserError: null,
   submitUserMessage: null,
   showModal: false,
+  isForClient: true,
   messageWithAdminInfo: null,
 };
 
@@ -80,6 +82,9 @@ const useSlice = createSlice({
     toggleModal: (state, action: PayloadAction<any>) => {
       state.showModal = action.payload.showModal;
     },
+    setIsForClient: (state, action: PayloadAction<any>) => {
+      state.isForClient = action.payload.isForClient;
+    },
   },
 });
 
@@ -93,6 +98,7 @@ export const {
   submitLoginSuccess,
   submitUserFailure,
   toggleModal,
+  setIsForClient,
 } = useSlice.actions;
 export default useSlice.reducer;
 

@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import store from '../store';
 import { RootState, useAppDispatch } from '../store';
 import { Provider, useSelector } from 'react-redux';
-import { toggleModal } from "../store/userSlice";
+import { toggleModal, setIsForClient } from "../store/userSlice";
 import MessageModal from "../src/components/MessageModal";
 
 
@@ -25,6 +25,7 @@ function AppWrapper({ children }: AppWrapperProps) {
       if (event.data.action === 'show-feedback-modal') {
         // Dispatch an action to toggle the modal
         dispatch(toggleModal({ showModal: true }));
+        dispatch(setIsForClient({ isForClient: false }));
       }
     };
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FiMessageSquare, FiX } from 'react-icons/fi';
-import { sendMessageSlice, toggleModal } from "../../store/userSlice";
+import { sendMessageSlice, toggleModal, setIsForClient } from "../../store/userSlice";
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
 import { Button, Form } from "react-bootstrap";
@@ -16,20 +16,13 @@ interface MessageModalProps {
 
 const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) => {
   const dispatch = useAppDispatch();
-  const { showModal } = useSelector((state: RootState) => state.user);
-
-  const [isVisible, setIsVisible] = useState(show);
-  const [isForClient, setIsForClient] = useState(true);
+  const { showModal, isForClient } = useSelector((state: RootState) => state.user);
   const [message, setMessage] = useState(''); // State to hold the textarea value
   const [error, setError] = useState('');
 
-  // Update visibility state when the show prop changes
-  useEffect(() => {
-    setIsForClient(forClient);
-  }, [show, forClient]);
-
   const toggleVisibility = () => {
     dispatch(toggleModal({ showModal: true }));
+    dispatch(setIsForClient({ isForClient: true }));
 
   };
 
@@ -56,7 +49,6 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) 
     setMessage(e.target.value);
   };
 
-  console.log(isForClient);
   return (
     <>
       <Button
