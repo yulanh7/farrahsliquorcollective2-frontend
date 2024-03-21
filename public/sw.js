@@ -24,18 +24,35 @@ self.addEventListener("push", async function (event) {
     data.usuburl ?? "https://dev.farrahsliquorcollective2.com/opt-out";
   viewOfferURL = "https://dev.farrahsliquorcollective2.com/detail";
   // Ensuring that there's always the option to unsubscribe, no matter what the server is sending.
-  data.actions.push(
-    {
-      action: 'view-offer',
-      type: 'button',
-      title: '👀 Opt In'
-    },
-    {
-      action: "unsubscribe",
-      type: "button",
-      title: "👎 Unsubscribe",
-    }
-  );
+  if (data.title && data.title == "Message From a Client") {
+    data.actions.push(
+
+      {
+        action: "reply-client",
+        type: "button",
+        title: "💬 Reply",
+      },
+      // {
+      //   action: "unsubscribe",
+      //   type: "button",
+      //   title: "👎 Unsubscribe",
+      // },
+    );
+  } else {
+
+    data.actions.push(
+      {
+        action: 'view-offer',
+        type: 'button',
+        title: '👀 Opt In'
+      },
+      {
+        action: "unsubscribe",
+        type: "button",
+        title: "👎 Unsubscribe",
+      },
+    );
+  }
 
   const notificationOptions = {
     body: data.body,
@@ -73,6 +90,14 @@ self.addEventListener("notificationclick", function (event) {
       }
       //event.notification.close();
       break;
+    case "reply-client":
+      const channel = new BroadcastChannel("feedback-channel");
+      // Send a message to the client
+      channel.postMessage({ action: "show-feedback-modal" });
+      // Close the channel
+      channel.close();
+      break;
+
   }
 
   event.waitUntil(clickResponsePromise);

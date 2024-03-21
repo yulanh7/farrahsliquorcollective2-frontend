@@ -16,9 +16,11 @@ interface UserData {
   userInfo: any;
   feedback: any;
   token: any;
+  message: any;
   submitUserLoading: boolean;
   submitUserError: string | null;
   submitUserMessage: string | null;
+  showModal: boolean;
   messageWithAdminInfo: any;
 }
 
@@ -27,10 +29,12 @@ const initialState: UserData = {
   userWithData: null,
   userInfo: null,
   feedback: null,
+  message: null,
   token: null,
   submitUserLoading: false,
   submitUserError: null,
   submitUserMessage: null,
+  showModal: false,
   messageWithAdminInfo: null,
 };
 
@@ -73,6 +77,9 @@ const useSlice = createSlice({
       state.submitUserMessage = null;
       state.submitUserError = action.payload;
     },
+    toggleModal: (state, action: PayloadAction<any>) => {
+      state.showModal = action.payload.showModal;
+    },
   },
 });
 
@@ -81,10 +88,11 @@ export const {
   setUserWithData,
   setUserInfo,
   setFeedback,
+  setSendMessage,
   submitUserStart,
   submitLoginSuccess,
   submitUserFailure,
-  setSendMessage,
+  toggleModal,
 } = useSlice.actions;
 export default useSlice.reducer;
 
@@ -105,6 +113,7 @@ export const optInSlice =
       console.error("Error submitting payload:", error);
     }
   };
+
 export const sendMessageSlice =
   (payload: {
     message: string;

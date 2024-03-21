@@ -1,28 +1,38 @@
+// components/MessageModal.tsx
+
 import React, { useState, useEffect } from 'react';
 import { FiMessageSquare, FiX } from 'react-icons/fi';
-import { sendMessageSlice } from "../../store/userSlice";
-import { useAppDispatch } from '../../store';
-
+import { sendMessageSlice, toggleModal } from "../../store/userSlice";
+import { RootState, useAppDispatch } from '../../store';
+import { useSelector } from 'react-redux';
 import { Button, Form } from "react-bootstrap";
 import utilStyles from "../styles/utils.module.scss";
 
+interface MessageModalProps {
+  show: boolean;
+  onHide: () => void;
+  forClient: boolean
+}
 
-type AdminEntry = {
-  endpoint?: string;
-  expirationTime: number | null;
-  keys: Record<string, string>;
-};
-
-const MessageModal: React.FC = () => {
+const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) => {
   const dispatch = useAppDispatch();
+  const { showModal } = useSelector((state: RootState) => state.user);
 
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(show);
+  const [isForClient, setIsForClient] = useState(true);
   const [message, setMessage] = useState(''); // State to hold the textarea value
   const [error, setError] = useState('');
 
+  // Update visibility state when the show prop changes
+  useEffect(() => {
+    setIsForClient(forClient);
+  }, [show, forClient]);
 
+  const toggleVisibility = () => {
+    dispatch(toggleModal({ showModal: true }));
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  };
+
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,12 +43,11 @@ const MessageModal: React.FC = () => {
       return;
     }
 
-
-
     const payload = {
       message, // Include the message in the payload
     };
     dispatch(sendMessageSlice(payload));
+    dispatch(toggleModal({ showModal: false }));
     setMessage(''); // Optionally clear the message after sending
   };
 
@@ -47,9 +56,9 @@ const MessageModal: React.FC = () => {
     setMessage(e.target.value);
   };
 
+  console.log(isForClient);
   return (
     <>
-
       <Button
         variant="primary"
         type="submit"
@@ -59,14 +68,18 @@ const MessageModal: React.FC = () => {
         <FiMessageSquare size={24} />
 
       </Button>
-      {isVisible && (
+
+      {showModal && (
         <div className={utilStyles.messageBox}>
-          <FiX size={24} className={utilStyles.closeIcon} onClick={toggleVisibility} />
+          <FiX size={24} className={utilStyles.closeIcon} onClick={onHide} />
+          {isForClient ?
+            <p>Your enquire</p> :
+            <p> Reply to the client</p>
+          }
           <Form onSubmit={handleSubmit} className={utilStyles.form} >
             <div>
               {/* Bind the textarea value to state and listen for changes */}
               <textarea
-                placeholder="Your message"
                 value={message}
                 onChange={handleMessageChange}
                 rows={4}
@@ -80,5 +93,6 @@ const MessageModal: React.FC = () => {
     </>
   );
 };
+
 
 export default MessageModal;
