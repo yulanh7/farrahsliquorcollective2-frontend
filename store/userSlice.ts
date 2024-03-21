@@ -124,7 +124,7 @@ export const optInSlice =
 export const sendMessageFromClientSlice =
   (payload: {
     message: string;
-    userHash: string;
+    messageId: string;
     endpoint?: string; // Make 'endpoint' optional
     expirationTime: number | null; // Change to 'number | null'
     keys: Record<string, string>;

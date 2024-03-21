@@ -9,6 +9,7 @@ import { Button, Form } from "react-bootstrap";
 import utilStyles from "../styles/utils.module.scss";
 import NotificationAlertModule from "./notificationAlertModule";
 import { run } from "../../lib/notification"; // Import the run function from the notification.ts file
+import { v4 as uuidv4 } from 'uuid';
 
 interface MessageModalProps {
   show: boolean;
@@ -22,6 +23,14 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) 
   const [message, setMessage] = useState(''); // State to hold the textarea value
   const [error, setError] = useState('');
   const [showNotificationModal, setShowNotificationModal] = useState(false);
+
+  useEffect(() => {
+    let messageId = localStorage.getItem('messageId');
+    if (!messageId) {
+      messageId = uuidv4();
+      localStorage.setItem('messageId', messageId);
+    }
+  }, []);
 
   const toggleVisibility = () => {
     dispatch(toggleModal({ showModal: true }));
@@ -41,6 +50,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) 
 
 
     if (isForClient) {
+      const messageId = localStorage.getItem('messageId') || uuidv4(); // Generate a new one as fallback, should never really happen
       const notificationGranted = await run();
       if (notificationGranted == "notGranted") {
         setShowNotificationModal(true);
@@ -54,7 +64,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient }) 
         }
         const payload = {
           message,
-          userHash: "hash",
+          messageId,
           endpoint: newSubscription?.endpoint || "default_endpoint_value",
           expirationTime: newSubscription?.expirationTime || null,
           keys: newSubscription?.keys || {},
