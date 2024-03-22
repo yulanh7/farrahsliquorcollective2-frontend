@@ -28,8 +28,6 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
     dispatch(setIsForClient({ isForClient: true }));
     if (messageId) {
       dispatch(fetchMessagesSlice({ messageId }))
-      localStorage.setItem('messageId', messageId);
-
     }
 
   };
@@ -46,7 +44,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
 
 
     if (isForClient) {
-      const messageId = localStorage.getItem('messageId') || uuidv4(); // Generate a new one as fallback, should never really happen
+      const messageIdForClient = messageId || uuidv4()
       const notificationGranted = await run();
       if (notificationGranted == "notGranted") {
         setShowNotificationModal(true);
@@ -60,7 +58,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
         }
         const payload = {
           message,
-          messageId,
+          messageId: messageIdForClient,
           clientInfo: {
             endpoint: newSubscription?.endpoint || "default_endpoint_value",
             expirationTime: newSubscription?.expirationTime || null,
@@ -68,7 +66,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
           }
         };
         dispatch(sendMessageFromClientSlice(payload));
-        dispatch(fetchMessagesSlice({ messageId }))
+        dispatch(fetchMessagesSlice({ messageId: messageIdForClient }))
 
       }
       dispatch(toggleModal({ showModal: false }));
