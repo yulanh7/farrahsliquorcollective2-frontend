@@ -16,7 +16,6 @@ interface AppWrapperProps {
 function AppWrapper({ children }: AppWrapperProps) {
   const dispatch = useAppDispatch();
   const [messageId, setMessageId] = useState('');
-  const { showModal } = useSelector((state: RootState) => state.user);
   const hideModal = () => dispatch(toggleModal({ showModal: false, title: '', content: '' }));
   useEffect(() => {
     // Listen for messages from the service worker
@@ -41,8 +40,16 @@ function AppWrapper({ children }: AppWrapperProps) {
       channel.close();
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    let localMessageId = localStorage.getItem('messageId');
+    if (localMessageId) {
+      setMessageId(localMessageId);
+    }
+  }, []);
+
   return <>
-    <MessageModal show={showModal} onHide={hideModal} forClient={true} messageId={messageId} />
+    <MessageModal onHide={hideModal} messageId={messageId} />
 
     {children}
   </>;

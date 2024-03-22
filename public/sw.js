@@ -21,7 +21,7 @@ self.addEventListener("push", async function (event) {
   data.body ??= "No data sent by server";
   data.title ??= "No title sent by server";
   messageId =
-    data.messageId ??= "https://4block.com.au/debug";
+    data.messageId ??= "None";
   unsubscribeURL =
     data.usuburl ?? "https://dev.farrahsliquorcollective2.com/opt-out";
   viewOfferURL = "https://dev.farrahsliquorcollective2.com/detail";

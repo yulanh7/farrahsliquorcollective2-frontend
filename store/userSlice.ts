@@ -8,6 +8,7 @@ import {
   login,
   sendMessageFromClient,
   sendMessageFromAdmin,
+  fetchMessages,
 } from "../api/api";
 import Router from "next/router";
 
@@ -22,8 +23,7 @@ interface UserData {
   submitUserMessage: string | null;
   showModal: boolean;
   isForClient: boolean;
-  messageFromClient: any;
-  messageFromAdmin: any;
+  messages: any;
 }
 
 const initialState: UserData = {
@@ -37,8 +37,7 @@ const initialState: UserData = {
   submitUserMessage: null,
   showModal: false,
   isForClient: true,
-  messageFromClient: null,
-  messageFromAdmin: null,
+  messages: null,
 };
 
 const useSlice = createSlice({
@@ -62,8 +61,8 @@ const useSlice = createSlice({
     setFeedback: (state, action: PayloadAction<any>) => {
       state.userInfo = action.payload;
     },
-    setSendMessageFromClient: (state, action: PayloadAction<any>) => {
-      state.messageFromClient = action.payload;
+    setGetMessage: (state, action: PayloadAction<any>) => {
+      state.messages = action.payload;
     },
     submitUserStart: (state) => {
       state.submitUserLoading = true;
@@ -94,7 +93,7 @@ export const {
   setUserWithData,
   setUserInfo,
   setFeedback,
-  setSendMessageFromClient,
+  setGetMessage,
   submitUserStart,
   submitLoginSuccess,
   submitUserFailure,
@@ -134,9 +133,6 @@ export const sendMessageFromClientSlice =
   async (dispatch) => {
     try {
       const response = await sendMessageFromClient(payload);
-      dispatch(setSendMessageFromClient(response));
-      // document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
-      // window.location.href = "/offer-receipt";
     } catch (error) {
       console.error("Error submitting payload:", error);
     }
@@ -154,8 +150,18 @@ export const sendMessageFromAdminSlice =
   async (dispatch) => {
     try {
       const response = await sendMessageFromAdmin(payload);
-      // document.cookie = `userHash=${user.userHash};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
-      // window.location.href = "/offer-receipt";
+    } catch (error) {
+      console.error("Error submitting payload:", error);
+    }
+  };
+export const fetchMessagesSlice =
+  (payload: {
+    messageId: string;
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      const { messages } = await fetchMessages(payload);
+      dispatch(setGetMessage(messages));
     } catch (error) {
       console.error("Error submitting payload:", error);
     }

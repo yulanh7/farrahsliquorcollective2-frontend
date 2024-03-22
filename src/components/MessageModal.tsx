@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FiMessageSquare, FiX } from 'react-icons/fi';
-import { sendMessageFromClientSlice, toggleModal, setIsForClient, sendMessageFromAdminSlice } from "../../store/userSlice";
+import { sendMessageFromClientSlice, toggleModal, setIsForClient, sendMessageFromAdminSlice, fetchMessagesSlice } from "../../store/userSlice";
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
 import { Button, Form } from "react-bootstrap";
@@ -12,30 +12,25 @@ import { run } from "../../lib/notification"; // Import the run function from th
 import { v4 as uuidv4 } from 'uuid';
 
 interface MessageModalProps {
-  show: boolean;
   onHide: () => void;
-  forClient: boolean;
   messageId?: string
 }
 
-const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient, messageId }) => {
+const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
   const dispatch = useAppDispatch();
-  const { showModal, isForClient } = useSelector((state: RootState) => state.user);
+  const { showModal, isForClient, messages } = useSelector((state: RootState) => state.user);
   const [message, setMessage] = useState(''); // State to hold the textarea value
   const [error, setError] = useState('');
   const [showNotificationModal, setShowNotificationModal] = useState(false);
 
-  useEffect(() => {
-    let messageId = localStorage.getItem('messageId');
-    if (!messageId) {
-      messageId = uuidv4();
-      localStorage.setItem('messageId', messageId);
-    }
-  }, []);
-
   const toggleVisibility = () => {
     dispatch(toggleModal({ showModal: true }));
     dispatch(setIsForClient({ isForClient: true }));
+    if (messageId) {
+      dispatch(fetchMessagesSlice({ messageId }))
+      localStorage.setItem('messageId', messageId);
+
+    }
 
   };
 
@@ -73,6 +68,8 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient, me
           }
         };
         dispatch(sendMessageFromClientSlice(payload));
+        dispatch(fetchMessagesSlice({ messageId }))
+
       }
       dispatch(toggleModal({ showModal: false }));
       setMessage('');
@@ -89,9 +86,11 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient, me
           }
         };
         dispatch(sendMessageFromAdminSlice(payload));
+        dispatch(toggleModal({ showModal: false }));
+        dispatch(fetchMessagesSlice({ messageId }))
+
+        setMessage('');
       }
-      dispatch(toggleModal({ showModal: false }));
-      setMessage('');
     }
   };
 
@@ -102,6 +101,9 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient, me
   const handleCloseModal = () => {
     setShowNotificationModal(false);
   };
+
+  console.log(messages)
+  console.log(messageId)
   return (
     <>
       <Button
@@ -117,24 +119,42 @@ const MessageModal: React.FC<MessageModalProps> = ({ show, onHide, forClient, me
 
       {showModal && (
         <div className={utilStyles.messageBox}>
-          <FiX size={24} className={utilStyles.closeIcon} onClick={onHide} />
-          {messageId && messageId}
-          {isForClient ?
-            <p>Your enquire</p> :
-            <p> Reply to the client</p>
-          }
-          <Form onSubmit={handleSubmit} className={utilStyles.form} >
-            <div>
+          <h5 className={utilStyles.title}>
+            <FiX size={24} className={utilStyles.closeIcon} onClick={onHide} />
+            {isForClient ?
+              "Your enquire" :
+              " Reply to the client"
+            }
+          </h5>
+
+          {/* {messageId && messageId} */}
+          <div className={utilStyles.content}>
+
+            <div className={utilStyles.history}>
+
+              {messages && (
+                messages.map((item: any, index: number) => (
+                  <div key={index} className={item.senderRole === "client" ? utilStyles.messageHistoryRight : utilStyles.messageHistoryLeft}>
+                    {item.content}
+                  </div>
+                ))
+              )}
+            </div>
+            <Form onSubmit={handleSubmit} className={utilStyles.form} >
+
               {/* Bind the textarea value to state and listen for changes */}
               <textarea
                 value={message}
                 onChange={handleMessageChange}
-                rows={4}
+
               ></textarea>
-            </div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <Button variant="primary" type="submit" >Send</Button>
-          </Form>
+
+              <Button variant="primary" type="submit" >Send</Button>
+              {error && <p style={{ color: 'red' }}>{error}</p>}
+            </Form>
+          </div>
+
+
         </div>
       )}
     </>

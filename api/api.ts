@@ -198,3 +198,6 @@ export const sendMessageFromAdmin = async (payload: {
     keys: Record<string, string>;
   };
 }) => makeRequest("post", "/admin/reply-message", payload);
+
+export const fetchMessages = async (payload: { messageId: string }) =>
+  makeRequest("get", `/messages/${payload.messageId}`);
