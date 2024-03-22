@@ -1,6 +1,6 @@
 // components/MessageModal.tsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { FiMessageSquare, FiX } from 'react-icons/fi';
 import { sendMessageFromClientSlice, toggleModal, setIsForClient, sendMessageFromAdminSlice, fetchMessagesSlice } from "../../store/userSlice";
 import { RootState, useAppDispatch } from '../../store';
@@ -26,7 +26,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
   const toggleVisibility = () => {
     dispatch(toggleModal({ showModal: true }));
     dispatch(setIsForClient({ isForClient: true }));
-    const localMessageId = localStorage.getItem('messageId') || uuidv4();
+    const localMessageId = localStorage.getItem('messageId');
 
     if (localMessageId) {
       dispatch(fetchMessagesSlice({ messageId: localMessageId }));
@@ -35,19 +35,17 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
   };
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault(); // This is commonly needed in form submissions to prevent the default form submit action
+
     // Log the admin and message to see if everything is captured correctly
     if (message.trim() === '') {
       // Set an error message if the message is empty
       setError('Please enter a message before sending.');
       return;
     }
-
-
     if (isForClient) {
-      const localMessageId = localStorage.getItem('messageId') || uuidv4();
-      localStorage.setItem('messageId', localMessageId);
+      const localMessageId = localStorage.getItem('messageId');
 
       const notificationGranted = await run();
       if (notificationGranted == "notGranted") {
@@ -70,7 +68,6 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
           }
         };
         dispatch(sendMessageFromClientSlice(payload));
-        dispatch(fetchMessagesSlice({ messageId: localMessageId }))
 
       }
       dispatch(toggleModal({ showModal: false }));
@@ -89,7 +86,6 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
         };
         dispatch(sendMessageFromAdminSlice(payload));
         dispatch(toggleModal({ showModal: false }));
-        dispatch(fetchMessagesSlice({ messageId }))
 
         setMessage('');
       }
@@ -148,7 +144,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
                 ))
               )}
             </div>
-            <Form onSubmit={handleSubmit} className={utilStyles.form} >
+            <Form className={utilStyles.form} >
 
               {/* Bind the textarea value to state and listen for changes */}
               <textarea
@@ -156,10 +152,19 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
                 onChange={handleMessageChange}
 
               ></textarea>
-
-              <Button variant="primary" type="submit" >Send</Button>
               {error && <p style={{ color: 'red' }}>{error}</p>}
+              {isForClient &&
+                <Button variant="primary" type="submit" onClick={handleSubmit}>Send</Button>
+              }
             </Form>
+            {
+              !isForClient &&
+              <div>
+                <Button className={utilStyles.sendBtn} onClick={handleSubmit}>Send</Button>
+
+                <Button className={utilStyles.finishBtn} onClick={handleSubmit}>Finish</Button>
+              </div>
+            }
           </div>
 
 

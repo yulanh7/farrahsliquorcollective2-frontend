@@ -180,7 +180,7 @@ export const sendFeedback = async (payload: {
 }) => makeRequest("post", "/sendFeedback", payload, false);
 
 export const sendMessageFromClient = async (payload: {
-  messageId: string;
+  messageId: string | null;
   message: string;
   clientInfo: {
     endpoint?: string; // Make 'endpoint' optional

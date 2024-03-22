@@ -11,6 +11,7 @@ import {
   fetchMessages,
 } from "../api/api";
 import Router from "next/router";
+import { v4 as uuidv4 } from "uuid";
 
 interface UserData {
   subsciption: any; // Replace any with the actual type for subsciption
@@ -122,7 +123,7 @@ export const optInSlice =
 
 export const sendMessageFromClientSlice =
   (payload: {
-    messageId: string;
+    messageId: string | null;
     message: string;
     clientInfo: {
       endpoint?: string; // Make 'endpoint' optional
@@ -132,7 +133,20 @@ export const sendMessageFromClientSlice =
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
+      if (!payload.messageId) {
+        const localMessageId = uuidv4();
+        localStorage.setItem("messageId", localMessageId);
+        payload.messageId = localMessageId;
+      }
       const response = await sendMessageFromClient(payload);
+      const { messages } = await fetchMessages({
+        messageId: payload.messageId,
+      });
+      if (messages) {
+        dispatch(setGetMessage(messages));
+      } else {
+        dispatch(setGetMessage({ messages: null }));
+      }
     } catch (error) {
       console.error("Error submitting payload:", error);
     }
@@ -150,6 +164,14 @@ export const sendMessageFromAdminSlice =
   async (dispatch) => {
     try {
       const response = await sendMessageFromAdmin(payload);
+      const { messages } = await fetchMessages({
+        messageId: payload.messageId,
+      });
+      if (messages) {
+        dispatch(setGetMessage(messages));
+      } else {
+        dispatch(setGetMessage({ messages: null }));
+      }
     } catch (error) {
       console.error("Error submitting payload:", error);
     }
