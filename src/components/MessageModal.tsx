@@ -71,7 +71,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
         dispatch(fetchMessagesSlice({ messageId }))
 
       }
-      // dispatch(toggleModal({ showModal: false }));
+      dispatch(toggleModal({ showModal: false }));
       setMessage('');
 
     } else {
@@ -86,7 +86,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
           }
         };
         dispatch(sendMessageFromAdminSlice(payload));
-        // dispatch(toggleModal({ showModal: false }));
+        dispatch(toggleModal({ showModal: false }));
         dispatch(fetchMessagesSlice({ messageId }))
 
         setMessage('');
@@ -131,10 +131,16 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
           <div className={utilStyles.content}>
 
             <div className={utilStyles.history}>
-
-              {messages && (
+              {isForClient && messages && (
                 messages.map((item: any, index: number) => (
                   <div key={index} className={item.senderRole === "client" ? utilStyles.messageHistoryRight : utilStyles.messageHistoryLeft}>
+                    {item.content}
+                  </div>
+                ))
+              )}
+              {!isForClient && messages && (
+                messages.map((item: any, index: number) => (
+                  <div key={index} className={item.senderRole === "client" ? utilStyles.messageHistoryLeft : utilStyles.messageHistoryRight}>
                     {item.content}
                   </div>
                 ))

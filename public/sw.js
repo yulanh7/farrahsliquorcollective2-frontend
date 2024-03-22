@@ -21,10 +21,21 @@ self.addEventListener("push", async function (event) {
   data.body ??= "No data sent by server";
   data.title ??= "No title sent by server";
   messageId =
-    data.messageId ??= "None";
+    data.messageId ??= null;
   unsubscribeURL =
     data.usuburl ?? "https://dev.farrahsliquorcollective2.com/opt-out";
   viewOfferURL = "https://dev.farrahsliquorcollective2.com/detail";
+
+  if (data.title === "Message From a Client" || data.title === "Message From a Admin") {
+    // Dispatch a message to the client
+    clients.matchAll().then(clients => {
+      clients.forEach(client => {
+        client.postMessage({ action: "fetch-messages", messageId });
+      });
+    });
+  }
+
+
   // Ensuring that there's always the option to unsubscribe, no matter what the server is sending.
   if (data.title && data.title == "Message From a Client") {
     data.actions.push(

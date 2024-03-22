@@ -22,7 +22,13 @@ function AppWrapper({ children }: AppWrapperProps) {
     const channel = new BroadcastChannel('feedback-channel');
     channel.onmessage = (event) => {
       // When a message is received, check if it's for showing the modal
-      if (event.data.action === 'show-reply-client-modal') {
+
+      if (event.data.action === 'fetch-messages') {
+        if (event.data.messageId) {
+          dispatch(fetchMessagesSlice({ messageId: event.data.messageId }));
+        }
+
+      } else if (event.data.action === 'show-reply-client-modal') {
         // Dispatch an action to toggle the modal
         dispatch(toggleModal({ showModal: true }));
         dispatch(setIsForClient({ isForClient: false }));
