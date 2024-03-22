@@ -29,6 +29,28 @@ img {
 }
 
 
+/* Make scrollbar smaller */
+::-webkit-scrollbar {
+  width: 5px; /* Width of the scrollbar */
+}
+
+/* Hide scrollbar track and arrows */
+::-webkit-scrollbar-track {
+  background: transparent; /* Hide scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  border-radius: 5px; /* Border radius of the scrollbar thumb */
+}
+
+/* Hide scrollbar arrows */
+::-webkit-scrollbar-button {
+  display: none; /* Hide scrollbar arrows */
+}
+
+
+
 .table thead th {
   background-color: $primaryColor;
   color: #fff;
