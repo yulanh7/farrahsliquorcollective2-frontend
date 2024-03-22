@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import store from '../store';
 import { RootState, useAppDispatch } from '../store';
 import { Provider, useSelector } from 'react-redux';
-import { toggleModal, setIsForClient } from "../store/userSlice";
+import { toggleModal, setIsForClient, fetchMessagesSlice } from "../store/userSlice";
 import MessageModal from "../src/components/MessageModal";
 
 
@@ -27,11 +27,14 @@ function AppWrapper({ children }: AppWrapperProps) {
         dispatch(toggleModal({ showModal: true }));
         dispatch(setIsForClient({ isForClient: false }));
         setMessageId(event.data.messageId);
+        dispatch(fetchMessagesSlice({ messageId: event.data.messageId }))
 
       } else {
         dispatch(toggleModal({ showModal: true }));
         dispatch(setIsForClient({ isForClient: true }));
         setMessageId(event.data.messageId);
+        dispatch(fetchMessagesSlice({ messageId: event.data.messageId }))
+
       }
     };
 
