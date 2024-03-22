@@ -71,7 +71,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
         dispatch(fetchMessagesSlice({ messageId }))
 
       }
-      dispatch(toggleModal({ showModal: false }));
+      // dispatch(toggleModal({ showModal: false }));
       setMessage('');
 
     } else {
@@ -86,7 +86,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
           }
         };
         dispatch(sendMessageFromAdminSlice(payload));
-        dispatch(toggleModal({ showModal: false }));
+        // dispatch(toggleModal({ showModal: false }));
         dispatch(fetchMessagesSlice({ messageId }))
 
         setMessage('');
