@@ -8,7 +8,8 @@ import {
   setIsForClient,
   sendMessageFromAdminSlice,
   fetchMessagesSlice,
-  deleteMessageSlice
+  deleteMessageSlice,
+  setGetMessage
 } from "../../store/userSlice";
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
@@ -16,7 +17,6 @@ import { Button, Form } from "react-bootstrap";
 import utilStyles from "../styles/utils.module.scss";
 import NotificationAlertModule from "./notificationAlertModule";
 import { run } from "../../lib/notification"; // Import the run function from the notification.ts file
-import { v4 as uuidv4 } from 'uuid';
 
 interface MessageModalProps {
   onHide: () => void;
@@ -37,6 +37,9 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
 
     if (localMessageId) {
       dispatch(fetchMessagesSlice({ messageId: localMessageId }));
+    } else {
+      dispatch(setGetMessage(null));
+
     }
 
   };
