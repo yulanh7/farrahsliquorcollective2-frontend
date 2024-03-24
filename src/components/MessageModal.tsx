@@ -144,7 +144,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
 
           {/* {messageId && messageId} */}
           <div className={utilStyles.content}>
-            {messages &&
+            {/* {messages &&
 
               <div className={utilStyles.history}>
                 {isForClient && (
@@ -162,7 +162,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
                   ))
                 )}
               </div>
-            }
+            } */}
             <Form className={utilStyles.form} >
 
               {/* Bind the textarea value to state and listen for changes */}
@@ -179,7 +179,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
             {
               !isForClient &&
               <div className={utilStyles.action}>
-                <Button className={utilStyles.finishBtn} onClick={handleDeleteMessage}>Finish</Button>
+                {/* <Button className={utilStyles.finishBtn} onClick={handleDeleteMessage}>Finish</Button> */}
                 <Button className={utilStyles.sendBtn} onClick={handleSubmit}>Send</Button>
 
               </div>
