@@ -2,7 +2,14 @@
 
 import React, { useState, useEffect, FormEvent } from 'react';
 import { FiMessageSquare, FiX } from 'react-icons/fi';
-import { sendMessageFromClientSlice, toggleModal, setIsForClient, sendMessageFromAdminSlice, fetchMessagesSlice } from "../../store/userSlice";
+import {
+  sendMessageFromClientSlice,
+  toggleModal,
+  setIsForClient,
+  sendMessageFromAdminSlice,
+  fetchMessagesSlice,
+  deleteMessageSlice
+} from "../../store/userSlice";
 import { RootState, useAppDispatch } from '../../store';
 import { useSelector } from 'react-redux';
 import { Button, Form } from "react-bootstrap";
@@ -100,8 +107,18 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
     setShowNotificationModal(false);
   };
 
-  console.log(messages)
-  console.log(messageId)
+  const handleDeleteMessage = () => {
+    // Check if messageId is provided
+    if (messageId) {
+      // Display a confirmation dialog
+      const isConfirmed = window.confirm('Are you sure you want to delete this message?');
+      // Proceed with deletion if confirmed
+      if (isConfirmed) {
+        dispatch(deleteMessageSlice({ messageId }));
+        onHide(); // Close the modal after deletion
+      }
+    }
+  };
   return (
     <>
       <Button
@@ -127,23 +144,25 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
 
           {/* {messageId && messageId} */}
           <div className={utilStyles.content}>
+            {messages &&
 
-            <div className={utilStyles.history}>
-              {isForClient && messages && (
-                messages.map((item: any, index: number) => (
-                  <div key={index} className={item.senderRole === "client" ? utilStyles.messageHistoryRight : utilStyles.messageHistoryLeft}>
-                    {item.content}
-                  </div>
-                ))
-              )}
-              {!isForClient && messages && (
-                messages.map((item: any, index: number) => (
-                  <div key={index} className={item.senderRole === "client" ? utilStyles.messageHistoryLeft : utilStyles.messageHistoryRight}>
-                    {item.content}
-                  </div>
-                ))
-              )}
-            </div>
+              <div className={utilStyles.history}>
+                {isForClient && (
+                  messages.map((item: any, index: number) => (
+                    <div key={index} className={item.senderRole === "client" ? utilStyles.messageHistoryRight : utilStyles.messageHistoryLeft}>
+                      {item.content}
+                    </div>
+                  ))
+                )}
+                {!isForClient && (
+                  messages.map((item: any, index: number) => (
+                    <div key={index} className={item.senderRole === "client" ? utilStyles.messageHistoryLeft : utilStyles.messageHistoryRight}>
+                      {item.content}
+                    </div>
+                  ))
+                )}
+              </div>
+            }
             <Form className={utilStyles.form} >
 
               {/* Bind the textarea value to state and listen for changes */}
@@ -159,10 +178,10 @@ const MessageModal: React.FC<MessageModalProps> = ({ onHide, messageId }) => {
             </Form>
             {
               !isForClient &&
-              <div>
+              <div className={utilStyles.action}>
+                <Button className={utilStyles.finishBtn} onClick={handleDeleteMessage}>Finish</Button>
                 <Button className={utilStyles.sendBtn} onClick={handleSubmit}>Send</Button>
 
-                <Button className={utilStyles.finishBtn} onClick={handleSubmit}>Finish</Button>
               </div>
             }
           </div>

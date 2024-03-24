@@ -9,6 +9,7 @@ import {
   sendMessageFromClient,
   sendMessageFromAdmin,
   fetchMessages,
+  deleteMessage,
 } from "../api/api";
 import Router from "next/router";
 import { v4 as uuidv4 } from "uuid";
@@ -176,15 +177,30 @@ export const sendMessageFromAdminSlice =
       console.error("Error submitting payload:", error);
     }
   };
+export const deleteMessageSlice =
+  (payload: {
+    messageId: string;
+  }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
+  async (dispatch) => {
+    try {
+      await deleteMessage(payload);
+      dispatch(setGetMessage(null));
+    } catch (error) {
+      console.error("Error submitting payload:", error);
+    }
+  };
 export const fetchMessagesSlice =
   (payload: {
     messageId: string;
   }): AppThunk<Promise<void>> => // Add <Promise<void>> to specify the return type
   async (dispatch) => {
     try {
+      dispatch(setGetMessage(null));
       const { messages } = await fetchMessages(payload);
       dispatch(setGetMessage(messages));
     } catch (error) {
+      dispatch(setGetMessage(null));
+      localStorage.setItem("messageId", "");
       console.error("Error submitting payload:", error);
     }
   };

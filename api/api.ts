@@ -201,3 +201,6 @@ export const sendMessageFromAdmin = async (payload: {
 
 export const fetchMessages = async (payload: { messageId: string }) =>
   makeRequest("get", `/messages/${payload.messageId}`);
+
+export const deleteMessage = async (payload: { messageId: string }) =>
+  makeRequest("delete", `/admin/delete-message/${payload.messageId}`);
